@@ -1,0 +1,38 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* @theme {
+  --font-sans: 'Inter', sans-serif;
+} */
+
+body, button, input, textarea, select {
+  font-family: var(--font-sans);
+}
+
+@plugin "daisyui";
+
+.ant-dropdown-menu-submenu-popup .ant-dropdown-menu {
+  background: linear-gradient(to bottom right, #2b2b2f, #555) !important;
+  padding: 10px;
+}
+
+#google_translate_element {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.goog-te-banner-frame {
+  display: none !important;
+}
+
+.VIpgJd-ZVi9od-ORHb-OEVmcd  {
+  display: none !important;
+  
+}
+body{
+  top: 0 !important;
+}
