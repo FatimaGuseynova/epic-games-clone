@@ -71,7 +71,7 @@ function ChangeLanguage({open, setOpen}) {
           </div>
         )}
       >
-        <a className={`${open ? "max-[720px]:opacity-0" : "max-[720px]:opacity-100"} duration-200 max-[720px]:items-end max-[720px]:justify-end max-[720px]:w-[88vw] flex items-center group hover:text-[#8b8b92] cursor-pointer`}>
+        <a className={`${open ? "max-[720px]:opacity-0" : "max-[720px]:opacity-100"} duration-200  max-[720px]:w-[83vw] group hover:text-[#8b8b92] cursor-pointer`}>
           <GrLanguage />
         </a>
       </Dropdown>
