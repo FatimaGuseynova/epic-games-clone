@@ -37,9 +37,9 @@ function Header() {
                     </div>
                 </div>
                 <div className="flex items-center text-amber-50  ">
-                    <button className={`${epicOpen ? "hidden" : "flex"} mr-2  max-[720px]:hidden`} >  <ChangeLanguage open={langOpen} setOpen={setLangOpen} />
-                    </button>
-                    <button className={`px-2.5 py-1 ${epicOpen  ? "opacity-0" : "opacity-100"} duration-200 max-[720px]:hidden  cta-button cta-button-primary  text-[14px] rounded-[6px] dark:bg-[#353539] dark:text-white mr-2.5 hover:bg-[#838383] `}>Sign in</button>
+                    <div className={`${epicOpen ? "hidden" : "flex"} mr-2  max-[720px]:hidden`} >  <ChangeLanguage open={langOpen} setOpen={setLangOpen} />
+                    </div>
+                    <Link to="/signin" className={`px-2.5 py-1 ${epicOpen  ? "opacity-0" : "opacity-100"} duration-200 max-[720px]:hidden  cta-button cta-button-primary  text-[14px] rounded-[6px] dark:bg-[#353539] dark:text-white mr-2.5 hover:bg-[#838383] `}>Sign in</Link>
 
                     <button className={`px-2.5 py-1 ${epicOpen ? "hidden" : "flex"} max-[350px]:hidden  cta-button cta-button-primary  text-[14px] rounded-[6px] dark:bg-[#26BBFF] dark:text-black duration-300 hover:bg-[#65ccfb]`}>Download</button>
 

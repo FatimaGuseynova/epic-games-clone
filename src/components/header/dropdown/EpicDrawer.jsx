@@ -37,7 +37,7 @@ function EpicDrawer({ open, setOpen, menu, setMenu }) {
                     <IoMdClose className='w-10 h-10 pr-3' />
                 </div>
             </div>
-            <div className={` w-full absolute p-6 top-12 left-0 bg-[#121216] ${open ? " translate-y-0 opacity-100" : "  -translate-y-350 opacity-0  pointer-events-none"}`}>
+            <div className={`z-9999 w-full absolute p-6 top-12 left-0 bg-[#121216] ${open ? " translate-y-0 opacity-100" : "  -translate-y-350 opacity-0  pointer-events-none"}`}>
                 <h2 className='text-[34px] font-extrabold mb-6'>Epic Games</h2>
                 <div>
                     <h4 className='font-bold text-[22px]'>Play</h4>

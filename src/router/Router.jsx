@@ -1,10 +1,27 @@
 import React from 'react'
+import { Routes, Route } from 'react-router'
 
-function Router() {
+import Header from '../components/header/Header'
+import Main from '../layout/Main'
+import Admin from '../admin/Admin'
+import AuthRouter from './AuthRouter'
+
+const Router = () => {
   return (
-    <div>
-        
-    </div>
+    <Routes>
+      <Route
+        path="/*"
+        element={
+          <>
+            <Header />
+            <Main />
+          </>
+        }
+      />
+
+      <Route path="/admin" element={<Admin />} />
+      <Route path="/signin/*" element={<AuthRouter />} />
+    </Routes>
   )
 }
 
