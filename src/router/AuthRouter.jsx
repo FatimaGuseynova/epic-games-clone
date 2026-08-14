@@ -5,6 +5,8 @@ import Register from '../pages/register/Register'
 import ExistAccount from '../pages/register/ExistAccount'
 import Privacy from '../pages/register/Privacy'
 import AccessAccount from '../pages/register/AccessAccount'
+import RegisterBirth from '../pages/register/RegisterBirth'
+import RegisterEmail from '../pages/register/RegisterEmail'
 
 const AuthRouter = () => {
     return (
@@ -14,6 +16,8 @@ const AuthRouter = () => {
             <Route path="exist" element={<ExistAccount />} />
             <Route path='privacy' element={<Privacy />} />
             <Route path='access' element={<AccessAccount />} />
+            <Route path='birth' element={<RegisterBirth />} />
+            <Route path='email' element={<RegisterEmail />} />
         </Routes>
     )
 }

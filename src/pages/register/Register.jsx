@@ -21,7 +21,7 @@ function Register() {
                     </div>
                     <div className='w-full flex flex-col'>
                         <Link className='w-full text-center my-6 mb-3 hover: rounded-[8px] duration-150 hover:bg-[#65ccfb] bg-[#26BBFF] py-2 text-black' to="/signin/exist">Yes</Link>
-                        <button className='w-full  rounded-[8px] bg-[#303034] duration-150 hover:bg-[#54545d] py-2 text-white'>No</button>
+                        <Link className='w-full text-center rounded-[8px] bg-[#303034] duration-150 hover:bg-[#54545d] py-2 text-white' to="/signin/birth">No</Link>
                     </div>
                 </div>
             </div>
