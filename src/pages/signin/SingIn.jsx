@@ -28,14 +28,14 @@ function SingIn() {
 
   return (
     <div className='bg-[#101014] max-[480px]:block min-[480px]:flex max-[480px]:px-5  min-[480px]:p-10 min-[480px]:justify-center  '>
-      <div className=' min-[480px]:bg-[#18181C] overflow-hidden min-[480px]:w-[550px] min-[480px]:max-w-[85%] min-[480px]:p-11 max-[480px]:py-11 flex flex-col  min-[480px]:rounded-[14px] min-[480px]:border-1 min-[480px]:border-[#303033]'>
+      <div className=' min-[480px]:bg-[#18181C] overflow-hidden min-[480px]:w-[550px] min-[480px]:max-w-[96%] min-[480px]:p-11 max-[480px]:py-11 flex flex-col  min-[480px]:rounded-[14px] min-[480px]:border-1 min-[480px]:border-[#303033]'>
         <div className='animate-slide-in-right '>
           <div className='flex flex-col items-center justify-center'>
             <Logo />
             <h2 className='text-white font-semibold py-4 text-[23px]'>Sign in to Epic Games</h2>
           </div>
           <form onSubmit={handleSubmit} className='w-full'>
-            <input name="email" onChange={handleChange} value={values.email} type="text" placeholder='Email address' required className={`${errors.email && "border-[#FF6173]"} py-3 border-1 w-[100%] px-5 rounded-2xl border-[#5a5a5f]`} />
+            <input name="email" onChange={handleChange} value={values.email} type="text" placeholder='Email address' required className={`${errors.email && "border-[#FF6173]"} hover:border-[#9b9ba2] duration-150 py-3 border-1 w-[100%] px-5 rounded-2xl border-[#5a5a5f]`} />
             {errors.email && <p className='text-[#FF6173] flex items-center text-[13px] pt-1'><BiSolidError className='mr-1' />
               {errors.email}</p>}
             <button type='submit' className='w-full my-6 rounded-[8px] bg-[#26BBFF] py-2 text-black'>Continue</button>
