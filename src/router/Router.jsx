@@ -5,6 +5,7 @@ import Header from '../components/header/Header'
 import Main from '../layout/Main'
 import Admin from '../admin/Admin'
 import AuthRouter from './AuthRouter'
+import MainRouter from './MainRouter'
 
 const Router = () => {
   return (
@@ -21,6 +22,7 @@ const Router = () => {
 
       <Route path="/admin" element={<Admin />} />
       <Route path="/signin/*" element={<AuthRouter />} />
+      <Route path="/*" element={<MainRouter />} />
     </Routes>
   )
 }

@@ -13,7 +13,6 @@ function Main() {
           <Discover  opened={opened} />
         </div>
       </div>
-      <Home/>
     </div>
   )
 }
