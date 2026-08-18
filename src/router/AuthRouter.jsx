@@ -8,6 +8,7 @@ import AccessAccount from '../pages/register/AccessAccount'
 import RegisterBirth from '../pages/register/RegisterBirth'
 import RegisterEmail from '../pages/register/RegisterEmail'
 import SigninPassword from '../pages/signin/SigninPassword'
+import RegisterName from '../pages/register/RegisterName'
 
 const AuthRouter = () => {
     return (
@@ -20,6 +21,7 @@ const AuthRouter = () => {
             <Route path='birth' element={<RegisterBirth />} />
             <Route path='email' element={<RegisterEmail />} />
             <Route path='password' element={<SigninPassword />} />
+            <Route path='name' element={<RegisterName />} />
         </Routes>
     )
 }

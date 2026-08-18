@@ -1,5 +1,5 @@
 import React, { use, useEffect, useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io"
 import { useFormik } from 'formik'
@@ -8,41 +8,32 @@ import { BiSolidError } from "react-icons/bi";
 import { Registration } from "../../api/Registration";
 
 function RegisterBirth() {
+    const navigate = useNavigate();
     const birthPost = new Registration()
 
     const [birthReg, setBirthReg] = useState({})
-    const token = localStorage.getItem('accessToken')
+    // const token = localStorage.getItem('accessToken')
 
-    useEffect(() => {
-        async function getAllUsers() {
-            const data = await birthPost.getUsers(token)
+    // useEffect(() => {
+    //     async function getAllUsers() {
+    //         const data = await birthPost.getUsers(token)
 
-            console.log("ALL USERS:", data)
-            console.log(token)
-        }
+    //         console.log("ALL USERS:", data)
+    //         console.log(token)
+    //     }
 
-        getAllUsers()
-    }, [])
+    //     getAllUsers()
+    // }, [])
 
-useEffect(() => {
-    async function postBirth() {
+    // useEffect(() => {
+    //     async function postBirth() {
+    //         let data = await birthPost.postDataUser(userData)
 
-        const userData = {
-  "firstname": "fati672r4",
-  "lastname": "fati452rr35",
-  "username": "fati232rr45",
-  "email": "fatimaguseynova0709@gmail.com",
-  "password": "fati067423",
-  "dateOfBirth": "2026-08-23T17:01:58.681Z",
-  "country": "fati02rrr43"
-}
-        let data = await birthPost.postDataUser(userData)
+    //         setBirthReg(data)
+    //     }
 
-        setBirthReg(data)
-    }
-
-    postBirth()
-}, [])
+    //     postBirth()
+    // }, [])
 
     const months = [
         "January",
@@ -66,25 +57,35 @@ useEffect(() => {
 
     const handleSelect = (month) => {
         setSelectedMonth(month);
+        setFieldValue('month', month);
         setOpen(false);
     };
 
-    const { values, errors, handleChange, handleSubmit } = useFormik({
+    const { values, errors, handleChange, handleSubmit, setFieldValue } = useFormik({
         initialValues: {
             month: '',
+            day: '',
+            year: '',
         },
 
         validationSchema: birthRegister,
 
         onSubmit: (values) => {
-            console.log(values);
+            console.log(months.indexOf(values.month) + 1);
+
+            const birthDate = `${values.year}-${months.indexOf(values.month) < 10 ? "0" + (months.indexOf(values.month) + 1) : months.indexOf(values.month) + 1 }-${values.day}T12:56:48.680Z`;
+
+            console.log("BIRTH DATE:", birthDate);
+
+            navigate('/signin/email');
         },
+
     });
 
     return (
         <div className='bg-[#101014] block min-[480px]:flex max-[480px]:px-5 h-screen min-[480px]:p-10 min-[480px]:justify-center min-[480px]:items-center '>
             <div className=' min-[480px]:bg-[#18181C] overflow-hidden min-[480px]:w-[550px] min-[480px]:max-w-[96%] min-[480px]:p-11 max-[480px]:py-11 flex flex-col  min-[480px]:rounded-[14px] min-[480px]:border-1 min-[480px]:border-[#303033]'>
-                 <div>
+                <div>
                     <Link to="/signin/register" className='flex group items-center text-[15px]'><IoIosArrowBack className='pr-1.5 duration-200 group-hover:mr-1.5 group-hover:text-white w-6 h-6 text-[#AEAEB0]' /> Back</Link>
                 </div>
                 <div>
@@ -178,13 +179,13 @@ useEffect(() => {
                                 </div>
                             )}
                         </div>
-                        <input type="text" placeholder='Day' className='hover:border-[#9b9ba2] bg-[#242428] w-[100%] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f]' />
-                        <input type='text' placeholder='Year' className='hover:border-[#9b9ba2] w-[100%] bg-[#242428] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f]' />
+                        <input type="text" name='day' onChange={handleChange} value={values.day} placeholder='Day' className='hover:border-[#9b9ba2] bg-[#242428] w-[100%] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f]' />
+                        <input type='text' name='year' onChange={handleChange} value={values.year} placeholder='Year' className='hover:border-[#9b9ba2] w-[100%] bg-[#242428] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f]' />
                     </div>
                     {errors.month && <p className='text-[#FF6173] flex items-center text-[13px] pt-1'><BiSolidError className='mr-1' />
                         {errors.month}</p>}
                     <div className=''>
-                        <Link to="/signin/email" className='block text-center w-full my-6 mb-3 hover: rounded-[8px] duration-150 hover:bg-[#65ccfb] bg-[#26BBFF] py-2 text-black'>Continue</Link>
+                        <button type="submit" className='block w-full text-center  my-6 mb-3 hover: rounded-[8px] duration-150 hover:bg-[#65ccfb] bg-[#26BBFF] py-2 text-black'>Continue</button>
                     </div>
                 </form>
                 <div>
