@@ -71,12 +71,13 @@ function RegisterBirth() {
         validationSchema: birthRegister,
 
         onSubmit: (values) => {
-            console.log(months.indexOf(values.month) + 1);
 
             const birthDate = `${values.year}-${months.indexOf(values.month) < 10 ? "0" + (months.indexOf(values.month) + 1) : months.indexOf(values.month) + 1 }-${values.day}T12:56:48.680Z`;
 
             console.log("BIRTH DATE:", birthDate);
 
+            localStorage.setItem("birthDate", birthDate);
+console.log("SAVED TO LOCALSTORAGE:", localStorage.getItem("birthDate"));
             navigate('/signin/email');
         },
 
@@ -181,9 +182,10 @@ function RegisterBirth() {
                         </div>
                         <input type="text" name='day' onChange={handleChange} value={values.day} placeholder='Day' className='hover:border-[#9b9ba2] bg-[#242428] w-[100%] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f]' />
                         <input type='text' name='year' onChange={handleChange} value={values.year} placeholder='Year' className='hover:border-[#9b9ba2] w-[100%] bg-[#242428] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f]' />
+  
                     </div>
-                    {errors.month && <p className='text-[#FF6173] flex items-center text-[13px] pt-1'><BiSolidError className='mr-1' />
-                        {errors.month}</p>}
+                                                {(errors.month || errors.year || errors.day) && <p className='text-[#FF6173] flex items-center text-[13px] pt-1'><BiSolidError className='mr-1' />
+                                  {errors.day || errors.year}</p>}
                     <div className=''>
                         <button type="submit" className='block w-full text-center  my-6 mb-3 hover: rounded-[8px] duration-150 hover:bg-[#65ccfb] bg-[#26BBFF] py-2 text-black'>Continue</button>
                     </div>
