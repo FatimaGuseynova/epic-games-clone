@@ -9,11 +9,13 @@ import { BiSolidError } from "react-icons/bi";
 import { Eye, EyeOff } from "lucide-react";
 import { HiMiniCheck } from "react-icons/hi2";
 import { getUsers } from "../../api/getUsers";
+import { RefreshCw } from "lucide-react";
+import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 
 function RegisterName() {
     const [showPassword, setShowPassword] = useState(false);
     const [existsUser, setExistUser] = useState(false)
-    const [existsNick, setExistNick] = useState(false)
+    const [existNick, setExistNick] = useState(false)
 
 
     const savedEmail = localStorage.getItem("email");
@@ -57,7 +59,7 @@ function RegisterName() {
 
                 if (usernameExists) {
 
-                    console.log(existsNick);
+                    console.log(existNick);
                     return;
                 }
 
@@ -100,6 +102,16 @@ function RegisterName() {
     const hasLetter = /[A-Za-zА-Яа-яЁё]/.test(values.password);
     const hasNumber = /[0-9]/.test(values.password);
 
+    function generateNickname() {
+    const name = uniqueNamesGenerator({
+        dictionaries: [adjectives, animals], 
+        separator: '',
+        style: 'capital', 
+        length: 2,
+    });
+    const number = Math.floor(1000 + Math.random() * 9000); 
+    return `${name}${number}`;
+}
 
     const [open, setOpen] = useState(false)
     return (
@@ -129,7 +141,7 @@ function RegisterName() {
                         <div>
                             <p className='text-[17px] py-5 text-[#A7A7A9]'>Last name</p>
                             <input
-                                onBlur={handleBlur} type="text" value={values.lastname} name='lastname' onChange={handleChange} className='hover:border-[#9b9ba2] bg-[#242428] w-[100%] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f]' className={`hover:border-[#9b9ba2] bg-[#242428] w-[100%] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f] ${touched.lastname && errors.lastname && "border-[#FF6173]"}`} />
+                                onBlur={handleBlur} type="text" value={values.lastname} name='lastname' onChange={handleChange} className={`hover:border-[#9b9ba2] bg-[#242428] w-[100%] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f] ${touched.lastname && errors.lastname && "border-[#FF6173]"}`} />
                             {touched.lastname && errors.lastname && <p className='text-[#FF6173] flex items-center text-[13px] pt-1'><BiSolidError className='mr-1' />
                                 {errors.lastname}</p>}
                         </div>
@@ -166,19 +178,34 @@ function RegisterName() {
                         <p className='text-[17px] py-5 text-[#A7A7A9]'>Display name</p>
                         <p className='text-[17px] py-5 text-[#A7A7A9]'>{values.nickname.length}/16</p>
                     </div>
-                    <input
-                        onBlur={handleBlur}
-                        type="text"
-                        value={values.nickname}
-                        name="nickname"
-                        onChange={(e) => {
-                            setExistNick(false);
-                            handleChange(e);
-                        }}
-                        maxLength={16}
-                        className={`hover:border-[#9b9ba2] bg-[#242428] w-full duration-150 py-3 border px-5 rounded-[10px] border-[#5a5a5f] ${touched.nickname && touched.nickname && errors.nickname ? "border-[#FF6173]" : "border-[#5a5a5f]"
-                            }`}
-                    />
+                    <div className="relative w-full">
+                        <input
+                            onBlur={handleBlur}
+                            type="text"
+                            value={values.nickname}
+                            name="nickname"
+                            onChange={(e) => {
+                                setExistNick(false);
+                                handleChange(e);
+                            }}
+                            maxLength={16}
+                            className={`hover:border-[#9b9ba2] bg-[#242428] w-full duration-150 py-3 border pl-5 pr-16 rounded-[10px] border-[#5a5a5f] ${touched.nickname && errors.nickname ? "border-[#FF6173]" : "border-[#5a5a5f]"
+                                }`}
+                        />
+
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                            {!existNick && !errors.nickname && (
+                                 <HiCheckCircle className=' text-[23px] text-[#71D687]' />
+                            )}
+                            <button
+                                type="button"
+                                onClick={generateNickname} 
+                                className="cursor-pointer"
+                            >
+                                <RefreshCw className="w-5 h-5 text-white/70 hover:text-white transition" />
+                            </button>
+                        </div>
+                    </div>
                     {touched.nickname && errors.nickname ? (
                         <p className="text-[#FF6173] flex items-center text-[13px] pt-1">
                             <BiSolidError className="mr-1" />
