@@ -1,7 +1,7 @@
 let BASE_URL = "http://localhost:3000/api";
 
 export const getUsers = async () => {
-    // 1. Логиним админа
+
     const loginResponse = await fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
@@ -21,15 +21,14 @@ export const getUsers = async () => {
         throw new Error(loginData.message || "Login failed");
     }
 
-    // 2. Получаем accessToken
     const token = loginData.token.accessToken;
 
     console.log("ADMIN ACCESS TOKEN:", token);
 
-    // 3. Сохраняем токен
+  
     localStorage.setItem("accessToken", token);
 
-    // 4. Теперь запрашиваем пользователей
+
     const usersResponse = await fetch(`${BASE_URL}/users`, {
         method: "GET",
         headers: {

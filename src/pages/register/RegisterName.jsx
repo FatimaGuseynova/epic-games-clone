@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { IoIosArrowBack } from "react-icons/io";
 import { useFormik } from 'formik'
 import { TbPointFilled } from "react-icons/tb";
@@ -10,6 +10,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { HiMiniCheck } from "react-icons/hi2";
 import { getUsers } from "../../api/getUsers";
 import { RefreshCw } from "lucide-react";
+import { postUsers } from "../../api/postUsers";
 import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 
 function RegisterName() {
@@ -17,6 +18,7 @@ function RegisterName() {
     const [existsUser, setExistUser] = useState(false)
     const [existNick, setExistNick] = useState(false)
 
+    const navigate = useNavigate();
 
     const savedEmail = localStorage.getItem("email");
     const savedBirth = localStorage.getItem("birthDate")
@@ -27,7 +29,8 @@ function RegisterName() {
         touched,
         handleBlur,
         handleChange,
-        handleSubmit
+        handleSubmit,
+        setFieldValue
     } = useFormik({
         initialValues: {
             email: savedEmail,
@@ -48,9 +51,14 @@ function RegisterName() {
                     (user) => user.email === values.email
                 );
 
+
                 if (emailExists) {
+                    setExistUser(true)
                     console.log(existsUser);
                     return;
+                }
+                else{
+                    setExistUser(false)
                 }
 
                 const usernameExists = users.some(
@@ -73,13 +81,17 @@ function RegisterName() {
                     country: "string"
                 };
 
-                console.log("REGISTER DATA:", registerfinal);
-
+                localStorage.setItem("userinf", JSON.stringify(registerfinal))
+                const result = await postUsers(registerfinal)
+                console.log(result);
+                
+                navigate("/signin/otp")
             } catch (error) {
                 console.error("Registration error:", error);
             }
         }
     });
+
 
     const [users, setUsers] = useState([]);
     useEffect(() => {
@@ -102,16 +114,23 @@ function RegisterName() {
     const hasLetter = /[A-Za-zА-Яа-яЁё]/.test(values.password);
     const hasNumber = /[0-9]/.test(values.password);
 
+    useEffect(() => {
+        generateNickname();
+    }, []);
+
     function generateNickname() {
-    const name = uniqueNamesGenerator({
-        dictionaries: [adjectives, animals], 
-        separator: '',
-        style: 'capital', 
-        length: 2,
-    });
-    const number = Math.floor(1000 + Math.random() * 9000); 
-    return `${name}${number}`;
-}
+        const name = uniqueNamesGenerator({
+            dictionaries: [adjectives, animals],
+            separator: '',
+            style: 'capital',
+            length: 2,
+        });
+
+        const shortName = name.slice(0, 12)
+        const number = Math.floor(1000 + Math.random() * 9000);
+
+        setFieldValue("nickname", `${shortName}${number}`.slice(0, 16));
+    }
 
     const [open, setOpen] = useState(false)
     return (
@@ -122,14 +141,27 @@ function RegisterName() {
                 </div>
                 <div>
                     <h2 className=' text-white font-semibold  py-4 pb-0 text-[23px]'>Add your details</h2>
+                    <div className={`${existsUser ? "block" : "hidden"} mt-5 flex items-start gap-5 rounded-[12px] border border-[#a13b4d] bg-[#291c20] px-6 py-7`}>
+                        <BiSolidError className="mt-1.5 shrink-0 text-[30px] text-[#ff4057]" />
+
+                        <p className="text-[20px] leading-[1.45] text-white max-[480px]:text-[16px]">
+                            This email is already in use by an existing account. To continue,{" "}
+                            <Link
+                                to="/signin"
+                                className="underline underline-offset-2 transition-colors hover:text-[#bdbdbd]"
+                            >
+                                sign in
+                            </Link>
+                        </p>
+                    </div>
                     <p className='text-[17px] py-5 text-[#A7A7A9]'>Email address</p>
                 </div>
                 <form onSubmit={handleSubmit}>
-                    <input type="text" name='email' value={values.email} onChange={(e) => {
-                        setExistUser(false);
-                        handleChange(e);
+                    <input type="text" name='email' value={values.email} onChange={(e) => {handleChange(e);
                     }}
                         onBlur={handleBlur} className={`hover:border-[#9b9ba2] bg-[#242428] w-[100%] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f] ${touched.email && errors.email && "border-[#FF6173]"}`} />
+                    {existsUser && <p className='text-[#FF6173] flex items-center text-[13px] pt-1'><BiSolidError className='mr-1' />
+                        Account already exists </p>}
                     <div className='flex items-start gap-6'>
                         <div>
                             <p className='text-[17px] py-5 text-[#A7A7A9]'>First name</p>
@@ -195,11 +227,11 @@ function RegisterName() {
 
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
                             {!existNick && !errors.nickname && (
-                                 <HiCheckCircle className=' text-[23px] text-[#71D687]' />
+                                <HiCheckCircle className=' text-[23px] text-[#71D687]' />
                             )}
                             <button
                                 type="button"
-                                onClick={generateNickname} 
+                                onClick={generateNickname}
                                 className="cursor-pointer"
                             >
                                 <RefreshCw className="w-5 h-5 text-white/70 hover:text-white transition" />

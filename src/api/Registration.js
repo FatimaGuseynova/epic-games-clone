@@ -12,9 +12,6 @@ export class Registration {
 
     const data = await res.json()
 
-    console.log("STATUS:", res.status)
-    console.log("RESPONSE:", data)
-
     return data
 }
 
@@ -29,8 +26,7 @@ export class Registration {
 
         const data = await res.json()
 
-        console.log(data)
-
+   
         return data
     }
 }

@@ -9,6 +9,7 @@ import RegisterBirth from '../pages/register/RegisterBirth'
 import RegisterEmail from '../pages/register/RegisterEmail'
 import SigninPassword from '../pages/signin/SigninPassword'
 import RegisterName from '../pages/register/RegisterName'
+import OtpCode from '../pages/register/OtpCode'
 
 const AuthRouter = () => {
     return (
@@ -22,6 +23,7 @@ const AuthRouter = () => {
             <Route path='email' element={<RegisterEmail />} />
             <Route path='password' element={<SigninPassword />} />
             <Route path='name' element={<RegisterName />} />
+            <Route path='otp' element={<OtpCode />} />
         </Routes>
     )
 }
