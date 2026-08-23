@@ -8,7 +8,7 @@ import MainDiscover from '../pages/discover/MainDiscover'
 function Main() {
   const [opened, setOpen] = useState(false)
   return (
-    <div className="bg-[#121216] h-[190vh]">
+    <div className="bg-[#121216]">
 
       <div className='min-[1010px]:w-[90%] w-[97%] mx-auto'>
         <div className='bg-[#121216] sticky z-999 top-0 flex  justify-between items-center '>
@@ -18,9 +18,7 @@ function Main() {
             <Discover opened={opened} />
           </div>
         </div>
-        <div>
-          <MainDiscover />
-        </div>
+
       </div>
     </div>
   )

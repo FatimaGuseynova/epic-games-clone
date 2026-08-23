@@ -10,6 +10,9 @@ import RegisterEmail from '../pages/register/RegisterEmail'
 import SigninPassword from '../pages/signin/SigninPassword'
 import RegisterName from '../pages/register/RegisterName'
 import OtpCode from '../pages/register/OtpCode'
+import ForgotPassword from '../pages/signin/ForgotPassword'
+import ResetPassword from '../pages/signin/ResetPassword'
+import CorrectInf from '../pages/signin/CorrectInf'
 
 const AuthRouter = () => {
     return (
@@ -24,6 +27,9 @@ const AuthRouter = () => {
             <Route path='password' element={<SigninPassword />} />
             <Route path='name' element={<RegisterName />} />
             <Route path='otp' element={<OtpCode />} />
+            <Route path='forgot' element={<ForgotPassword />} />
+            <Route path='reset' element={<ResetPassword />} />
+            <Route path='correct' element={<CorrectInf />} />
         </Routes>
     )
 }

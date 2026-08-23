@@ -1,25 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
+import { useLocation, useNavigate } from "react-router";
 
-function Discover({opened}) {
+function Discover({ opened }) {
+
     const [open, setOpen] = useState(false);
-    const [selected, setSelected] = useState('Discover');
+
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const options = [
-        'Discover',
-        'Browse',
-        'News',
+        {
+            name: "Discover",
+            path: "/discover",
+        },
+        {
+            name: "Browse",
+            path: "/browse",
+        },
+        {
+            name: "News",
+            path: "/news",
+        },
     ];
 
+    // Определяем выбранный пункт по текущему URL
+    const selected =
+        options.find(option => option.path === location.pathname)?.name
+        || "Discover";
+
     const handleSelect = (option) => {
-        setSelected(option);
         setOpen(false);
+        navigate(option.path);
     };
 
     return (
-        <div className={`relative min-[1023px]:hidden
-                     items-center justify-center 
-                    ${opened ? " hidden" : "flex"}`}>
+        <div
+            className={`
+                relative
+                min-[1023px]:hidden
+                items-center
+                justify-center
+                ${opened ? "hidden" : "flex"}
+            `}
+        >
 
             <button
                 type="button"
@@ -60,9 +84,11 @@ function Discover({opened}) {
                         bg-[#101014]
                     "
                 >
+
                     {options.map((option, index) => (
+
                         <button
-                            key={option}
+                            key={option.path}
                             type="button"
                             onClick={() => handleSelect(option)}
                             className={`
@@ -73,12 +99,15 @@ function Discover({opened}) {
                                 text-left
                                 text-[16px]
                                 duration-200
+
                                 ${
-                                    selected === option
+                                    selected === option.name
                                         ? "text-white"
                                         : "text-[#96969b]"
                                 }
+
                                 hover:text-white
+
                                 ${
                                     index !== options.length - 1
                                         ? "border-b border-[#3b3b3f]"
@@ -86,9 +115,11 @@ function Discover({opened}) {
                                 }
                             `}
                         >
-                            {option}
+                            {option.name}
                         </button>
+
                     ))}
+
                 </div>
             )}
 
@@ -96,4 +127,4 @@ function Discover({opened}) {
     );
 }
 
-export default Discover
+export default Discover;

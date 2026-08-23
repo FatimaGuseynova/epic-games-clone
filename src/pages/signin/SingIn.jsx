@@ -13,16 +13,19 @@ import steam from "../../images/steam.png"
 import { useFormik } from 'formik'
 import { signinEmail } from "../../validation/signinEmail";
 import { BiSolidError } from "react-icons/bi";
-import { Link } from 'react-router';
+import { Link, useNavigate  } from 'react-router';
 
 function SingIn() {
+  const navigate = useNavigate();
   const { values, errors, handleChange, handleSubmit } = useFormik({
     initialValues: {
       email: ""
     },
     validationSchema: signinEmail,
     onSubmit: (values) => {
+      localStorage.setItem("email", values.email)
       console.log(values);
+      navigate("/signin/password");
     }
   })
 
@@ -38,7 +41,7 @@ function SingIn() {
             <input name="email" onChange={handleChange} value={values.email} type="text" placeholder='Email address' required className={`${errors.email && "border-[#FF6173]"} hover:border-[#9b9ba2] duration-150 py-3 border-1 w-[100%] px-5 rounded-2xl border-[#5a5a5f]`} />
             {errors.email && <p className='text-[#FF6173] flex items-center text-[13px] pt-1'><BiSolidError className='mr-1' />
               {errors.email}</p>}
-            <Link to="password" className='w-full my-6 rounded-[8px] bg-[#26BBFF] block text-center py-2 text-black'>Continue</Link>
+            <button type='submit' className='w-full my-6 rounded-[8px] bg-[#26BBFF] block text-center py-2 text-black'>Continue</button>
           </form>
           <div>
             <h6 className='text-center text-[15px] text-[#A7A7A9] '>New here? <Link to="/signin/register" className="text-[#26B7F9] underline">Create an account</Link> </h6>

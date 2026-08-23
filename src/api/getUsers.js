@@ -1,4 +1,4 @@
-let BASE_URL = "http://localhost:3000/api";
+const BASE_URL = "http://localhost:3000/api";
 
 export const getUsers = async () => {
 
@@ -21,13 +21,12 @@ export const getUsers = async () => {
         throw new Error(loginData.message || "Login failed");
     }
 
+    // ВОТ ЭТОГО У ТЕБЯ НЕ ХВАТАЛО
     const token = loginData.token.accessToken;
 
     console.log("ADMIN ACCESS TOKEN:", token);
 
-  
     localStorage.setItem("accessToken", token);
-
 
     const usersResponse = await fetch(`${BASE_URL}/users`, {
         method: "GET",

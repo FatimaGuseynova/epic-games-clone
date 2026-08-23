@@ -15,14 +15,14 @@ const Router = () => {
         element={
           <>
             <Header />
-            <Main />
+            <Main/>
+            <MainRouter />
           </>
         }
       />
 
       <Route path="/admin" element={<Admin />} />
       <Route path="/signin/*" element={<AuthRouter />} />
-      <Route path="/*" element={<MainRouter />} />
     </Routes>
   )
 }
