@@ -1,81 +1,68 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
+import { GenresGet } from "../../../api/GenreGet";
+
 function PopularGenres() {
+    const [genres, setGenres] = useState([]);
+    const [isDragging, setIsDragging] = useState(false);
 
-    const genres = [
-        {
-            name: "Action Games",
-            images: [
-                "/images/action1.jpg",
-                "/images/action2.jpg",
-                "/images/action3.jpg",
-            ],
-        },
-        {
-            name: "Action-Adventure Games",
-            images: [
-                "/images/adventure1.jpg",
-                "/images/adventure2.jpg",
-                "/images/adventure3.jpg",
-            ],
-        },
-        {
-            name: "Adventure Games",
-            images: [
-                "/images/adventure4.jpg",
-                "/images/adventure5.jpg",
-                "/images/adventure6.jpg",
-            ],
-        },
-        {
-            name: "Casual Games",
-            images: [
-                "/images/casual1.jpg",
-                "/images/casual2.jpg",
-                "/images/casual3.jpg",
-            ],
-        },
-        {
-            name: "RPG Games",
-            images: [
-                "/images/rpg1.jpg",
-                "/images/rpg2.jpg",
-                "/images/rpg3.jpg",
-            ],
-        },
-        {
-            name: "Strategy Games",
-            images: [
-                "/images/strategy1.jpg",
-                "/images/strategy2.jpg",
-                "/images/strategy3.jpg",
-            ],
-        },
-    ];
+    const sliderRef = useRef(null);
+    const startX = useRef(0);
+    const scrollStart = useRef(0);
 
-    const [current, setCurrent] = useState(0);
+    useEffect(() => {
+        const getGenres = async () => {
+            const res = await GenresGet();
+            setGenres(res);
+        };
+
+        getGenres();
+    }, []);
+
+    const handleMouseDown = (e) => {
+        setIsDragging(true);
+
+        startX.current = e.pageX;
+        scrollStart.current = sliderRef.current.scrollLeft;
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isDragging) return;
+
+        e.preventDefault();
+
+        const distance = e.pageX - startX.current;
+
+        sliderRef.current.scrollLeft =
+            scrollStart.current - distance;
+    };
+
+    const handleMouseUp = () => {
+        setIsDragging(false);
+    };
 
     const next = () => {
-        if (current < genres.length - 1) {
-            setCurrent(current + 1);
-        }
+        sliderRef.current.scrollBy({
+            left: sliderRef.current.clientWidth,
+            behavior: "smooth",
+        });
     };
 
     const prev = () => {
-        if (current > 0) {
-            setCurrent(current - 1);
-        }
+        sliderRef.current.scrollBy({
+            left: -sliderRef.current.clientWidth,
+            behavior: "smooth",
+        });
     };
 
     return (
-        <section className="w-full px-[5%] py-8">
-
-            {/* HEADER */}
+        <section className="w-full px-[2%] lg:px-[5%] py-8">
 
             <div className="flex items-center justify-between mb-6">
 
-                <h2 className="text-white text-4xl font-bold">
+                <h2 className="text-white text-[28px] font-extrabold">
                     Popular Genres
                 </h2>
 
@@ -83,71 +70,77 @@ function PopularGenres() {
 
                     <button
                         onClick={prev}
-                        disabled={current === 0}
-                        className="w-10 h-10 rounded-full bg-[#303034] flex items-center justify-center text-white disabled:opacity-40 hover:bg-[#3d3d42] transition"
+                        className="p-2 rounded-full bg-[#303034] flex items-center justify-center text-white hover:bg-[#3d3d42] transition"
                     >
-                        <IoIosArrowBack size={22} />
+                        <IoIosArrowBack size={16} />
                     </button>
 
                     <button
                         onClick={next}
-                        disabled={current === genres.length - 1}
-                        className="w-10 h-10 rounded-full bg-[#303034] flex items-center justify-center text-white disabled:opacity-40 hover:bg-[#3d3d42] transition"
+                        className="p-2 rounded-full bg-[#303034] flex items-center justify-center text-white hover:bg-[#3d3d42] transition"
                     >
-                        <IoIosArrowForward size={22} />
+                        <IoIosArrowForward size={16} />
                     </button>
 
                 </div>
-
             </div>
 
+            <div
+                ref={sliderRef}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+                className={`
+                    overflow-x-auto
+                    scrollbar-hide
+                    select-none
+                    cursor-grab
+                    ${isDragging ? "cursor-grabbing" : ""}
+                `}
+            >
 
-            {/* SLIDER */}
+                <div className="        grid
+grid-flow-col
+auto-cols-[50%]
+min-[725px]:auto-cols-[25%]">
 
-            <div className="overflow-hidden">
-
-                <div
-                    className="flex transition-transform duration-500 ease-out"
-                    style={{
-                        transform: `translateX(-${current * 100}%)`,
-                    }}
-                >
-
-                    {genres.map((genre, index) => (
+                    {genres.slice(2).map((genre) => (
 
                         <div
-                            key={index}
+                            key={genre.id}
                             className="
-                                shrink-0
-                                w-1/2
-                                md:w-1/3
-                                lg:w-1/4
-                                px-3
+                            px-2
                             "
                         >
 
-                            <div className="bg-[#202024] rounded-[14px] p-7">
+                            <div className="bg-[#202024] rounded-[14px] p-1  pb-5
+                            duration-150
+                            hover:bg-[#43434adb]">
 
-                                {/* IMAGES */}
+                                <div className="flex h-[80px] overflow-hidden rounded-[4px] 
+                         ">
 
-                                <div className="flex h-[180px] overflow-hidden rounded-[4px]">
-
-                                    {genre.images.map((image, imageIndex) => (
+                                    {genre.products?.slice(0, 3).map((product) => (
 
                                         <img
-                                            key={imageIndex}
-                                            src={image}
-                                            alt=""
-                                            className="w-1/3 h-full object-cover"
+                                            key={product.id}
+                                            src={product.coverImage?.url}
+                                            alt={product.name}
+                                            draggable="false"
+                                            className="
+                                                w-1/3
+                                                h-full
+                                                object-cover
+                                                pointer-events-none
+                                            "
                                         />
 
                                     ))}
 
                                 </div>
 
-                                {/* TITLE */}
-
-                                <h3 className="text-white text-center text-xl mt-7">
+                                <h3 className="text-white text-center  mt-7 truncate">
                                     {genre.name}
                                 </h3>
 

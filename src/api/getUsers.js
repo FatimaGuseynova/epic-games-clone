@@ -21,7 +21,6 @@ export const getUsers = async () => {
         throw new Error(loginData.message || "Login failed");
     }
 
-    // ВОТ ЭТОГО У ТЕБЯ НЕ ХВАТАЛО
     const token = loginData.token.accessToken;
 
     console.log("ADMIN ACCESS TOKEN:", token);
