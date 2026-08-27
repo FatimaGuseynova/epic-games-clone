@@ -4,7 +4,7 @@ import FilterGames from './components/FilterGames'
 
 function MainBrowse() {
     return (
-        <div className='bg-[#121216] '>
+        <div className='bg-[#121216] h-[150vh] '>
             <div className='min-[1100px]:w-[80%]  w-[95%] mx-auto'>
                 <PopularGenres />
                 <FilterGames/>

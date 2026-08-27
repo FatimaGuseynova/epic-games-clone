@@ -1,15 +1,13 @@
-let BASE_URL = "http://localhost:3000/api";
-const token = localStorage.getItem("accessToken")
+import { apiFetch } from "./apiFetch";
 
-console.log(token)
+let BASE_URL = "http://localhost:3000/api";
+
+
 export const GenresPost = async (params) => {
-    let responsive = await fetch(`${BASE_URL}/genres`, {
+    let responsive = await apiFetch(`${BASE_URL}/genres`, {
         method: "POST",
         body: JSON.stringify(params),
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            "content-type": "application/json"
-        }
+   
     })
     let data = await responsive.json()
     return data

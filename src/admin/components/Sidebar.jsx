@@ -1,7 +1,8 @@
 function Sidebar({ activePage, setActivePage }) {
+
     return (
         <aside className="w-64 min-h-screen bg-[#18181c] border-r border-[#29292f] p-5">
-            
+
             <h1 className="text-2xl font-bold mb-10">
                 Epic Admin
             </h1>
@@ -17,6 +18,17 @@ function Sidebar({ activePage, setActivePage }) {
                     }`}
                 >
                     Genres
+                </button>
+
+                <button
+                    onClick={() => setActivePage("features")}
+                    className={`w-full text-left px-4 py-3 rounded-lg transition ${
+                        activePage === "features"
+                            ? "bg-[#2f2f36]"
+                            : "hover:bg-[#24242a]"
+                    }`}
+                >
+                    Features
                 </button>
 
                 <button

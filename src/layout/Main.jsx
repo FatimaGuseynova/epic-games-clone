@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Search from '../components/search/Search'
 import Discover from '../components/search/Discover'
 import Home from '../pages/home/BrowsePopular'
 import DiscoverDesktop from '../components/search/DiscoverDesktop'
 import MainDiscover from '../pages/discover/MainDiscover'
+import { getUsers } from "../api/getUsers";
 
 function Main() {
+  useEffect(() => {
+        getUsers();
+    }, []);
   const [opened, setOpen] = useState(false)
   return (
     <div className="bg-[#121216]">
