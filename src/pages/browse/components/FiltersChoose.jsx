@@ -23,11 +23,11 @@ function FiltersChoose() {
             const [events, genre, features, types, platform, subscriptions] =
                 await Promise.all([
                     EventsGet(),
-                    GenreGet(),
+                    GenresGet(),
                     FeatureGet(),
-                    TypeGet(),
+                    TypesGet(),
                     PlatformGet(),
-                    SubscriptionGet()
+                    SubscriptionsGet()
                 ]);
             setAll({
                 events,
