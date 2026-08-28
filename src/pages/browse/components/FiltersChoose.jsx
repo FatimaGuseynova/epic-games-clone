@@ -7,6 +7,7 @@ import { GenresGet } from "../../../api/GenreGet";
 import { TypesGet } from "../../../api/TypeGet";
 import { PlatformGet } from "../../../api/PlatformsGet";
 import { SubscriptionsGet } from "../../../api/SubscriptionGet";
+import { Link } from 'react-router';
 
 function FiltersChoose() {
     const [open, setOpen] = useState(false)
@@ -51,50 +52,59 @@ function FiltersChoose() {
     ];
 
     return (
-        <div className='bg-[#18181C]'>
-            <div className=' w-[94%] mx-auto'>
+        <div className='bg-[#18181C] h-screen'>
+            <div className=' w-[90%] mx-auto'>
 
                 <div>
                     <h2 className='font-semibold py-5'>Filters</h2>
                 </div>
-                <div className='w-full bg-[#303034] flex items-center  gap-4 py-2 px-4'>
-                    <GrSearch size={14} />
+                <div className='w-full hover:bg-[#29292d] bg-[#303034] flex items-center  gap-4 py-2 px-4'>
+                    <GrSearch className='text-[#d6d6d6]' size={14} />
 
                     <input className='outline-none' type="text" placeholder='Keywords' name="" id="" />
                 </div>
-                <div className='h-px w-full bg-[#3A3A3E]'> </div>
-
             </div>
-            <ul className="flex  flex-col gap-5 py-2">
-                {filters.map((filter) => (
-                    <div key={filter.id}>
-                        <li
+            <div className='py-4'>
+                <ul className="flex  flex-col">
+                    {filters.map((filter) => (
+                        <div key={filter.id}>
 
-                            onClick={() => {
-                                setOpen(open === filter.id ? false : filter.id);
-                            }}
-                            className="px-6 text-[15px] flex items-center justify-between w-full p-3 duration-150 hover:bg-[#54545b]"
-                        >
-                            {filter.name}
 
-                            {open === filter.id ? (
-                                <IoIosArrowUp className="ml-1 text-[16px]" />
-                            ) : (
-                                <IoIosArrowDown className="ml-1 text-[16px]" />
-                            )}
+                            <li
 
-                        </li>
-                        <div >
+                                onClick={() => {
+                                    setOpen(open === filter.id ? false : filter.id);
+                                }}
+                                className="border-t-1 border-[#3A3A3E] px-6 text-[14px] flex items-center justify-between w-full p-5 duration-150 hover:bg-[#54545b]"
+                            >
+                                {filter.name}
 
+                                {open === filter.id ? (
+                                    <IoIosArrowUp className="ml-1 text-[16px]" />
+                                ) : (
+                                    <IoIosArrowDown className="ml-1 text-[16px]" />
+                                )}
+
+                            </li>
+                            <div >
+
+                            </div>
+                            <div className={`${open === filter.id ? "block" : "hidden"}`}>
+                                {filter.array.map((item) => (<div key={item.id} className="py-2 text-sm text-[#A7A7A9]" > {item.name} </div>))}
+                            </div>
                         </div>
-                        <div className='h-px w-full bg-[#3A3A3E]'> </div>
-                        <div className={`${open === filter.id ? "block" : "hidden"}`}>
-                            {filter.array.map((item) => (<div key={item.id} className="py-2 text-sm text-[#A7A7A9]" > {item.name} </div>))}
-                        </div>
-                    </div>
 
-                ))}
-            </ul>
+                    ))}
+                </ul>
+
+                <div className='h-px w-full  bg-[#3A3A3E]'> </div>
+            </div>
+            <div className=' w-[90%] mx-auto'>
+                 <div className='flex items-center justify-between pt-3 '>
+                    <Link className='hover:bg-[#4b4b589b] w-[20%] text-[14px] my-6 rounded-[8px] bg-transparent block text-center py-2 text-white border-1 border-[#68686A] '>Clear</Link>
+                    <Link className='w-[20%] my-6 rounded-[8px] text-[14px] hover:bg-[#60cdff] bg-[#26BBFF] block text-center py-2 text-black'>Apply</Link>
+                 </div>
+            </div>
         </div>
 
     )

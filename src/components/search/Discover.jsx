@@ -24,7 +24,6 @@ function Discover({ opened }) {
         },
     ];
 
-    // Определяем выбранный пункт по текущему URL
     const selected =
         options.find(option => option.path === location.pathname)?.name
         || "Discover";
@@ -54,7 +53,7 @@ function Discover({ opened }) {
                     flex
                     items-center
                     justify-center
-                    text-[16px]
+                    text-[15px]
                     font-normal
                     duration-200
                     pt-4
@@ -64,9 +63,9 @@ function Discover({ opened }) {
                 <span>{selected}</span>
 
                 {open ? (
-                    <IoIosArrowUp className="ml-1 text-[16px]" />
+                    <IoIosArrowUp className="ml-1 text-[15px]" />
                 ) : (
-                    <IoIosArrowDown className="ml-1 text-[16px]" />
+                    <IoIosArrowDown className="ml-1 text-[15px]" />
                 )}
             </button>
 
@@ -76,10 +75,10 @@ function Discover({ opened }) {
                     className="
                         absolute
                         top-full
-                        left-0
+                        right-10
                         w-full
                         z-50
-                        px-[50px]
+                        px-[30px]
                         pb-[14px]
                         bg-[#101014]
                     "
@@ -93,11 +92,11 @@ function Discover({ opened }) {
                             onClick={() => handleSelect(option)}
                             className={`
                                 w-full
-                                h-[76px]
+                                h-[46px]
                                 flex
                                 items-center
                                 text-left
-                                text-[16px]
+                                text-[14px]
                                 duration-200
 
                                 ${
