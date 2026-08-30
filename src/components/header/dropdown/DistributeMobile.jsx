@@ -4,18 +4,6 @@ import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 function DistributeMobile({ opend, setOpend }) {
     const [showPanel, setShowPanel] = useState(false);
 
-    // useEffect(() => {
-    //     if (opend) {
-    //         const timer = setTimeout(() => {
-    //             setShowPanel(true);
-    //         }, 0);
-
-    //         return () => clearTimeout(timer);
-    //     } else {
-    //         setShowPanel(false);
-    //     }
-    // }, [opend]);
-
     return (
         <div className="relative">
 

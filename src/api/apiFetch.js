@@ -19,8 +19,6 @@ const refreshAccessToken = async () => {
 
     const data = await response.json();
 
-    console.log("REFRESH RESPONSE:", data);
-
     if (!response.ok) {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
@@ -42,9 +40,6 @@ const refreshAccessToken = async () => {
 export const apiFetch = async (url, options = {}) => {
     let token = localStorage.getItem("accessToken");
 
-    console.log("REQUEST:", url);
-    console.log("TOKEN:", token);
-
     let response = await fetch(url, {
         ...options,
         headers: {
@@ -54,7 +49,6 @@ export const apiFetch = async (url, options = {}) => {
         },
     });
 
-    console.log("STATUS:", response.status);
 
     if (response.status === 401) {
         token = await refreshAccessToken();

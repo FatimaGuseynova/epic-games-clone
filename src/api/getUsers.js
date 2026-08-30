@@ -13,18 +13,12 @@ export const getUsers = async () => {
   });
 
   const loginData = await loginResponse.json();
-
-  console.log("LOGIN RESPONSE:", loginData);
-
   if (!loginResponse.ok) {
     throw new Error(loginData.message || "Login failed");
   }
 
   const token = loginData.token.accessToken;
   const refreshToken = loginData.token.refreshToken;
-
-  console.log("ADMIN ACCESS TOKEN:", token);
-  console.log("ADMIN REFRESH TOKEN:", refreshToken);
 
   localStorage.setItem("accessToken", token);
   localStorage.setItem("refreshToken", refreshToken);
@@ -38,8 +32,6 @@ export const getUsers = async () => {
   });
 
   const usersData = await usersResponse.json();
-
-  console.log("USERS RESPONSE:", usersData);
 
   if (!usersResponse.ok) {
     throw new Error(usersData.message || "Failed to get users");

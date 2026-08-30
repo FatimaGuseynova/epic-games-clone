@@ -1,19 +1,23 @@
 import { Link } from 'react-router'
 import React, { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
-import { NavLink, useLocation } from "react-router";
+import { NavLink, useNavigate  } from "react-router";
 
 function DiscoverDropdown() {
-    
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState("Discover");
 
     const options = ["Discover", "Browse", "News"];
 
     const handleSelect = (option) => {
-        setSelected(option);
-        setOpen(false);
-    };
+    setSelected(option);
+    setOpen(false);
+    const link = links.find((item) => item.name === option);
+    if (link) {
+        navigate(link.path);
+    }
+};
     const links = [
         {
             name: "Discover",

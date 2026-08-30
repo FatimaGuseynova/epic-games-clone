@@ -126,7 +126,7 @@ const changeLanguage = (langCode) => {
                     popupRender={() => languageContent}
                 >
                     <button className="group hover:text-[#8b8b92] cursor-pointer">
-                        <GrLanguage />
+                        <GrLanguage  size={20}/>
                     </button>
                 </Dropdown>
 
@@ -141,7 +141,7 @@ const changeLanguage = (langCode) => {
                         ${open ? "opacity-0" : "opacity-100"}
                     `}
                 >
-                    <GrLanguage />
+                    <GrLanguage/>
                 </button>
 
 

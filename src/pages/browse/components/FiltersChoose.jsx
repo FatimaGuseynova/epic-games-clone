@@ -7,10 +7,19 @@ import { GenresGet } from "../../../api/GenreGet";
 import { TypesGet } from "../../../api/TypeGet";
 import { PlatformGet } from "../../../api/PlatformsGet";
 import { SubscriptionsGet } from "../../../api/SubscriptionGet";
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 
 function FiltersChoose() {
+    const [searchParams] = useSearchParams();
     const [open, setOpen] = useState(false)
+    const [select, setSelect] = useState({
+        Events: searchParams.getAll("eventId").map(Number),
+        Genre: searchParams.getAll("genreId").map(Number),
+        Features: searchParams.getAll("featureId").map(Number),
+        Types: searchParams.getAll("typeId").map(Number),
+        Platform: searchParams.getAll("platformId").map(Number),
+        Subscriptions: searchParams.getAll("subscriptionId").map(Number)
+    });
     const [all, setAll] = useState({
         events: [],
         genre: [],
@@ -51,8 +60,22 @@ function FiltersChoose() {
         { id: 6, name: "Subscriptions", array: all.subscriptions }
     ];
 
+    const getFilterUrl = () => {
+        const params = new URLSearchParams();
+
+        select.Events.forEach(id => params.append("eventId", id));
+        select.Genre.forEach(id => params.append("genreId", id));
+        select.Features.forEach(id => params.append("featureId", id));
+        select.Types.forEach(id => params.append("typeId", id));
+        select.Platform.forEach(id => params.append("platformId", id));
+        select.Subscriptions.forEach(id => params.append("subscriptionId", id));
+
+        return `/browse?${params.toString()}`;
+    };
+    
+
     return (
-        <div className='bg-[#18181C] h-screen'>
+        <div className='bg-[#18181C] min-h-screen'>
             <div className=' w-[90%] mx-auto'>
 
                 <div>
@@ -78,19 +101,39 @@ function FiltersChoose() {
                                 className="border-t-1 border-[#3A3A3E] px-6 text-[14px] flex items-center justify-between w-full p-5 duration-150 hover:bg-[#54545b]"
                             >
                                 {filter.name}
-
-                                {open === filter.id ? (
-                                    <IoIosArrowUp className="ml-1 text-[16px]" />
-                                ) : (
-                                    <IoIosArrowDown className="ml-1 text-[16px]" />
-                                )}
+                                <div className='flex items-center gap-2'>
+                                    <div className={`${select[filter.name].length > 0 ? "block" : "hidden"} text-white px-1.5 bg-[#3A3A3E] rounded-full`}>
+                                        {select[filter.name].length}
+                                    </div>
+                                    {open === filter.id ? (
+                                        <IoIosArrowUp className="ml-1 text-[16px]" />
+                                    ) : (
+                                        <IoIosArrowDown className="ml-1 text-[16px]" />
+                                    )}
+                                </div>
 
                             </li>
                             <div >
 
                             </div>
-                            <div className={`${open === filter.id ? "block" : "hidden"}`}>
-                                {filter.array.map((item) => (<div key={item.id} className="py-2 text-sm text-[#A7A7A9]" > {item.name} </div>))}
+                            <div className='w-[90%] mx-auto'>
+                                <div className={`${open === filter.id ? "block" : "hidden"} `}>
+                                    {filter.array.map((item) => (<div key={item.id} className="py-2 flex items-center gap-2 text-sm text-[#A7A7A9]" > <input
+                                        checked={select[filter.name].includes(item.id)}
+                                        onChange={(e) => {
+                                            setSelect((prev) => ({
+                                                ...prev,
+                                                [filter.name]:
+                                                    filter.name === "Events"
+                                                        ? (e.target.checked ? [item.id] : [])
+                                                        : (
+                                                            e.target.checked
+                                                                ? [...prev[filter.name], item.id]
+                                                                : prev[filter.name].filter(id => id !== item.id)
+                                                        )
+                                            }));
+                                        }} className='h-[20px] w-[20px]' type="checkbox" /> {item.name} </div>))}
+                                </div>
                             </div>
                         </div>
 
@@ -100,10 +143,19 @@ function FiltersChoose() {
                 <div className='h-px w-full  bg-[#3A3A3E]'> </div>
             </div>
             <div className=' w-[90%] mx-auto'>
-                 <div className='flex items-center justify-between pt-3 '>
-                    <Link className='hover:bg-[#4b4b589b] w-[20%] text-[14px] my-6 rounded-[8px] bg-transparent block text-center py-2 text-white border-1 border-[#68686A] '>Clear</Link>
-                    <Link className='w-[20%] my-6 rounded-[8px] text-[14px] hover:bg-[#60cdff] bg-[#26BBFF] block text-center py-2 text-black'>Apply</Link>
-                 </div>
+                <div className='flex items-center justify-between pt-3 pb-5'>
+                    <Link to="/browse" onClick={() => setSelect(
+                        {
+                            Events: [],
+                            Genre: [],
+                            Features: [],
+                            Types: [],
+                            Platform: [],
+                            Subscriptions: []
+                        }
+                    )} className='hover:bg-[#4b4b589b] w-[20%] text-[14px] my-6 rounded-[8px] bg-transparent block text-center py-2 text-white border-1 border-[#68686A] '>Clear</Link>
+                    <Link to={getFilterUrl()} className='w-[20%] my-6 rounded-[8px] text-[14px] hover:bg-[#60cdff] bg-[#26BBFF] block text-center py-2 text-black'>Apply</Link>
+                </div>
             </div>
         </div>
 
