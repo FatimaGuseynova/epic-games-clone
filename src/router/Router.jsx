@@ -5,7 +5,8 @@ import Header from '../components/header/Header'
 import Main from '../layout/Main'
 import MainRouter from './MainRouter'
 import MainSupport from '../pages/support/MainSupport'
-
+import FiltersChoose from '../pages/browse/components/FiltersChoose'
+import AuthRouter from './AuthRouter'
 const Router = () => {
   return (
     <Routes>
@@ -20,6 +21,8 @@ const Router = () => {
         }
       />
       <Route path='/support' element={<MainSupport />} />
+            <Route path="/signin/*" element={<AuthRouter />} />
+            <Route path='/filterchoose' element={<FiltersChoose />} />
     </Routes>
   )
 }

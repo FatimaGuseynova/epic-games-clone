@@ -12,6 +12,7 @@ import { Link, useSearchParams } from 'react-router';
 import FilterDrawer from './FilterDrawer';
 import FilterDesktop from './FilterDesktop';
 import { IoMdClose } from "react-icons/io";
+import GamesBrowse from './GamesBrowse';
 
 function FilterGames() {
     const [searchParams] = useSearchParams();
@@ -137,7 +138,7 @@ function FilterGames() {
                                 }
                             </ul>
                         </div>
-                        <div  className='flex flex-wrap gap-2 '>
+                        <div className='flex flex-wrap gap-2 '>
                             {selectedNames.map((item) => (
                                 <div key={item} className='bg-[#343437] flex items-center gap-2 rounded-full px-2.5 py-1 text-white text-[15px]'>
                                     {item} <IoMdClose className='text-[#B0B0B1]' size={15} />
@@ -155,9 +156,13 @@ function FilterGames() {
                         <div onClick={() => setFilter(true)} className='flex hover:bg-[#696971] duration-150 bg-[#4f4f55] rounded-[10px] py-1 px-2  gap-3 items-center'> <FilterDrawer paramss={paramss} />
                         </div>
                     </div>
-                    <div className='max-[1024px]:hidden block'>
-                        <div onClick={() => setFilter(true)} ><FilterDesktop paramss={paramss} />
-                        </div>
+                </div>
+            </div>
+            <div className='flex items-start justify-start'>
+                <GamesBrowse />
+
+                <div className='max-[1024px]:hidden ml-10 block'>
+                    <div onClick={() => setFilter(true)} ><FilterDesktop paramss={paramss} />
                     </div>
                 </div>
             </div>

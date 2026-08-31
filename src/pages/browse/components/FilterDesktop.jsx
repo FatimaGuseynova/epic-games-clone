@@ -76,7 +76,7 @@ function FilterDesktop({ paramss }) {
     };
 
     return (
-        <div className='bg-[#202024] h-fit rounded-2xl'>
+        <div className='bg-[#202024]  w-fit h-fit rounded-2xl'>
             <div className=' w-[90%] mx-auto '>
                 <div>
                     <h2 className='font-semibold py-5'>Filter {paramss > 0 && `(${paramss})`} </h2>

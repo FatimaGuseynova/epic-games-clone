@@ -127,7 +127,7 @@ function Hamburgermenu({ menulOpen, setMenulOpen }) {
                                 </h2>
 
                                 <Link
-                                    to="/"
+                                    to="/support"
                                     className="
                                         text-[17px]
                                         w-full
