@@ -66,7 +66,7 @@ function GamesBrowse() {
                                 <h3 className="text-white pb-1 text-[17px] font-bold">
                                     {item.name}
                                 </h3>
-                                {item?.events[0]?.name && <p className={`${item.events[0].name === "First Run" && "w-fit mb-1.5 rounded-[4px] px-1 py-0.5 bg-[#343437] text-[14px] text-white"}`}>{item.events[0].name === "First Run" && (<div className='flex items-center gap-1'><FaCrown className='text-[#FFD15C]' /> <span>First Run</span></div>)}</p>}
+                                {item?.events[0]?.name && <div className={`${item.events[0].name === "First Run" && "w-fit mb-1.5 rounded-[4px] px-1 py-0.5 bg-[#343437] text-[14px] text-white"}`}>{item.events[0].name === "First Run" && (<div className='flex items-center gap-1'><FaCrown className='text-[#FFD15C]' /> <span>First Run</span></div>)}</div>}
 
                                 <h5 className={`${item?.discount > 0 ? "flex" : "hidden"} items-center gap-2`}>
                                     <div className='bg-[#26BAFE] px-1  py-0.5 text-black text-[14px] rounded-2xl'>

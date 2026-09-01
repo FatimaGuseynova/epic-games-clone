@@ -34,7 +34,7 @@ function DiscoverDropdown() {
     ];
 
     return (
-        <div>
+        <div >
             <div className="max-[1280px]:hidden">
                 <nav className="flex items-center gap-6">
                     {links.map((link) => (
@@ -42,7 +42,7 @@ function DiscoverDropdown() {
                             key={link.path}
                             to={link.path}
                             className={({ isActive }) =>
-                                `text-[10px] transition-colors duration-200 ${isActive
+                                `text-[17px] transition-colors duration-200 ${isActive
                                     ? "text-white"
                                     : "text-[#85858a] hover:text-white"
                                 }`
@@ -79,7 +79,7 @@ function DiscoverDropdown() {
                                 text-left
                                 px-3
                                 py-2
-                                text-xs
+                                text-[17px]
                                 transition-colors
                                 duration-150
                                 ${option === selected

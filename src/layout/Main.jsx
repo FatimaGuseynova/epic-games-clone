@@ -5,6 +5,7 @@ import Home from '../pages/home/BrowsePopular'
 import DiscoverDesktop from '../components/search/DiscoverDesktop'
 import MainDiscover from '../pages/discover/MainDiscover'
 import { getUsers } from "../api/getUsers";
+import Footer from './Footer'
 
 function Main() {
   useEffect(() => {
@@ -12,10 +13,10 @@ function Main() {
     }, []);
   const [opened, setOpen] = useState(false)
   return (
-    <div className="bg-[#121216]">
+    <div className="bg-[#121216] sticky z-999 top-0 py-5">
 
       <div className='min-[1010px]:w-[90%] w-[97%] mx-auto'>
-        <div className='bg-[#121216] sticky z-999 top-0 flex  justify-between items-center '>
+        <div className='bg-[#121216]  flex  justify-between items-center '>
           <Search opened={opened} setOpen={setOpen} />
           <div className='w-full'>
             <DiscoverDesktop />

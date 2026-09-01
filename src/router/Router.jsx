@@ -7,6 +7,7 @@ import MainRouter from './MainRouter'
 import MainSupport from '../pages/support/MainSupport'
 import FiltersChoose from '../pages/browse/components/FiltersChoose'
 import AuthRouter from './AuthRouter'
+import Footer from '../layout/Footer'
 const Router = () => {
   return (
     <Routes>
@@ -17,6 +18,7 @@ const Router = () => {
             <Header />
             <Main />
             <MainRouter />
+            <Footer/>
           </>
         }
       />
