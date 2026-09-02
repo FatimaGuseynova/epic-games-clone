@@ -27,7 +27,7 @@ function DetailPage() {
         <div>
 
           <h1 className='text-white font-bold text-[32px]'>{product.name}</h1>
-          <div className='flex items-center gap-4'>
+          <div className='flex items-center gap-4 py-2'>
             <Link to="/detail" >Overview</Link>
             <Link to="/">FAQ</Link>
           </div>
@@ -155,12 +155,12 @@ function DetailPage() {
                   Follow Us
                 </h3>
 
-                <div className="flex items-center justify-center min-[760px]:max-[1000px]:gap-5 gap-10 rounded-lg bg-[#202023] px-5 py-8 ">
+                <div className="flex items-center flex-wrap justify-center min-[760px]:max-[1000px]:gap-5 gap-10 rounded-lg bg-[#202023] px-5 py-8 ">
                   <a
                     href="#"
                     className="text-[#aaa] transition hover:text-white"
                   >
-                    <IoGlobeOutline size={26} />
+                    <IoGlobeOutline  size={26} />
                   </a>
                   <a
                     href="#"

@@ -8,6 +8,7 @@ import MainSupport from '../pages/support/MainSupport'
 import FiltersChoose from '../pages/browse/components/FiltersChoose'
 import AuthRouter from './AuthRouter'
 import Footer from '../layout/Footer'
+import AgeCheck from '../pages/browse/components/AgeCheck'
 const Router = () => {
   return (
     <Routes>
@@ -25,6 +26,7 @@ const Router = () => {
       <Route path='/support' element={<MainSupport />} />
             <Route path="/signin/*" element={<AuthRouter />} />
             <Route path='/filterchoose' element={<FiltersChoose />} />
+            <Route path='/age' element={<AgeCheck />} />
     </Routes>
   )
 }

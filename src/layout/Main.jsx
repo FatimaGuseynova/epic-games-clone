@@ -13,7 +13,7 @@ function Main() {
     }, []);
   const [opened, setOpen] = useState(false)
   return (
-    <div className="bg-[#121216] sticky z-999 top-0 py-5">
+    <div className="bg-[#121216] sticky z-999 top-0 py-1">
 
       <div className='min-[1010px]:w-[90%] w-[97%] mx-auto'>
         <div className='bg-[#121216]  flex  justify-between items-center '>

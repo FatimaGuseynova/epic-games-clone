@@ -34,9 +34,9 @@ function DiscoverDropdown() {
     ];
 
     return (
-        <div >
+        <div className=''>
             <div className="max-[1280px]:hidden">
-                <nav className="flex items-center gap-6">
+                <nav className="flex py-3.5 items-center gap-6">
                     {links.map((link) => (
                         <NavLink
                             key={link.path}
@@ -53,7 +53,7 @@ function DiscoverDropdown() {
                     ))}
                 </nav>
             </div>
-            <div className="relative inline-block max-[1023px]:hidden min-[1280px]:hidden">
+            <div className="relative py-0 inline-block max-[1023px]:hidden min-[1280px]:hidden">
 
                 <button
                     onClick={() => setOpen(!open)}

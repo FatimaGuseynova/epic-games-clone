@@ -28,7 +28,7 @@ function GamesBrowse() {
                     {res.data.map((item, index) => (
 
                         <div key={index}>
-                            <Link to="/detail" state={{product: item}}>
+                            <Link to={item.ageRestriction === "18+" ? "/age" : "/detail"}state={{product: item}}>
                                 <div className="relative group w-fit">
 
                                     <img
