@@ -76,7 +76,7 @@ function AgeCheck() {
 
             <div className="min-h-screen w-screen flex flex-col justify-center items-center">
 
-                <div className="rounded-[10px] border border-[#2E2E32] p-1 bg-[#18181C]">
+                <div className="rounded-[10px] flex flex-col items-center border border-[#2E2E32] p-1 bg-[#18181C]">
 
                     <img
                         className="w-80 rounded-[10px]"

@@ -42,7 +42,7 @@ function DiscoverDropdown() {
                             key={link.path}
                             to={link.path}
                             className={({ isActive }) =>
-                                `text-[17px] transition-colors duration-200 ${isActive
+                                `text-[15px] transition-colors duration-200 ${isActive
                                     ? "text-white"
                                     : "text-[#85858a] hover:text-white"
                                 }`

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router'
+import { Link, useLocation, NavLink } from 'react-router'
 import { SlBasketLoaded } from "react-icons/sl";
 import { GrGift } from "react-icons/gr";
 import { CiBookmark } from "react-icons/ci";
@@ -28,8 +28,29 @@ function DetailPage() {
 
           <h1 className='text-white font-bold text-[32px]'>{product.name}</h1>
           <div className='flex items-center gap-4 py-2'>
-            <Link to="/detail" >Overview</Link>
-            <Link to="/">FAQ</Link>
+            <NavLink
+              to="/detail"
+              className={({ isActive }) =>
+                `relative py-3 text-[20px] transition-colors ${isActive
+                  ? "text-white after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-[#26BBFF]"
+                  : "text-[#A7A7A9] hover:text-white"
+                }`
+              }
+            >
+              Overview
+            </NavLink>
+
+            <NavLink
+              to="/detail"
+              className={({ isActive }) =>
+                `relative py-3 text-[20px] transition-colors ${isActive
+                  ? "text-white after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-[#26BBFF]"
+                  : "text-[#A7A7A9] hover:text-white"
+                }`
+              }
+            >
+              FAQ
+            </NavLink>
           </div>
         </div>
         <div className='min-[760px]:grid-cols-[2fr_1fr] gap-5 grid grid-cols-1 '>
@@ -160,7 +181,7 @@ function DetailPage() {
                     href="#"
                     className="text-[#aaa] transition hover:text-white"
                   >
-                    <IoGlobeOutline  size={26} />
+                    <IoGlobeOutline size={26} />
                   </a>
                   <a
                     href="#"

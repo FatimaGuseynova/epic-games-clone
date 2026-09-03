@@ -205,7 +205,7 @@ const FilterDrawer = ({ paramss }) => {
                                                     text-white
                                                     px-1.5
                                                     bg-[#3A3A3E]
-                                                    rounded-full
+                                                    rounded-[1px]
                                                 `}
                                             >
                                                 {select[filter.name].length}

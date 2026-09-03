@@ -5,6 +5,7 @@ import MainBrowse from '../pages/browse/MainBrowse'
 import MainNews from '../pages/news/MainNews'
 import Admin from '../admin/Admin'
 import DetailPage from '../pages/browse/components/DetailPage'
+import NewsDetail from '../pages/news/components/NewsDetail'
 
 const MainRouter = () => {
     return (
@@ -14,6 +15,7 @@ const MainRouter = () => {
             <Route path='/news' element={<MainNews />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/detail" element={<DetailPage />} />
+            <Route path="/newsdetail" element={<NewsDetail />} />
 
         </Routes>
     )
