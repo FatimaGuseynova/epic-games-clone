@@ -55,12 +55,12 @@ function TwoNews() {
                     Epic Games News
                 </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-10">
+                <div className="grid grid-cols-1 sm:flex-row md:grid-cols-2 gap-x-5 gap-y-10">
 
                     {news.slice(0,2).map((item, index) => (
                         <article
                             key={item.id}
-                            className="group border-b border-[#39393e] pb-8 md:border-0 md:pb-0"
+                            className="group pb-8"
                         >
                             <div className="flex flex-col md:block">
 
@@ -82,11 +82,11 @@ function TwoNews() {
                                     {item.title}
                                 </h3>
 
-                                <p className="hidden md:block text-[#a5a5aa] text-[15px] leading-[1.5] mt-7 max-w-[560px] line-clamp-1">
-                                    {item.description.slice(0, 130)}...
+                                <p className=" md:block text-[#a5a5aa] text-[15px] leading-[1.5] mt-7 max-w-[560px] line-clamp-1">
+                                    {item.description.slice(0, 230)}...
                                 </p>
 
-                                <Link to="/newsdetail" className="text-[16px] mt-6 border-b border-[#77777d] pb-[2px] hover:border-white w-fit transition-colors">
+                                <Link to="/newsdetail" state={{news: item}} className="text-[16px] mt-6 border-b border-[#77777d] pb-[2px] hover:border-white w-fit transition-colors">
                                     Read more
                                 </Link>
 

@@ -63,7 +63,7 @@ function GamesBrowse({ sort = 1 }) {
         const list = [...filteredGames]
 
         const getPrice = (item) =>
-            item.isDiscount ? item.discountedPrice : item.price
+            item.discount > 0 ? item.discount : item.price
 
         switch (sort) {
             case 2:

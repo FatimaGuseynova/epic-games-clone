@@ -98,7 +98,7 @@ function FilterGames() {
 
     paramss = params.size;
 
-    return `/browse?${params.toString()}`;
+    return `/filterchoose?${params.toString()}`;
 };
 
     const filterData = {

@@ -1,9 +1,26 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router';
 import { IoMdSearch } from "react-icons/io";
 import { IoMdClose } from "react-icons/io";
 
 
 function Search({ opened, setOpen }) {
+    const [query, setQuery] = useState('');
+    const navigate = useNavigate();
+
+    const handleSearch = () => {
+        if (query.trim()) {
+            navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+            setOpen(false);
+        }
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
     return (
         <div >
             <div className='max-[1023px]:hidden '>
@@ -13,6 +30,9 @@ function Search({ opened, setOpen }) {
                         <input
                             type="text"
                             placeholder="Search store"
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            onKeyDown={handleKeyDown}
                             className="hover:bg-[#404044] py-2  duration-200 w-full pl-2.5 bg-transparent outline-none border-none text-[15px] text-white text-[#8a8a8f]"
                         />
                     </div>
@@ -26,7 +46,14 @@ function Search({ opened, setOpen }) {
                     <div className='text-[23px]'>
                         <IoMdSearch />
                     </div>
-                    <input type="text" placeholder='Search store' className='pl-6 outline-none text-[#f1f1f1] text-[14px] py-3 w-full border-none' />
+                    <input
+                        type="text"
+                        placeholder='Search store'
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        className='pl-6 outline-none text-[#f1f1f1] text-[14px] py-3 w-full border-none'
+                    />
                     <IoMdClose className='text-[46px] pr-5' onClick={() => { setOpen(false) }} />
 
                 </div>
