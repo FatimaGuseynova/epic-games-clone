@@ -1,5 +1,4 @@
 import React from 'react';
-import { DownOutlined } from '@ant-design/icons';
 import { Dropdown, Space } from 'antd';
 import { IoIosArrowDown } from 'react-icons/io';
 import { IoIosArrowForward } from "react-icons/io";

@@ -7,6 +7,8 @@ import SeenFortnite from './components/SeenFortnite'
 import Discounts from './components/Discounts'
 import DealsOfWeek from './components/DealsOfWeek'
 import FreeGames from './components/FreeGames'
+import NewReleases from './components/NewReleases'
+import UpcomingGames from './components/UpcomingGames'
 
 function MainDiscover() {
   return (
@@ -19,6 +21,8 @@ function MainDiscover() {
       <Discounts />
       <DealsOfWeek />
       <FreeGames />
+      <NewReleases />
+      <UpcomingGames/>
     </div>
   )
 }

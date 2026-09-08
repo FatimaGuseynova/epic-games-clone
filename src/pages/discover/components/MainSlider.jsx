@@ -62,7 +62,7 @@ function MainSlider() {
               </div>
               <div className=' '>
 
-                <div className='flex flex-col p-5 min-[890px]:pb-20 h-full justify-end absolute z-10  w-[50%]'>
+                <div className='flex flex-col p-5 min-[950px]:pb-20 h-full justify-end absolute z-10  w-[50%]'>
 
                   <h4 className='pl-19 text-[#F5FBFE]
                         font-black
@@ -79,9 +79,9 @@ function MainSlider() {
                              text-3xl
                              uppercase
                              drop-shadow-[0_0_6px_rgba(255,255,255,0.8)]'>Savings</h2>
-                  <div className='p-4 pt-6 relative'>
-                    <p className='mac-[790px]:text-[14px] text-[13px] pb-2 font-semibold'>AUGUST 6 - AUGUST 20</p>
-                    <h6 className='text-[14px]'>Save big on must-play games and discover
+                  <div className='p-4 pt-6 max-[840px]:pt-1 relative'>
+                    <p className='max-[790px]:text-[14px] max-[840px]:w-[150%] text-[13px] pb-2 max-[840px]:pb-1 font-semibold'>AUGUST 6 - AUGUST 20</p>
+                    <h6 className='max-[840px]:w-[150%] text-[14px]'>Save big on must-play games and discover
                       new adventures.</h6>
                   </div>
 
@@ -89,7 +89,7 @@ function MainSlider() {
                     <button className="
                              bg-white
                              text-black
-                             px-5
+                             px-5 
                              py-3
                              rounded-[10px]
                              text-[16px]
@@ -111,10 +111,10 @@ function MainSlider() {
               >
                 <div className="absolute z-0 !text-white rounded-[12px] inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent">
                 </div>
-                <div className='flex w-[85%] flex-col p-5 min-[890px]:pb-20 h-full justify-end absolute z-10  w-[50%]'>
+                <div className='flex w-[85%] flex-col p-5 min-[950px]:pb-20 h-full justify-end absolute z-10  w-[50%]'>
                   <h2 className=' font-semibold text-[17px]'>{item.name}</h2>
-                  <h6 className='text-[14px] py-3 w-full'>{item.description}</h6>
-                  <p className='pb-2 pt-7'>${item.price}</p>
+                  <h6 className='text-[14px] py-3 max-[900px]:py-1 w-full'>{item.description.split(' ').slice(0, 23).join(' ')}...</h6>
+                  <p className='pb-2 pt-7 max-[910px]:pt-1'>{item.price === 0 ? "Free" : item.discount ? "$" + item.discount : "$" + item.price}</p>
                   <div className='flex gap-3'>
                     <div className=" bg-white
                              text-black

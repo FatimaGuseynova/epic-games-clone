@@ -183,7 +183,7 @@ function MainSliderMobile() {
                                                 mt-5
                                                 font-medium
                                             ">
-                                                ${item.price}
+                                                {item.price === 0 ? "Free" : item.discount ? "$" + item.discount : "$" + item.price}
                                             </p>
 
                                         </div>

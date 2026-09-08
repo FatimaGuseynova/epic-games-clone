@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate  } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { IoIosArrowBack } from "react-icons/io";
 import { Eye, EyeOff } from "lucide-react";
 import { useFormik } from 'formik'
@@ -32,17 +32,33 @@ function SigninPassword() {
         initialValues: {
             password: ""
         },
-        // validationSchema:
-
         onSubmit: async (values) => {
             const obj = {
                 email: emailSend,
                 password: values.password
+            };
+
+            try {
+                const response = await loginUsers(obj);
+
+                if (response?.error) {
+                    setMessage(response.message);
+                    return;
+                }
+
+                if (response?.token?.accessToken) {
+                    localStorage.setItem("accessToken", response.token.accessToken);
+                    localStorage.setItem("refreshToken", response.token.refreshToken);
+
+                    console.log("ACCESS:", localStorage.getItem("accessToken"));
+                    console.log("REFRESH:", localStorage.getItem("refreshToken"));
+
+                    navigate("/discover");
+                }
+            } catch (error) {
+                console.log(error);
+                setMessage("Something went wrong");
             }
-            const response = await loginUsers(obj)
-            response.error && setMessage(response.message)
-            console.log(response)
-            navigate("/signin/correct")
         }
     })
 

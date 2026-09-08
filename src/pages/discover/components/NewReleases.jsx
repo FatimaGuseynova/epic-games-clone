@@ -6,7 +6,7 @@ import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { ProductsGet } from "../../../api/ProductsGet";
 import "swiper/css";
 
-function DiscoverNew() {
+function NewReleases() {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -26,7 +26,11 @@ function DiscoverNew() {
                     page++;
                 }
 
-                setProducts(allProducts);
+                const newest = allProducts
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                    .slice(0, 5);
+
+                setProducts(newest);
             } catch (error) {
                 console.log(error);
             }
@@ -36,7 +40,6 @@ function DiscoverNew() {
     }, []);
 
     const slides = [];
-
     for (let i = 0; i < products.length; i += 6) {
         slides.push(products.slice(i, i + 6));
     }
@@ -46,14 +49,17 @@ function DiscoverNew() {
             <div className="min-[1100px]:w-[77%] w-[93%] mx-auto">
                 <div className="flex items-center max-[770px]:flex-col justify-between gap-11">
                     <div
-                        className="w-88 max-[770px]:w-full max-[770px]:h-[410px] shrink-0 flex justify-center items-end h-[330px] bg-cover bg-center bg-no-repeat rounded-[12px]"
-                        style={{ backgroundImage: "url('https://cdn2.unrealengine.com/en-discoversn-bhn-target-recmin-1200x1200-1200x1200-82f0776c4b35.jpg?resize=1&w=360&h=480&quality=medium')" }}
+                        className="w-90 max-[770px]:w-full max-[770px]:h-[400px] shrink-0 flex justify-center items-end h-[330px] bg-cover bg-center bg-no-repeat rounded-[12px]"
+                        style={{
+                            backgroundImage:
+                                "url('https://cdn2.unrealengine.com/en-brandedlist-newreleases-1200x1200-5904350c2195.avif?resize=1&w=360&h=480&quality=medium')"
+                        }}
                     >
                         <Link
                             to="/"
                             className="text-center bg-white h-fit text-black duration-150 px-5 w-[60%] py-3 rounded-[10px] text-[16px] font-medium hover:bg-gray-300 mb-7"
                         >
-                            View More
+                            Discover More
                         </Link>
                     </div>
 
@@ -62,7 +68,6 @@ function DiscoverNew() {
                             <button className="discover-prev w-8 h-8 rounded-full bg-[#29292e] flex items-center justify-center text-white">
                                 <IoChevronBack size={17} />
                             </button>
-
                             <button className="discover-next w-8 h-8 rounded-full bg-[#29292e] flex items-center justify-center text-white">
                                 <IoChevronForward size={17} />
                             </button>
@@ -88,20 +93,18 @@ function DiscoverNew() {
                                                 className="flex items-center gap-3"
                                             >
                                                 <img
-                                                    src={item?.coverImage?.url}
-                                                    alt={item?.name}
+                                                    src={item.coverImage?.url}
+                                                    alt={item.name}
                                                     className="w-16 rounded-[3px] object-cover shrink-0"
                                                 />
-
                                                 <div className="min-w-0">
                                                     <p className="text-white text-[13px] font-semibold truncate">
-                                                        {item?.name}
+                                                        {item.name}
                                                     </p>
-
                                                     <p className="text-white text-[12px] font-semibold mt-1">
-                                                        {item?.price === 0
+                                                        {item.price === 0
                                                             ? "Free"
-                                                            : item?.discount > 0
+                                                            : item.discount > 0
                                                             ? "$" + item.discount
                                                             : "$" + item.price}
                                                     </p>
@@ -119,4 +122,4 @@ function DiscoverNew() {
     );
 }
 
-export default DiscoverNew;
+export default NewReleases;
