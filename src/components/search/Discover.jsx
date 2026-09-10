@@ -1,13 +1,13 @@
 import React, { useState } from "react";
+
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
-import { useLocation, useNavigate } from "react-router";
+
+import { useNavigate } from "react-router";
 
 function Discover({ opened }) {
-
     const [open, setOpen] = useState(false);
 
     const navigate = useNavigate();
-    const location = useLocation();
 
     const options = [
         {
@@ -24,11 +24,13 @@ function Discover({ opened }) {
         },
     ];
 
-    const selected =
-        options.find(option => option.path === location.pathname)?.name
-        || "Discover";
+    const [selected, setSelected] = useState(() => {
+        return localStorage.getItem("discoverDropdown") || "Discover";
+    });
 
     const handleSelect = (option) => {
+        setSelected(option.name);
+        localStorage.setItem("discoverDropdown", option.name);
         setOpen(false);
         navigate(option.path);
     };
@@ -43,7 +45,6 @@ function Discover({ opened }) {
                 ${opened ? "hidden" : "flex"}
             `}
         >
-
             <button
                 type="button"
                 onClick={() => setOpen(prev => !prev)}
@@ -69,7 +70,6 @@ function Discover({ opened }) {
                 )}
             </button>
 
-
             {open && (
                 <div
                     className="
@@ -83,9 +83,7 @@ function Discover({ opened }) {
                         bg-[#101014]
                     "
                 >
-
                     {options.map((option, index) => (
-
                         <button
                             key={option.path}
                             type="button"
@@ -98,15 +96,12 @@ function Discover({ opened }) {
                                 text-left
                                 text-[14px]
                                 duration-200
-
                                 ${
                                     selected === option.name
                                         ? "text-white"
                                         : "text-[#96969b]"
                                 }
-
                                 hover:text-white
-
                                 ${
                                     index !== options.length - 1
                                         ? "border-b border-[#3b3b3f]"
@@ -116,12 +111,9 @@ function Discover({ opened }) {
                         >
                             {option.name}
                         </button>
-
                     ))}
-
                 </div>
             )}
-
         </div>
     );
 }

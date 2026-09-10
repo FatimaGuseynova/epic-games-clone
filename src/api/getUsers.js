@@ -1,41 +1,22 @@
+import { apiFetch } from "./apiFetch";
+
 const BASE_URL = "http://localhost:3000/api";
 
 export const getUsers = async () => {
-  const loginResponse = await fetch(`${BASE_URL}/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email: "mehemmedemciyev146@gmail.com",
-      password: "admin123!",
-    }),
-  });
+    const accessToken = localStorage.getItem("accessToken");
 
-  const loginData = await loginResponse.json();
-  if (!loginResponse.ok) {
-    throw new Error(loginData.message || "Login failed");
-  }
+    const response = await apiFetch(`${BASE_URL}/users`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
 
-  const token = loginData.token.accessToken;
-  const refreshToken = loginData.token.refreshToken;
+    const data = await response.json();
 
-  localStorage.setItem("accessToken", token);
-  localStorage.setItem("refreshToken", refreshToken);
+    if (!response.ok) {
+        throw new Error(data.message || "Failed to get users");
+    }
 
-  const usersResponse = await fetch(`${BASE_URL}/users`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const usersData = await usersResponse.json();
-
-  if (!usersResponse.ok) {
-    throw new Error(usersData.message || "Failed to get users");
-  }
-
-  return usersData;
+    return data;
 };

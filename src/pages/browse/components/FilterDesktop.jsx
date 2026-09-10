@@ -7,9 +7,11 @@ import { GenresGet } from "../../../api/GenreGet";
 import { TypesGet } from "../../../api/TypeGet";
 import { PlatformGet } from "../../../api/PlatformsGet";
 import { SubscriptionsGet } from "../../../api/SubscriptionGet";
-import { useNavigate, useSearchParams } from 'react-router';
+import { useLocation, useNavigate, useSearchParams } from 'react-router';
 
 function FilterDesktop({ paramss }) {
+    const location = useLocation();
+    const browseCategory = location.pathname.split("/browse/")[1];
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
@@ -70,7 +72,9 @@ function FilterDesktop({ paramss }) {
 
     const filters = [
         { id: 1, name: "Events", array: all.events },
-        { id: 2, name: "Genre", array: all.genre },
+        ...(!browseCategory
+            ? [{ id: 2, name: "Genre", array: all.genre }]
+            : []),
         { id: 3, name: "Features", array: all.features },
         { id: 4, name: "Types", array: all.types },
         { id: 5, name: "Platform", array: all.platform },
@@ -102,7 +106,7 @@ function FilterDesktop({ paramss }) {
         currentSelect.Platform.forEach(id => params.append("platformId", id));
         currentSelect.Subscriptions.forEach(id => params.append("subscriptionId", id));
 
-        navigate(`/browse?${params.toString()}`);
+        navigate(`${location.pathname}?${params.toString()}`);
     };
 
     const handleChange = (filterName, itemId, checked) => {
@@ -132,7 +136,7 @@ function FilterDesktop({ paramss }) {
         params.delete("platformId");
         params.delete("subscriptionId");
 
-        navigate(`/browse?${params.toString()}`);
+        navigate(`${location.pathname}?${params.toString()}`);
     };
 
     return (
@@ -188,7 +192,7 @@ function FilterDesktop({ paramss }) {
                                         className={`${select[filter.name].length > 0
                                             ? "block"
                                             : "hidden"
-                                        } text-white px-1.5 bg-[#3A3A3E] rounded-full`}
+                                            } text-white px-1.5 bg-[#3A3A3E] rounded-full`}
                                     >
                                         {select[filter.name].length}
                                     </div>
@@ -206,7 +210,7 @@ function FilterDesktop({ paramss }) {
                                     className={`${open === filter.id
                                         ? "block"
                                         : "hidden"
-                                    }`}
+                                        }`}
                                 >
                                     {filter.array.map((item) => (
                                         <div

@@ -7,10 +7,11 @@ import { GenresGet } from "../../../api/GenreGet";
 import { TypesGet } from "../../../api/TypeGet";
 import { PlatformGet } from "../../../api/PlatformsGet";
 import { SubscriptionsGet } from "../../../api/SubscriptionGet";
-import { Link, useSearchParams } from 'react-router';
+import { Link, useLocation, useSearchParams } from 'react-router';
 
 function FiltersChoose() {
     const [searchParams] = useSearchParams();
+    const returnPath = searchParams.get("returnPath") || "/browse";
     const [open, setOpen] = useState(false)
     const [select, setSelect] = useState({
         Events: searchParams.getAll("eventId").map(Number),
@@ -20,6 +21,7 @@ function FiltersChoose() {
         Platform: searchParams.getAll("platformId").map(Number),
         Subscriptions: searchParams.getAll("subscriptionId").map(Number)
     });
+
     const [all, setAll] = useState({
         events: [],
         genre: [],
@@ -28,6 +30,7 @@ function FiltersChoose() {
         platform: [],
         subscriptions: []
     })
+
     useEffect(() => {
         const getFeature = async () => {
             const [events, genre, features, types, platform, subscriptions] =
@@ -39,6 +42,7 @@ function FiltersChoose() {
                     PlatformGet(),
                     SubscriptionsGet()
                 ]);
+
             setAll({
                 events,
                 genre,
@@ -48,8 +52,20 @@ function FiltersChoose() {
                 subscriptions
             })
         }
+
         getFeature()
     }, [])
+
+    useEffect(() => {
+        setSelect({
+            Events: searchParams.getAll("eventId").map(Number),
+            Genre: searchParams.getAll("genreId").map(Number),
+            Features: searchParams.getAll("featureId").map(Number),
+            Types: searchParams.getAll("typeId").map(Number),
+            Platform: searchParams.getAll("platformId").map(Number),
+            Subscriptions: searchParams.getAll("subscriptionId").map(Number)
+        });
+    }, [searchParams]);
 
     const filters = [
         { id: 1, name: "Events", array: all.events },
@@ -70,95 +86,129 @@ function FiltersChoose() {
         select.Platform.forEach(id => params.append("platformId", id));
         select.Subscriptions.forEach(id => params.append("subscriptionId", id));
 
-        return `/browse?${params.toString()}`;
+        const query = params.toString();
+
+        return `${returnPath}${query ? `?${query}` : ""}`;
     };
-    
+
+    const handleChange = (filterName, itemId, checked) => {
+        setSelect(prev => ({
+            ...prev,
+            [filterName]: filterName === "Events"
+                ? (checked ? [itemId] : [])
+                : checked
+                    ? [...prev[filterName], itemId]
+                    : prev[filterName].filter(id => id !== itemId)
+        }));
+    };
+
+    const clearFilters = {
+        Events: [],
+        Genre: [],
+        Features: [],
+        Types: [],
+        Platform: [],
+        Subscriptions: []
+    };
 
     return (
         <div className='bg-[#18181C] min-h-screen'>
-            <div className=' w-[90%] mx-auto'>
-
+            <div className='w-[90%] mx-auto'>
                 <div>
                     <h2 className='font-semibold py-5'>Filters</h2>
                 </div>
-                <div className='w-full hover:bg-[#29292d] bg-[#303034] flex items-center  gap-4 py-2 px-4'>
+
+                <div className='w-full hover:bg-[#29292d] bg-[#303034] flex items-center gap-4 py-2 px-4'>
                     <GrSearch className='text-[#d6d6d6]' size={14} />
 
-                    <input className='outline-none' type="text" placeholder='Keywords' name="" id="" />
+                    <input
+                        className='outline-none'
+                        type="text"
+                        placeholder='Keywords'
+                        name=""
+                        id=""
+                    />
                 </div>
             </div>
+
             <div className='py-4'>
-                <ul className="flex  flex-col">
+                <ul className="flex flex-col">
                     {filters.map((filter) => (
                         <div key={filter.id}>
-
-
                             <li
-
                                 onClick={() => {
                                     setOpen(open === filter.id ? false : filter.id);
                                 }}
                                 className="border-t-1 border-[#3A3A3E] px-6 text-[14px] flex items-center justify-between w-full p-5 duration-150 hover:bg-[#54545b]"
                             >
                                 {filter.name}
+
                                 <div className='flex items-center gap-2'>
-                                    <div className={`${select[filter.name].length > 0 ? "block" : "hidden"} text-white px-1.5 bg-[#3A3A3E] rounded-full`}>
+                                    <div
+                                        className={`${select[filter.name].length > 0 ? "block" : "hidden"} text-white px-1.5 bg-[#3A3A3E] rounded-full`}
+                                    >
                                         {select[filter.name].length}
                                     </div>
+
                                     {open === filter.id ? (
                                         <IoIosArrowUp className="ml-1 text-[16px]" />
                                     ) : (
                                         <IoIosArrowDown className="ml-1 text-[16px]" />
                                     )}
                                 </div>
-
                             </li>
-                            <div >
 
-                            </div>
                             <div className='w-[90%] mx-auto'>
-                                <div className={`${open === filter.id ? "block" : "hidden"} `}>
-                                    {filter.array.map((item) => (<div key={item.id} className="py-2 flex items-center gap-2 text-sm text-[#A7A7A9]" > <input
-                                        checked={select[filter.name].includes(item.id)}
-                                        onChange={(e) => {
-                                            setSelect((prev) => ({
-                                                ...prev,
-                                                [filter.name]:
-                                                    filter.name === "Events"
-                                                        ? (e.target.checked ? [item.id] : [])
-                                                        : (
-                                                            e.target.checked
-                                                                ? [...prev[filter.name], item.id]
-                                                                : prev[filter.name].filter(id => id !== item.id)
-                                                        )
-                                            }));
-                                        }} className='h-[20px] w-[20px]' type="checkbox" /> {item.name} </div>))}
+                                <div className={`${open === filter.id ? "block" : "hidden"}`}>
+                                    {filter.array.map((item) => (
+                                        <div
+                                            key={item.id}
+                                            className="py-2 flex items-center gap-2 text-sm text-[#A7A7A9]"
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                className='h-[20px] w-[20px]'
+                                                checked={select[filter.name].includes(item.id)}
+                                                onChange={(e) => {
+                                                    handleChange(
+                                                        filter.name,
+                                                        item.id,
+                                                        e.target.checked
+                                                    );
+                                                }}
+                                            />
+
+                                            {item.name}
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
-
                     ))}
                 </ul>
 
-                <div className='h-px w-full  bg-[#3A3A3E]'> </div>
+                <div className='h-px w-full bg-[#3A3A3E]'></div>
             </div>
-            <div className=' w-[90%] mx-auto'>
+
+            <div className='w-[90%] mx-auto'>
                 <div className='flex items-center justify-between pt-3 pb-5'>
-                    <Link to="/browse" onClick={() => setSelect(
-                        {
-                            Events: [],
-                            Genre: [],
-                            Features: [],
-                            Types: [],
-                            Platform: [],
-                            Subscriptions: []
-                        }
-                    )} className='hover:bg-[#4b4b589b] w-[20%] text-[14px] my-6 rounded-[8px] bg-transparent block text-center py-2 text-white border-1 border-[#68686A] '>Clear</Link>
-                    <Link to={getFilterUrl()} className='w-[20%] my-6 rounded-[8px] text-[14px] hover:bg-[#60cdff] bg-[#26BBFF] block text-center py-2 text-black'>Apply</Link>
+                    <Link
+                        to={returnPath}
+                        onClick={() => setSelect(clearFilters)}
+                        className='hover:bg-[#4b4b589b] w-[20%] text-[14px] my-6 rounded-[8px] bg-transparent block text-center py-2 text-white border-1 border-[#68686A]'
+                    >
+                        Clear
+                    </Link>
+
+                    <Link
+                        to={getFilterUrl()}
+                        className='w-[20%] my-6 rounded-[8px] text-[14px] hover:bg-[#60cdff] bg-[#26BBFF] block text-center py-2 text-black'
+                    >
+                        Apply
+                    </Link>
                 </div>
             </div>
         </div>
-
     )
 }
 

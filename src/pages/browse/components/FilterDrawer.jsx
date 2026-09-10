@@ -9,21 +9,21 @@ import { GenresGet } from "../../../api/GenreGet";
 import { TypesGet } from "../../../api/TypeGet";
 import { PlatformGet } from "../../../api/PlatformsGet";
 import { SubscriptionsGet } from "../../../api/SubscriptionGet";
-import { Link, useSearchParams } from 'react-router';
+import { Link, useLocation, useSearchParams } from 'react-router';
 
 const FilterDrawer = ({ paramss }) => {
-    const [searchParams] = useSearchParams();
-
-    const [openFilter, setOpenFilter] = useState(null);
-    const [openDrawer, setOpenDrawer] = useState(false);
-
-    const [select, setSelect] = useState({
-        Events: searchParams.getAll("eventId").map(Number),
-        Genre: searchParams.getAll("genreId").map(Number),
-        Features: searchParams.getAll("featureId").map(Number),
-        Types: searchParams.getAll("typeId").map(Number),
-        Platform: searchParams.getAll("platformId").map(Number),
-        Subscriptions: searchParams.getAll("subscriptionId").map(Number)
+        const location = useLocation();
+        const [searchParams] = useSearchParams();
+        const [openFilter, setOpenFilter] = useState(null);
+        const [openDrawer, setOpenDrawer] = useState(false);
+        const browseCategory = location.pathname.split("/browse/")[1];
+        const [select, setSelect] = useState({
+            Events: searchParams.getAll("eventId").map(Number),
+            Genre: searchParams.getAll("genreId").map(Number),
+            Features: searchParams.getAll("featureId").map(Number),
+            Types: searchParams.getAll("typeId").map(Number),
+            Platform: searchParams.getAll("platformId").map(Number),
+            Subscriptions: searchParams.getAll("subscriptionId").map(Number)
     });
 
     const [all, setAll] = useState({
@@ -66,9 +66,22 @@ const FilterDrawer = ({ paramss }) => {
         getFeature();
     }, []);
 
+    useEffect(() => {
+        setSelect({
+            Events: searchParams.getAll("eventId").map(Number),
+            Genre: searchParams.getAll("genreId").map(Number),
+            Features: searchParams.getAll("featureId").map(Number),
+            Types: searchParams.getAll("typeId").map(Number),
+            Platform: searchParams.getAll("platformId").map(Number),
+            Subscriptions: searchParams.getAll("subscriptionId").map(Number)
+        });
+    }, [searchParams]);
+
     const filters = [
         { id: 1, name: "Events", array: all.events },
-        { id: 2, name: "Genre", array: all.genre },
+        ...(!browseCategory
+            ? [{ id: 2, name: "Genre", array: all.genre }]
+            : []),
         { id: 3, name: "Features", array: all.features },
         { id: 4, name: "Types", array: all.types },
         { id: 5, name: "Platform", array: all.platform },
@@ -77,13 +90,17 @@ const FilterDrawer = ({ paramss }) => {
 
     const getFilterUrl = () => {
         const params = new URLSearchParams();
+
         select.Events.forEach(id => params.append("eventId", id));
         select.Genre.forEach(id => params.append("genreId", id));
         select.Features.forEach(id => params.append("featureId", id));
         select.Types.forEach(id => params.append("typeId", id));
         select.Platform.forEach(id => params.append("platformId", id));
         select.Subscriptions.forEach(id => params.append("subscriptionId", id));
-        return `/browse?${params.toString()}`;
+
+        const query = params.toString();
+
+        return `${location.pathname}${query ? `?${query}` : ""}`;
     };
 
     const showDrawer = () => {
@@ -93,6 +110,17 @@ const FilterDrawer = ({ paramss }) => {
     const onClose = () => {
         setOpenDrawer(false);
     };
+
+    const handleChange = (filterName, itemId, checked) => {
+    setSelect(prev => ({
+        ...prev,
+        [filterName]: filterName === "Events"
+            ? (checked ? [itemId] : [])
+            : checked
+                ? [...prev[filterName], itemId]
+                : prev[filterName].filter(id => id !== itemId)
+    }));
+};
 
     return (
         <>
@@ -132,6 +160,7 @@ const FilterDrawer = ({ paramss }) => {
                 <div className="bg-[#18181C] min-h-full text-white">
 
                     <div className="w-[90%] mx-auto">
+
                         <h2 className="font-semibold py-5">
                             Filters
                         </h2>
@@ -162,12 +191,15 @@ const FilterDrawer = ({ paramss }) => {
                                 placeholder="Keywords"
                             />
                         </div>
+
                     </div>
 
                     <div className="py-4">
+
                         <ul className="flex flex-col">
 
                             {filters.map((filter) => (
+
                                 <div key={filter.id}>
 
                                     <li
@@ -192,6 +224,7 @@ const FilterDrawer = ({ paramss }) => {
                                             cursor-pointer
                                         "
                                     >
+
                                         {filter.name}
 
                                         <div className="flex items-center gap-2">
@@ -222,9 +255,11 @@ const FilterDrawer = ({ paramss }) => {
                                             )}
 
                                         </div>
+
                                     </li>
 
                                     <div className="w-[90%] mx-auto">
+
                                         <div
                                             className={
                                                 openFilter === filter.id
@@ -232,7 +267,9 @@ const FilterDrawer = ({ paramss }) => {
                                                     : "hidden"
                                             }
                                         >
+
                                             {filter.array.map((item) => (
+
                                                 <div
                                                     key={item.id}
                                                     className="
@@ -243,6 +280,7 @@ const FilterDrawer = ({ paramss }) => {
                                                         text-[#A7A7A9]
                                                     "
                                                 >
+
                                                     <input
                                                         type="checkbox"
                                                         className="h-[20px] w-[20px]"
@@ -250,75 +288,102 @@ const FilterDrawer = ({ paramss }) => {
                                                             filter.name
                                                         ].includes(item.id)}
                                                         onChange={(e) => {
-                                                            setSelect((prev) => ({
-                                                                ...prev,
-                                                                [filter.name]:
-                                                                    filter.name === "Events"
-                                                                        ? (e.target.checked ? [item.id] : [])
-                                                                        : (
-                                                                            e.target.checked
-                                                                                ? [...prev[filter.name], item.id]
-                                                                                : prev[filter.name].filter(id => id !== item.id)
-                                                                        )
-                                                            }));
+                                                            handleChange(
+                                                                filter.name,
+                                                                item.id,
+                                                                e.target.checked
+                                                            );
                                                         }}
                                                     />
 
                                                     {item.name}
+
                                                 </div>
+
                                             ))}
+
                                         </div>
+
                                     </div>
 
                                 </div>
+
                             ))}
 
                         </ul>
 
                         <div className="h-px w-full bg-[#3A3A3E]" />
+
                     </div>
 
                     <div className="w-[90%] mx-auto">
-                        <div className="flex items-center justify-between pt-3 pb-5">
-                            <div className='hover:bg-[#4b4b589b] font-semibold w-[45%] text-[14px] my-6 rounded-[8px] bg-transparent block text-center py-2 border-1 border-[#68686A] '>
-                                <Link
-                                    to="/browse"
-                                    onClick={() => {
-                                        setSelect({
-                                            Events: [],
-                                            Genre: [],
-                                            Features: [],
-                                            Types: [],
-                                            Platform: [],
-                                            Subscriptions: []
-                                        });
 
-                                        setOpenFilter(null);
-                                        setOpenDrawer(false);
-                                    }}
-                                    className="
-                                    !text-white
-                                "
-                                >
-                                    Clear
-                                </Link>
-                            </div>
+                        <div className="flex items-center justify-between pt-3 pb-5">
+<div
+    className="
+        hover:bg-[#4b4b589b]
+        font-semibold
+        w-[45%]
+        text-[14px]
+        my-6
+        rounded-[8px]
+        bg-transparent
+        block
+        text-center
+        py-2
+        border-1
+        border-[#68686A]
+    "
+>
+    <Link
+        to={location.pathname}
+        onClick={() => {
+            setSelect({
+                Events: [],
+                Genre: [],
+                Features: [],
+                Types: [],
+                Platform: [],
+                Subscriptions: []
+            });
+            setOpenFilter(null);
+            setOpenDrawer(false);
+        }}
+        className="!text-white"
+    >
+        Clear
+    </Link>
+</div>
+
                             <div
-                                className='w-[45%] my-6 font-semibold rounded-[8px] text-[14px] hover:bg-[#60cdff] bg-[#26BBFF] block text-center py-2'
+                                className="
+                                    w-[45%]
+                                    my-6
+                                    font-semibold
+                                    rounded-[8px]
+                                    text-[14px]
+                                    hover:bg-[#60cdff]
+                                    bg-[#26BBFF]
+                                    block
+                                    text-center
+                                    py-2
+                                "
                             >
+
                                 <Link
                                     to={getFilterUrl()}
                                     onClick={() => {
                                         setOpenDrawer(false);
                                     }}
-                                    className='!text-black'>
+                                    className="!text-black"
+                                >
                                     Apply
                                 </Link>
-
 
                             </div>
 
                         </div>
+
                     </div>
 
                 </div>

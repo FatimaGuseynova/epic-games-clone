@@ -1,27 +1,41 @@
 import React, { useEffect, useState } from 'react'
+
 import { Link, useNavigate } from 'react-router'
+
 import { IoIosArrowBack } from "react-icons/io";
+
 import { useFormik } from 'formik'
+
 import { TbPointFilled } from "react-icons/tb";
+
 import { nameRegister } from "../../validation/nameRegister";
+
 import { HiCheckCircle } from "react-icons/hi2";
+
 import { BiSolidError } from "react-icons/bi";
+
 import { Eye, EyeOff } from "lucide-react";
+
 import { HiMiniCheck } from "react-icons/hi2";
-import { getUsers } from "../../api/getUsers";
+
 import { RefreshCw } from "lucide-react";
+
 import { postUsers } from "../../api/postUsers";
+
 import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 
 function RegisterName() {
+
     const [showPassword, setShowPassword] = useState(false);
-    const [existsUser, setExistUser] = useState(false)
-    const [existNick, setExistNick] = useState(false)
+    const [existsUser, setExistUser] = useState(false);
+    const [existNick, setExistNick] = useState(false);
+    const [users, setUsers] = useState([]);
+    const [open, setOpen] = useState(false);
 
     const navigate = useNavigate();
 
     const savedEmail = localStorage.getItem("email");
-    const savedBirth = localStorage.getItem("birthDate")
+    const savedBirth = localStorage.getItem("birthDate");
 
     const {
         values,
@@ -41,35 +55,32 @@ function RegisterName() {
             terms1: false,
             nickname: ""
         },
-
         validationSchema: nameRegister,
-
         onSubmit: async (values) => {
-
             try {
                 const emailExists = users.some(
-                    (user) => user.email === values.email
+                    (user) =>
+                        user.email?.toLowerCase() === values.email?.toLowerCase()
                 );
 
-
                 if (emailExists) {
-                    setExistUser(true)
-                    console.log(existsUser);
+                    setExistUser(true);
                     return;
-                }
-                else{
-                    setExistUser(false)
+                } else {
+                    setExistUser(false);
                 }
 
                 const usernameExists = users.some(
-                    (user) => user.username === values.nickname
+                    (user) =>
+                        user.username?.toLowerCase() === values.nickname?.toLowerCase()
                 );
 
                 if (usernameExists) {
-
-                    console.log(existNick);
+                    setExistNick(true);
                     return;
                 }
+
+                setExistNick(false);
 
                 const registerfinal = {
                     firstname: values.name,
@@ -80,30 +91,72 @@ function RegisterName() {
                     dateOfBirth: String(savedBirth),
                     country: "string"
                 };
-
-                localStorage.setItem("userinf", JSON.stringify(registerfinal))
-                const result = await postUsers(registerfinal)
+                localStorage.setItem(
+                    "userinf",
+                    JSON.stringify(registerfinal)
+                );
+                const result = await postUsers(registerfinal);
                 console.log(result);
-                
-                navigate("/signin/otp")
+                localStorage.setItem("email", values.email);
+                navigate("/signin/otp");
             } catch (error) {
                 console.error("Registration error:", error);
             }
         }
     });
 
-
-    const [users, setUsers] = useState([]);
     useEffect(() => {
         const loadUsers = async () => {
             try {
-                const data = await getUsers();
+                const loginResponse = await fetch("http://localhost:3000/api/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: "mehemmedemciyev146@gmail.com",
+                        password: "admin123!"
+                    })
+                });
 
-                console.log("ALL USERS:", data);
+                const loginData = await loginResponse.json();
 
-                setUsers(data);
+                console.log("LOGIN RESPONSE:", loginData);
+
+                if (!loginResponse.ok) {
+                    throw new Error(loginData.message || "Admin login failed");
+                }
+
+                const accessToken = loginData.token.accessToken;
+
+                if (!accessToken) {
+                    throw new Error("Access token not found");
+                }
+
+                console.log("Admin authorization successful");
+
+                const usersResponse = await fetch("http://localhost:3000/api/users", {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                const usersData = await usersResponse.json();
+
+                console.log("USERS RESPONSE:", usersData);
+
+                if (!usersResponse.ok) {
+                    throw new Error(usersData.message || "Failed to get users");
+                }
+
+                setUsers(usersData);
+
+                console.log("ALL USERS:", usersData);
+                console.log("Admin check completed");
             } catch (error) {
-                console.error("Failed to get users:", error);
+                console.error("Failed to authorize or get users:", error);
             }
         };
 
@@ -126,21 +179,33 @@ function RegisterName() {
             length: 2,
         });
 
-        const shortName = name.slice(0, 12)
+        const shortName = name.slice(0, 12);
         const number = Math.floor(1000 + Math.random() * 9000);
 
-        setFieldValue("nickname", `${shortName}${number}`.slice(0, 16));
+        setFieldValue(
+            "nickname",
+            `${shortName}${number}`.slice(0, 16)
+        );
     }
 
-    const [open, setOpen] = useState(false)
     return (
-        <div className='bg-[#101014] max-[480px]:block min-[480px]:flex max-[480px]:px-5  min-[480px]:p-10 min-[480px]:justify-center  '>
-            <div className=' min-[480px]:bg-[#18181C]  overflow-hidden min-[480px]:w-[550px] min-[480px]:max-w-[96%] min-[480px]:p-11 max-[480px]:py-11 flex flex-col  min-[480px]:rounded-[14px] min-[480px]:border-1 min-[480px]:border-[#303033]'>
+        <div className='bg-[#101014] max-[480px]:block min-[480px]:flex max-[480px]:px-5 min-[480px]:p-10 min-[480px]:justify-center'>
+            <div className='min-[480px]:bg-[#18181C] overflow-hidden min-[480px]:w-[550px] min-[480px]:max-w-[96%] min-[480px]:p-11 max-[480px]:py-11 flex flex-col min-[480px]:rounded-[14px] min-[480px]:border-1 min-[480px]:border-[#303033]'>
                 <div>
-                    <Link to="/signin/email" className='flex group items-center text-[15px]'><IoIosArrowBack className='pr-1.5 duration-200 group-hover:mr-1.5 group-hover:text-white w-6 h-6 text-[#AEAEB0]' /> Back</Link>
+                    <Link
+                        to="/signin/email"
+                        className='flex group items-center text-[15px]'
+                    >
+                        <IoIosArrowBack className='pr-1.5 duration-200 group-hover:mr-1.5 group-hover:text-white w-6 h-6 text-[#AEAEB0]' />
+                        Back
+                    </Link>
                 </div>
+
                 <div>
-                    <h2 className=' text-white font-semibold  py-4 pb-0 text-[23px]'>Add your details</h2>
+                    <h2 className='text-white font-semibold py-4 pb-0 text-[23px]'>
+                        Add your details
+                    </h2>
+
                     <div className={`${existsUser ? "block" : "hidden"} mt-5 flex items-start gap-5 rounded-[12px] border border-[#a13b4d] bg-[#291c20] px-6 py-7`}>
                         <BiSolidError className="mt-1.5 shrink-0 text-[30px] text-[#ff4057]" />
 
@@ -154,31 +219,82 @@ function RegisterName() {
                             </Link>
                         </p>
                     </div>
-                    <p className='text-[17px] py-5 text-[#A7A7A9]'>Email address</p>
+
+                    <p className='text-[17px] py-5 text-[#A7A7A9]'>
+                        Email address
+                    </p>
                 </div>
+
                 <form onSubmit={handleSubmit}>
-                    <input type="text" name='email' value={values.email} onChange={(e) => {handleChange(e);
-                    }}
-                        onBlur={handleBlur} className={`hover:border-[#9b9ba2] bg-[#242428] w-[100%] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f] ${touched.email && errors.email && "border-[#FF6173]"}`} />
-                    {existsUser && <p className='text-[#FF6173] flex items-center text-[13px] pt-1'><BiSolidError className='mr-1' />
-                        Account already exists </p>}
+                    <input
+                        type="text"
+                        name='email'
+                        value={values.email}
+                        onChange={(e) => {
+                            setExistUser(false);
+                            handleChange(e);
+                        }}
+                        onBlur={handleBlur}
+                        className={`hover:border-[#9b9ba2] bg-[#242428] w-[100%] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f] ${touched.email && errors.email && "border-[#FF6173]"}`}
+                    />
+
+                    {existsUser && (
+                        <p className='text-[#FF6173] flex items-center text-[13px] pt-1'>
+                            <BiSolidError className='mr-1' />
+                            Account already exists
+                        </p>
+                    )}
+
                     <div className='flex items-start gap-6'>
                         <div>
-                            <p className='text-[17px] py-5 text-[#A7A7A9]'>First name</p>
+                            <p className='text-[17px] py-5 text-[#A7A7A9]'>
+                                First name
+                            </p>
+
                             <input
-                                onBlur={handleBlur} type="text" value={values.name} name='name' onChange={handleChange} className={`hover:border-[#9b9ba2] bg-[#242428] w-[100%] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f] ${touched.name && errors.name && "border-[#FF6173]"}`} />
-                            {touched.name && errors.name && <p className='text-[#FF6173] flex items-center text-[13px] pt-1'><BiSolidError className='mr-1' />
-                                {errors.name}</p>}
+                                onBlur={handleBlur}
+                                type="text"
+                                value={values.name}
+                                name='name'
+                                onChange={handleChange}
+                                className={`hover:border-[#9b9ba2] bg-[#242428] w-[100%] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f] ${touched.name && errors.name && "border-[#FF6173]"}`}
+                            />
+
+                            {touched.name && errors.name && (
+                                <p className='text-[#FF6173] flex items-center text-[13px] pt-1'>
+                                    <BiSolidError className='mr-1' />
+                                    {errors.name}
+                                </p>
+                            )}
                         </div>
+
                         <div>
-                            <p className='text-[17px] py-5 text-[#A7A7A9]'>Last name</p>
+                            <p className='text-[17px] py-5 text-[#A7A7A9]'>
+                                Last name
+                            </p>
+
                             <input
-                                onBlur={handleBlur} type="text" value={values.lastname} name='lastname' onChange={handleChange} className={`hover:border-[#9b9ba2] bg-[#242428] w-[100%] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f] ${touched.lastname && errors.lastname && "border-[#FF6173]"}`} />
-                            {touched.lastname && errors.lastname && <p className='text-[#FF6173] flex items-center text-[13px] pt-1'><BiSolidError className='mr-1' />
-                                {errors.lastname}</p>}
+                                onBlur={handleBlur}
+                                type="text"
+                                value={values.lastname}
+                                name='lastname'
+                                onChange={handleChange}
+                                className={`hover:border-[#9b9ba2] bg-[#242428] w-[100%] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f] ${touched.lastname && errors.lastname && "border-[#FF6173]"}`}
+                            />
+
+                            {touched.lastname && errors.lastname && (
+                                <p className='text-[#FF6173] flex items-center text-[13px] pt-1'>
+                                    <BiSolidError className='mr-1' />
+                                    {errors.lastname}
+                                </p>
+                            )}
                         </div>
                     </div>
-                    <p className='text-[17px] py-5 text-[#A7A7A9]'>Create password</p>
+
+                    <p className='text-[17px] py-5 text-[#A7A7A9]'>
+                        Create password
+                    </p>
+
                     <div className="relative w-[100%]">
                         <input
                             onFocus={() => setOpen(true)}
@@ -188,7 +304,9 @@ function RegisterName() {
                             value={values.password}
                             name="password"
                             onChange={handleChange}
-                            className={`hover:border-[#9b9ba2] bg-[#242428] w-[100%] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f] ${touched.password && errors.password && "border-[#FF6173]"}`} />
+                            className={`hover:border-[#9b9ba2] bg-[#242428] w-[100%] duration-150 py-3 border-1 px-5 rounded-[10px] border-[#5a5a5f] ${touched.password && errors.password && "border-[#FF6173]"}`}
+                        />
+
                         <button
                             type="button"
                             onClick={() => setShowPassword((prev) => !prev)}
@@ -197,19 +315,44 @@ function RegisterName() {
                         >
                             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                         </button>
-                    </div>                    {touched.password && errors.password && <p className='text-[#FF6173] flex items-center text-[13px] pt-1'><BiSolidError className='mr-1' />
-                        {errors.password}</p>}
+                    </div>
+
+                    {touched.password && errors.password && (
+                        <p className='text-[#FF6173] flex items-center text-[13px] pt-1'>
+                            <BiSolidError className='mr-1' />
+                            {errors.password}
+                        </p>
+                    )}
+
                     <div>
                         <ul className={`pt-3 ${open ? "flex flex-col gap-3" : "hidden"}`}>
-                            <li className={`text-[15px] ${hasLetter ? "text-[#71D687]" : "text-[#b5b5b5]"} flex items-center gap-2`}>{hasLetter ? <HiCheckCircle className=' text-[23px]' /> : <TbPointFilled className={`${hasLetter ? "text-[#71D687]" : "text-white"}`} />}At least one letter</li>
-                            <li className={`text-[15px] ${hasNumber ? "text-[#71D687]" : "text-[#b5b5b5]"} flex items-center gap-2`}>{hasNumber ? <HiCheckCircle className=' text-[23px]' /> : <TbPointFilled className={`${hasNumber ? "text-[#71D687]" : "text-white"}`} />}At least one number</li>
-                            <li className={`text-[15px] ${hasMinLength ? "text-[#71D687]" : "text-[#b5b5b5]"} flex items-center gap-2`}>{hasMinLength ? <HiCheckCircle className=' text-[23px]' /> : <TbPointFilled className={`${hasMinLength ? "text-[#71D687]" : "text-white"}`} />}Minimum 7 characters</li>
+                            <li className={`text-[15px] ${hasLetter ? "text-[#71D687]" : "text-[#b5b5b5]"} flex items-center gap-2`}>
+                                {hasLetter ? <HiCheckCircle className='text-[23px]' /> : <TbPointFilled className={`${hasLetter ? "text-[#71D687]" : "text-white"}`} />}
+                                At least one letter
+                            </li>
+
+                            <li className={`text-[15px] ${hasNumber ? "text-[#71D687]" : "text-[#b5b5b5]"} flex items-center gap-2`}>
+                                {hasNumber ? <HiCheckCircle className='text-[23px]' /> : <TbPointFilled className={`${hasNumber ? "text-[#71D687]" : "text-white"}`} />}
+                                At least one number
+                            </li>
+
+                            <li className={`text-[15px] ${hasMinLength ? "text-[#71D687]" : "text-[#b5b5b5]"} flex items-center gap-2`}>
+                                {hasMinLength ? <HiCheckCircle className='text-[23px]' /> : <TbPointFilled className={`${hasMinLength ? "text-[#71D687]" : "text-white"}`} />}
+                                Minimum 7 characters
+                            </li>
                         </ul>
                     </div>
+
                     <div className='flex justify-between items-center'>
-                        <p className='text-[17px] py-5 text-[#A7A7A9]'>Display name</p>
-                        <p className='text-[17px] py-5 text-[#A7A7A9]'>{values.nickname.length}/16</p>
+                        <p className='text-[17px] py-5 text-[#A7A7A9]'>
+                            Display name
+                        </p>
+
+                        <p className='text-[17px] py-5 text-[#A7A7A9]'>
+                            {values.nickname.length}/16
+                        </p>
                     </div>
+
                     <div className="relative w-full">
                         <input
                             onBlur={handleBlur}
@@ -221,14 +364,14 @@ function RegisterName() {
                                 handleChange(e);
                             }}
                             maxLength={16}
-                            className={`hover:border-[#9b9ba2] bg-[#242428] w-full duration-150 py-3 border pl-5 pr-16 rounded-[10px] border-[#5a5a5f] ${touched.nickname && errors.nickname ? "border-[#FF6173]" : "border-[#5a5a5f]"
-                                }`}
+                            className={`hover:border-[#9b9ba2] bg-[#242428] w-full duration-150 py-3 border pl-5 pr-16 rounded-[10px] border-[#5a5a5f] ${touched.nickname && errors.nickname ? "border-[#FF6173]" : "border-[#5a5a5f]"}`}
                         />
 
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
                             {!existNick && !errors.nickname && (
-                                <HiCheckCircle className=' text-[23px] text-[#71D687]' />
+                                <HiCheckCircle className='text-[23px] text-[#71D687]' />
                             )}
+
                             <button
                                 type="button"
                                 onClick={generateNickname}
@@ -238,12 +381,18 @@ function RegisterName() {
                             </button>
                         </div>
                     </div>
+
                     {touched.nickname && errors.nickname ? (
                         <p className="text-[#FF6173] flex items-center text-[13px] pt-1">
                             <BiSolidError className="mr-1" />
                             {errors.nickname}
                         </p>
-                    ) : <p className='text-[13px] pt-1 '>Use letters, numbers, underscores (_), hyphens (-), and periods (.).</p>}
+                    ) : (
+                        <p className='text-[13px] pt-1'>
+                            Use letters, numbers, underscores (_), hyphens (-), and periods (.).
+                        </p>
+                    )}
+
                     <div className="flex flex-col items-start gap-5 pt-7">
                         <div className='flex gap-2 items-center'>
                             <div className="relative w-[30px] h-[30px] shrink-0">
@@ -259,10 +408,11 @@ function RegisterName() {
                                     <HiMiniCheck className="absolute inset-0 m-auto text-white pointer-events-none" />
                                 )}
                             </div>
+
                             <p className="text-[15px] leading-[1.35]">
                                 I have read and agree to the{" "}
-                                <Link to="/signin/privacy"
-
+                                <Link
+                                    to="/signin/privacy"
                                     className="underline hover:text-white"
                                 >
                                     Terms of Service
@@ -276,10 +426,15 @@ function RegisterName() {
                                 </a>
                                 <span className="text-[#FF6173]"> *</span>
                             </p>
-
                         </div>
-                        {touched.terms && errors.terms && <p className='text-[#FF6173] flex items-center text-[13px] pt-1'><BiSolidError className='mr-1' />
-                            {errors.terms}</p>}
+
+                        {touched.terms && errors.terms && (
+                            <p className='text-[#FF6173] flex items-center text-[13px] pt-1'>
+                                <BiSolidError className='mr-1' />
+                                {errors.terms}
+                            </p>
+                        )}
+
                         <div className='flex gap-2 items-center'>
                             <div className="relative w-[30px] h-[30px] shrink-0">
                                 <input
@@ -294,18 +449,32 @@ function RegisterName() {
                                     <HiMiniCheck className="absolute inset-0 m-auto text-white pointer-events-none" />
                                 )}
                             </div>
-                            <p className="text-[15px] leading-[1.35]">Send news, surveys, and offers from Epic Games <span className='text-[15px] py-5 text-[#A7A7A9]'>(Optional)</span></p>
+
+                            <p className="text-[15px] leading-[1.35]">
+                                Send news, surveys, and offers from Epic Games{" "}
+                                <span className='text-[15px] py-5 text-[#A7A7A9]'>
+                                    (Optional)
+                                </span>
+                            </p>
                         </div>
                     </div>
 
-
-                    <button type='submit' className='block text-center w-full my-6 mb-3 hover: rounded-[8px] duration-150 hover:bg-[#65ccfb] bg-[#26BBFF] py-2 text-black'>Continue</button>
-
+                    <button
+                        type='submit'
+                        className='block text-center w-full my-6 mb-3 rounded-[8px] duration-150 hover:bg-[#65ccfb] bg-[#26BBFF] py-2 text-black'
+                    >
+                        Continue
+                    </button>
                 </form>
-                <div className='text-center py-5'>
-                    <Link to="/signin/privacy" className="text-[#2290C3] underline">Privacy Policy</Link>
-                </div>
 
+                <div className='text-center py-5'>
+                    <Link
+                        to="/signin/privacy"
+                        className="text-[#2290C3] underline"
+                    >
+                        Privacy Policy
+                    </Link>
+                </div>
             </div>
         </div>
     )

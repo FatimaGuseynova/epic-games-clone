@@ -2,30 +2,42 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { FaCrown } from "react-icons/fa";
 import { ProductsGet } from "../../../api/ProductsGet";
 import { Link, useSearchParams } from 'react-router';
+function GamesBrowse({ sort = 1, genreId }) {
+        console.log("genre:", genreId)
+        const [res, setRes] = useState({
+            data: [],
+            totalPages: 1,
+            page: 1
 
-function GamesBrowse({ sort = 1 }) {
-    const [res, setRes] = useState({
-        data: [],
-        totalPages: 1,
-        page: 1
     })
-
     const [currentPage, setCurrentPage] = useState(1)
     const [searchParams] = useSearchParams()
-
     useEffect(() => {
-        const getProducts = async () => {
-            const response = await ProductsGet(currentPage)
-            setRes(response)
-            console.log(response.data[0])
+            const getProducts = async () => {
+                let page = 1
+                let allProducts = []
+                let totalPages = 1
+                while (page <= totalPages) {
+                    const response = await ProductsGet(page)
+                    allProducts = [...allProducts, ...response.data]
+                    totalPages = response.totalPages
+
+                page++
+            }
+
+            setRes({
+                data: allProducts,
+                totalPages: Math.ceil(allProducts.length / 10),
+                page: 1
+            })
         }
 
         getProducts()
-    }, [currentPage])
+    }, [])
 
     useEffect(() => {
         setCurrentPage(1)
-    }, [searchParams])
+    }, [searchParams, genreId])
 
     const filters = useMemo(() => ({
         eventId: searchParams.getAll("eventId").map(Number),
@@ -46,7 +58,14 @@ function GamesBrowse({ sort = 1 }) {
 
     const filteredGames = useMemo(() => {
         return res.data.filter(item => {
+            const matchesCurrentGenre = genreId
+                ? item.genres?.some(
+                    genre => Number(genre.id) === Number(genreId)
+                )
+                : true
+
             return (
+                matchesCurrentGenre &&
                 matchesFilter(item.events, filters.eventId) &&
                 matchesFilter(item.genres, filters.genreId) &&
                 matchesFilter(item.features, filters.featureId) &&
@@ -55,9 +74,9 @@ function GamesBrowse({ sort = 1 }) {
                 matchesFilter(item.subscriptions, filters.subscriptionId)
             )
         })
-    }, [res.data, filters])
+    }, [res.data, filters, genreId])
 
-    const totalPages = res.totalPages
+    const totalPages = Math.ceil(filteredGames.length / 10)
 
     const currentGames = useMemo(() => {
         const list = [...filteredGames]
@@ -67,34 +86,40 @@ function GamesBrowse({ sort = 1 }) {
 
         switch (sort) {
             case 2:
-                return list.sort(
+                list.sort(
                     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
                 )
+                break
 
             case 3:
-                return list.sort(
+                list.sort(
                     (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
                 )
+                break
 
             case 4:
-                return list.sort((a, b) =>
+                list.sort((a, b) =>
                     a.name.localeCompare(b.name)
                 )
+                break
 
             case 5:
-                return list.sort(
+                list.sort(
                     (a, b) => getPrice(b) - getPrice(a)
                 )
+                break
 
             case 6:
-                return list.sort(
+                list.sort(
                     (a, b) => getPrice(a) - getPrice(b)
                 )
-
-            default:
-                return list
+                break
         }
-    }, [filteredGames, sort])
+
+        const start = (currentPage - 1) * 10
+
+        return list.slice(start, start + 10)
+    }, [filteredGames, sort, currentPage])
 
     const goToPage = (page) => {
         if (page >= 1 && page <= totalPages) {
@@ -194,7 +219,7 @@ function GamesBrowse({ sort = 1 }) {
                                         className={`${item.events[0].name === "First Run"
                                             ? "w-fit mb-1.5 rounded-[4px] px-1 py-0.5 bg-[#343437] text-[14px] text-white"
                                             : ""
-                                        }`}
+                                            }`}
                                     >
                                         {item.events[0].name === "First Run" && (
                                             <div className='flex items-center gap-1'>
@@ -286,5 +311,4 @@ function GamesBrowse({ sort = 1 }) {
         </div>
     )
 }
-
 export default GamesBrowse

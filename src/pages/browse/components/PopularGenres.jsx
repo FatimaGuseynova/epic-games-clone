@@ -13,6 +13,7 @@ import fantasy from '../../../images2/fantasy.png'
 import horror from '../../../images2/horror.png'
 import mac from '../../../images2/mac.png'
 import achiv from '../../../images2/achiv.png'
+import { Link } from "react-router";
 
 function PopularGenres() {
     const images = [action, actadv, adv, casual, city, coop, cross, dungeon, fantasy, horror, mac, achiv]
@@ -110,13 +111,13 @@ function PopularGenres() {
                 `}
             >
 
-                <div className="        grid
+                <div className=" grid
 grid-flow-col
 auto-cols-[50%]
 min-[725px]:auto-cols-[25%]">
 
                     {genres.slice(0,genres.length - 2).map((genre, index) => (
-                        <div
+                        <Link to={genre.name.split(" ")[0].toLowerCase()}
                             key={genre.id}
                             className="px-2"
                         >
@@ -134,7 +135,7 @@ min-[725px]:auto-cols-[25%]">
                                     {genre.name}
                                 </h3>
                             </div>
-                        </div>
+                        </Link>
                     ))}
 
                 </div>
