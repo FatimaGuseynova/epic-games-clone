@@ -5,6 +5,7 @@ import ChangeLanguage from '../../components/header/dropdown/ChangeLanguage'
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
 import { IoIosArrowRoundForward } from "react-icons/io";
+import { Link } from 'react-router';
 
 function MainSupport() {
   const [open, setOpen] = useState(false)
@@ -41,7 +42,7 @@ function MainSupport() {
         }} >
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/60 to-black/90"></div>
 
-        <div className="relative  ">
+        <div className="relative top-3">
           <div className='top-8 border-l-4 border-[#F7D82B] p-2 rounded-[7px] bg-[#00000049] z-10 flex w-[70%] mx-auto items-center gap-3'>
             <div className="flex-1">
               <p className={`pt-2 ${open ? "line-clamp-4" : "line-clamp-2"} text-white line-clamp-2 text-[15px]`}>
@@ -61,8 +62,11 @@ function MainSupport() {
             <div className='h-[50vh] flex flex-col items-center justify-center'>
               <h3 className='max-[900px]:text-[21px] text-[30px] text-white'>Epic Games Support</h3>
               <h2 className='text-white font-bold max-[900px]:text-[32px] text-[42px]'>How can we help?</h2>
-              <input type="text" placeholder='Describe your problem here' className='bg-[#dfdfdf2c] border-1 rounded-[10px] px-5 py-2 border-[#76688A] w-full' />
-              <button><IoIosArrowRoundForward /></button>
+              <div className='flex pt-2 items-center w-full gap-3'>
+                <input type="text" placeholder='Describe your problem here' className='bg-[#dfdfdf2c] border-1 rounded-[10px] px-5 py-2 border-[#76688A] w-full' />
+                <button className='bg-[#33BFFF] p-2 rounded-full text-black'><IoIosArrowRoundForward size={22} /></button>
+              </div>
+              <p className='pt-4 text-[13px] text-[#AFA3B7]'>By continuing, you agree to our Terms and acknowledge our <Link to="/signin/privacy" className='text-white underline'>Privacy Policy</Link>.</p>
             </div>
           </div>
         </div>

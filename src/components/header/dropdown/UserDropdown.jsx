@@ -28,7 +28,7 @@ const UserDropdown = ({ user, setUser }) => {
         {
             key: "title",
             label: (
-                <div className="px-3 pt-3 pb-2 text-[14px] font-bold text-[#a8a8ad]">
+                <div className="px-2 pt-1 text-[13px] font-bold text-[#a8a8ad]">
                     STORE
                 </div>
             ),
@@ -37,7 +37,8 @@ const UserDropdown = ({ user, setUser }) => {
         {
             key: "achievements",
             label: (
-                <div className="flex items-center gap-3 px-3 py-2.5 text-[16px] text-white rounded-[7px] hover:bg-[#ffffff12]">
+                <div className="flex items-center gap-2 px-2 py-1 text-[14px] text-white rounded-[7px] hover:bg-[#ffffff12] cursor-pointer"
+                >
                     <Trophy size={19} />
                     My Achievements
                 </div>
@@ -46,7 +47,8 @@ const UserDropdown = ({ user, setUser }) => {
         {
             key: "rewards",
             label: (
-                <div className="flex items-center gap-3 px-3 py-2.5 text-[16px] text-white rounded-[7px] hover:bg-[#ffffff12]">
+                <div className="flex items-center gap-2 px-2 py-1 text-[14px] text-white rounded-[7px] hover:bg-[#ffffff12] cursor-pointer"
+                >
                     <CircleStar size={19} />
                     Epic Rewards
                 </div>
@@ -55,7 +57,8 @@ const UserDropdown = ({ user, setUser }) => {
         {
             key: "balance",
             label: (
-                <div className="flex items-center gap-3 px-3 py-2.5 text-[16px] text-white rounded-[7px] hover:bg-[#ffffff12]">
+                <div className="flex items-center gap-2 px-2 py-1 text-[14px] text-white rounded-[7px] hover:bg-[#ffffff12] cursor-pointer"
+                >
                     <WalletCards size={19} />
                     Account Balance
                 </div>
@@ -64,7 +67,8 @@ const UserDropdown = ({ user, setUser }) => {
         {
             key: "gifts",
             label: (
-                <div className="flex items-center gap-3 px-3 py-2.5 text-[16px] text-white rounded-[7px] hover:bg-[#ffffff12]">
+                <div className="flex items-center gap-2 px-2 py-1 text-[14px] text-white rounded-[7px] hover:bg-[#ffffff12] cursor-pointer"
+                >
                     <Gift size={19} />
                     Gifts
                 </div>
@@ -73,7 +77,8 @@ const UserDropdown = ({ user, setUser }) => {
         {
             key: "coupons",
             label: (
-                <div className="flex items-center gap-3 px-3 py-2.5 text-[16px] text-white rounded-[7px] hover:bg-[#ffffff12]">
+                <div className="flex items-center gap-2 px-2 py-1 text-[14px] text-white rounded-[7px] hover:bg-[#ffffff12] cursor-pointer"
+                >
                     <BadgeCheck size={19} />
                     Coupons
                 </div>
@@ -82,16 +87,20 @@ const UserDropdown = ({ user, setUser }) => {
         {
             key: "account",
             label: (
-                <div className="flex items-center gap-3 px-3 py-2.5 text-[16px] text-white rounded-[7px] hover:bg-[#ffffff12]">
-                    <UserRound size={19} />
-                    Account
-                </div>
+                <Link to="/account" className="flex items-center gap-2 px-2 py-1 text-[14px] text-white rounded-[7px] hover:bg-[#ffffff12] cursor-pointer"
+                >
+                    <div className="flex text-white items-center gap-3">
+                        <UserRound size={19} />
+                        Account
+                    </div>
+                </Link>
             )
         },
         {
             key: "redeem",
             label: (
-                <div className="flex items-center gap-3 px-3 py-2.5 text-[16px] text-white rounded-[7px] hover:bg-[#ffffff12]">
+                <div className="flex items-center gap-2 px-2 py-1 text-[14px] text-white rounded-[7px] hover:bg-[#ffffff12] cursor-pointer"
+                >
                     <CreditCard size={19} />
                     Redeem Code
                 </div>
@@ -100,7 +109,8 @@ const UserDropdown = ({ user, setUser }) => {
         {
             key: "fortnite",
             label: (
-                <div className="flex items-center gap-3 px-3 py-2.5 text-[16px] text-white rounded-[7px] hover:bg-[#ffffff12]">
+                <div className="flex items-center gap-2 px-2 py-1 text-[14px] text-white rounded-[7px] hover:bg-[#ffffff12] cursor-pointer"
+                >
                     <GiftIcon size={19} />
                     Redeem Fortnite Gift Card
                 </div>
@@ -109,7 +119,8 @@ const UserDropdown = ({ user, setUser }) => {
         {
             key: "wishlist",
             label: (
-                <div className="flex items-center gap-3 px-3 py-2.5 text-[16px] text-white rounded-[7px] hover:bg-[#ffffff12]">
+                <div className="flex items-center gap-2 px-2 py-1 text-[14px] text-white rounded-[7px] hover:bg-[#ffffff12] cursor-pointer"
+                >
                     <Bookmark size={19} />
                     Wishlist
                 </div>
@@ -123,13 +134,16 @@ const UserDropdown = ({ user, setUser }) => {
             label: (
                 <Link
                     to="/support"
-                    className="flex items-center justify-between px-3 py-2.5 text-[16px] text-white rounded-[7px] hover:bg-[#ffffff12]"
+                    className="flex items-center gap-2 px-2 py-1 text-[14px] text-white rounded-[7px] hover:bg-[#ffffff12] cursor-pointer"
+
                 >
-                    <div className="flex items-center gap-3">
+                    <div className="flex text-white items-center gap-3">
                         <CircleHelp size={19} />
                         Support
                     </div>
-                    <ExternalLink size={17} />
+                    <div className='text-white w-full flex items-end justify-end'>
+                        <ExternalLink size={17} />
+                    </div>
                 </Link>
             )
         },
@@ -138,7 +152,7 @@ const UserDropdown = ({ user, setUser }) => {
             label: (
                 <div
                     onClick={handleLogout}
-                    className="flex items-center gap-3 px-3 py-2.5 text-[16px] text-white rounded-[7px] hover:bg-[#ffffff12] cursor-pointer"
+                    className="flex items-center gap-2 px-2 py-1 text-[14px] text-white rounded-[7px] hover:bg-[#ffffff12] cursor-pointer"
                 >
                     <LogOut size={19} />
                     Sign Out
@@ -160,7 +174,7 @@ const UserDropdown = ({ user, setUser }) => {
                 }
             }}
             popupRender={(menu) => (
-                <div className="mt-2 w-[313px] rounded-[18px] overflow-hidden bg-gradient-to-b from-[#2b2b2f] to-[#302c31] border border-[#ffffff12] shadow-2xl">
+                <div className=" w-fit rounded-[18px] overflow-hidden bg-gradient-to-b from-[#2b2b2ff4] to-[#302c31f4] border border-[#ffffff12] shadow-2xl">
                     {React.cloneElement(menu, {
                         style: {
                             background: "transparent",
@@ -174,10 +188,10 @@ const UserDropdown = ({ user, setUser }) => {
                 type="button"
                 className="flex items-center gap-2 cursor-pointer"
             >
-                <div className="w-10 h-10 rounded-full bg-[#36363b] flex items-center justify-center text-[18px] font-semibold text-[#e5e5e5]">
+                <div className="w-7 h-7 rounded-full bg-[#36363b] flex items-center justify-center text-[14px] font-semibold text-[#e5e5e5]">
                     {user?.username?.[0]?.toUpperCase()}
                 </div>
-                <span className="text-[16px] text-white">
+                <span className="text-[15px] max-[720px]:hidden text-white">
                     {user?.username}
                 </span>
             </button>

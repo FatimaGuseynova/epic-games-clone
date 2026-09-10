@@ -75,7 +75,7 @@ function Header() {
                         <ChangeLanguage open={langOpen} setOpen={setLangOpen} />
                     </div>
                     {user ? (
-                        <div className="mr-2.5 max-[720px]:hidden">
+                        <div className="mr-2.5 max-[600px]:hidden">
                             <UserDropdown user={user} setUser={setUser} />
                         </div>
                     ) : (

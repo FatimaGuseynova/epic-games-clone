@@ -6,6 +6,7 @@ import MainNews from '../pages/news/MainNews'
 import Admin from '../admin/Admin'
 import DetailPage from '../pages/browse/components/DetailPage'
 import NewsDetail from '../pages/news/components/NewsDetail'
+import UserMain from '../pages/user/UserMain'
 
 const MainRouter = () => {
     return (
@@ -16,6 +17,8 @@ const MainRouter = () => {
             <Route path="/admin" element={<Admin />} />
             <Route path="/detail" element={<DetailPage />} />
             <Route path="/newsdetail" element={<NewsDetail />} />
+            <Route path="/account" element={<UserMain />} />
+            
 
         </Routes>
     )
