@@ -107,7 +107,7 @@ function MainSlider() {
             </div>
             {res.data.slice(0, 5).map((item, index) => (
               <Link to="/detail" state={{ product: item }} key={index} className={`${click === index ? "block" : "hidden"} relative z-10 w-[64vw] aspect-[16/9] max-w-[1500px] min-w-[300px] bg-cover bg-center bg-no-repeat rounded-[12px] overflow-hidden`}
-                style={{ backgroundImage: `url('${item.detailImage[0].url}')` }}
+                style={{ backgroundImage: `url('${item.detailImage?.[1]?.url || item.detailImage?.[0]?.url}')` }}
               >
                 <div className="absolute z-0 !text-white rounded-[12px] inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent">
                 </div>

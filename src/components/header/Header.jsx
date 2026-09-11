@@ -6,7 +6,7 @@ import HeaderDropdown1 from './dropdown/HeaderDropdown1';
 import ChangeLanguage from './dropdown/ChangeLanguage';
 import EpicDropdown from './dropdown/EpicDropdown';
 import Hamburgermenu from './dropdown/Hamburgermenu';
-import { getUsers } from '../../api/getUsers';
+import { getCurrentUser } from './../../api/GetCurrentUser';
 import UserDropdown from './dropdown/UserDropdown';
 
 function Header() {
@@ -16,30 +16,25 @@ function Header() {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        const accessToken = localStorage.getItem("accessToken");
-        const refreshToken = localStorage.getItem("refreshToken");
-        const email = localStorage.getItem("email");
+    const accessToken = localStorage.getItem("accessToken");
 
-        if (!accessToken && !refreshToken) {
+    if (!accessToken) {
+        setUser(null);
+        return;
+    }
+
+    const loadUser = async () => {
+        try {
+            const currentUser = await getCurrentUser();
+            setUser(currentUser);
+        } catch (error) {
+            console.log(error);
             setUser(null);
-            return;
         }
+    };
 
-        const loadUser = async () => {
-            try {
-                const users = await getUsers();
-                const currentUser = users.find(item => item.email === email);
-
-                if (currentUser) {
-                    setUser(currentUser);
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
-        loadUser();
-    }, []);
+    loadUser();
+}, []);
 
     return (
         <header className="header bg-[#121216] flex text-[#FEFEFE]">
