@@ -6,21 +6,17 @@ import { OtpGet } from "../../api/otpGet";
 
 function OtpCode() {
     const userInf = localStorage.getItem("email");
-
     const navigate = useNavigate();
-
     const [red, setRed] = useState(false);
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
     const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const inputsRef = useRef([]);
     const [timer, setTimer] = useState(3);
-
     const newOtp = [...otp];
     const allDigits = newOtp.every((digit) => digit !== "");
-
     useEffect(() => {
         if (timer === 0) return;
-
         const interval = setInterval(() => {
             setTimer((prev) => prev - 1);
         }, 1000);
@@ -30,12 +26,12 @@ function OtpCode() {
 
     const handleChange = (e, index) => {
         const value = e.target.value;
-
         newOtp[index] = value;
         setOtp(newOtp);
 
         if (newOtp.every((digit) => digit !== "")) {
             setRed(false);
+            setErrorMessage("");
         }
 
         if (value && index < otp.length - 1) {
@@ -46,31 +42,49 @@ function OtpCode() {
     console.log(userInf);
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
 
-        const code = {
-            email: userInf,
-            otpCode: Number(otp.join(""))
-        };
+    e.preventDefault();
 
-        setLoading(true);
-
-        try {
-            const response = await OtpVerify(code);
-
-            console.log("OTP правильный:", response);
-
-            setRed(false);
-
-            navigate("/");
-        } catch (error) {
-            console.log("OTP неправильный:", error);
-
-            setRed(true);
-        } finally {
-            setLoading(false);
-        }
+    const code = {
+        email: userInf,
+        otpCode: Number(otp.join(""))
     };
+
+    setLoading(true);
+
+    try {
+
+        const response = await OtpVerify(code);
+
+        console.log("OTP правильный:", response);
+
+        setRed(false);
+
+        setErrorMessage("");
+
+        localStorage.setItem("accountCreated", "true");
+
+        navigate("/signin");
+
+    } catch (error) {
+
+        console.log("OTP неправильный:", error);
+
+        setRed(true);
+
+        const message =
+            error?.response?.data?.message ||
+            error?.message ||
+            String(error);
+
+        setErrorMessage(message);
+
+    } finally {
+
+        setLoading(false);
+
+    }
+};
 
     const handleKeyDown = (e, index) => {
         if (e.key === "Backspace") {
@@ -93,8 +107,16 @@ function OtpCode() {
             setTimer(3);
             setOtp(["", "", "", "", "", ""]);
             setRed(false);
+            setErrorMessage("");
         } catch (error) {
             console.log("Ошибка при повторной отправке OTP:", error);
+
+            const message =
+                error?.response?.data?.message ||
+                error?.message ||
+                String(error);
+
+            setErrorMessage(message);
         }
     };
 
@@ -143,6 +165,12 @@ function OtpCode() {
                         ))}
                     </div>
 
+                    {errorMessage && (
+                        <p className="text-[#FF6173] text-[14px] mt-3">
+                            {errorMessage}
+                        </p>
+                    )}
+
                     <button
                         type="submit"
                         disabled={!allDigits || loading}
@@ -153,17 +181,15 @@ function OtpCode() {
                 </form>
 
                 <p
-                    className={`${
-                        timer === 0 ? "hidden" : ""
-                    } text-[17px] py-5 text-[#A7A7A9] text-center`}
+                    className={`${timer === 0 ? "hidden" : ""
+                        } text-[17px] py-5 text-[#A7A7A9] text-center`}
                 >
                     Resend Email in {timer}
                 </p>
 
                 <div
-                    className={`text-center py-5 ${
-                        timer === 0 ? "block" : "hidden"
-                    }`}
+                    className={`text-center py-5 ${timer === 0 ? "block" : "hidden"
+                        }`}
                 >
                     <button
                         type="button"
@@ -178,5 +204,4 @@ function OtpCode() {
         </div>
     );
 }
-
 export default OtpCode;

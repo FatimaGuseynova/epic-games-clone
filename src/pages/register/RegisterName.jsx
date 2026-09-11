@@ -1,41 +1,26 @@
 import React, { useEffect, useState } from 'react'
-
 import { Link, useNavigate } from 'react-router'
-
 import { IoIosArrowBack } from "react-icons/io";
-
 import { useFormik } from 'formik'
-
 import { TbPointFilled } from "react-icons/tb";
-
 import { nameRegister } from "../../validation/nameRegister";
-
 import { HiCheckCircle } from "react-icons/hi2";
-
 import { BiSolidError } from "react-icons/bi";
-
 import { Eye, EyeOff } from "lucide-react";
-
 import { HiMiniCheck } from "react-icons/hi2";
-
 import { RefreshCw } from "lucide-react";
-
 import { postUsers } from "../../api/postUsers";
-
 import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 
 function RegisterName() {
-
-    const [showPassword, setShowPassword] = useState(false);
-    const [existsUser, setExistUser] = useState(false);
-    const [existNick, setExistNick] = useState(false);
-    const [users, setUsers] = useState([]);
-    const [open, setOpen] = useState(false);
-
-    const navigate = useNavigate();
-
-    const savedEmail = localStorage.getItem("email");
-    const savedBirth = localStorage.getItem("birthDate");
+        const [showPassword, setShowPassword] = useState(false);
+        const [existsUser, setExistUser] = useState(false);
+        const [existNick, setExistNick] = useState(false);
+        const [users, setUsers] = useState([]);
+        const [open, setOpen] = useState(false);
+        const navigate = useNavigate();
+        const savedEmail = localStorage.getItem("email");
+        const savedBirth = localStorage.getItem("birthDate");
 
     const {
         values,

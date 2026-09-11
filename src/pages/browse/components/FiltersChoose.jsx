@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from 'react'
+
 import { GrSearch } from "react-icons/gr";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
+
 import { FeatureGet } from "../../../api/FeaturesGet";
 import { EventsGet } from "../../../api/EventsGet";
 import { GenresGet } from "../../../api/GenreGet";
 import { TypesGet } from "../../../api/TypeGet";
 import { PlatformGet } from "../../../api/PlatformsGet";
 import { SubscriptionsGet } from "../../../api/SubscriptionGet";
-import { Link, useLocation, useSearchParams } from 'react-router';
+
+import { Link, useSearchParams } from 'react-router';
 
 function FiltersChoose() {
     const [searchParams] = useSearchParams();
     const returnPath = searchParams.get("returnPath") || "/browse";
+    const browseCategory = returnPath.split("/browse/")[1];
+
     const [open, setOpen] = useState(false)
     const [select, setSelect] = useState({
         Events: searchParams.getAll("eventId").map(Number),
@@ -52,7 +57,6 @@ function FiltersChoose() {
                 subscriptions
             })
         }
-
         getFeature()
     }, [])
 
@@ -69,7 +73,7 @@ function FiltersChoose() {
 
     const filters = [
         { id: 1, name: "Events", array: all.events },
-        { id: 2, name: "Genre", array: all.genre },
+        ...(!browseCategory ? [{ id: 2, name: "Genre", array: all.genre }] : []),
         { id: 3, name: "Features", array: all.features },
         { id: 4, name: "Types", array: all.types },
         { id: 5, name: "Platform", array: all.platform },
@@ -78,16 +82,13 @@ function FiltersChoose() {
 
     const getFilterUrl = () => {
         const params = new URLSearchParams();
-
         select.Events.forEach(id => params.append("eventId", id));
         select.Genre.forEach(id => params.append("genreId", id));
         select.Features.forEach(id => params.append("featureId", id));
         select.Types.forEach(id => params.append("typeId", id));
         select.Platform.forEach(id => params.append("platformId", id));
         select.Subscriptions.forEach(id => params.append("subscriptionId", id));
-
         const query = params.toString();
-
         return `${returnPath}${query ? `?${query}` : ""}`;
     };
 
@@ -120,7 +121,6 @@ function FiltersChoose() {
 
                 <div className='w-full hover:bg-[#29292d] bg-[#303034] flex items-center gap-4 py-2 px-4'>
                     <GrSearch className='text-[#d6d6d6]' size={14} />
-
                     <input
                         className='outline-none'
                         type="text"
@@ -177,7 +177,6 @@ function FiltersChoose() {
                                                     );
                                                 }}
                                             />
-
                                             {item.name}
                                         </div>
                                     ))}
@@ -211,5 +210,4 @@ function FiltersChoose() {
         </div>
     )
 }
-
 export default FiltersChoose
