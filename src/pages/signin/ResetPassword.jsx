@@ -1,122 +1,241 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router'
-import { IoIosArrowBack } from "react-icons/io";
-import { useFormik } from 'formik'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router'
+import { useFormik } from "formik";
+import { TbPointFilled } from "react-icons/tb";
+import { HiCheckCircle } from "react-icons/hi2";
+import { BiSolidError } from "react-icons/bi";
+import { Eye, EyeOff } from "lucide-react";
+import { NewPassword } from "../../api/NewPassword";
 
 function ResetPassword() {
-    const [timer, setTimer] = useState(3)
+    const [showPassword, setShowPassword] = useState(false);
+    const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
-    useEffect(() =>{
-        if (timer === 0) return;
+    const token = new URLSearchParams(window.location.search).get("token");
 
-        const interval = setInterval(() => {
-            setTimer((prev) => prev - 1)
-        }, 1000);
-        return () => clearInterval(interval)
-
-
-    }, [timer])
-
-    const email = localStorage.getItem("email")
-    const inputRefs = useRef([]);
-    const [red, setRed] = useState(false)
-    const { values, handleSubmit, handleChange, setFieldValue } = useFormik({
+    const {
+        values,
+        errors,
+        touched,
+        handleBlur,
+        handleChange,
+        handleSubmit
+    } = useFormik({
         initialValues: {
-            digit1: "",
-            digit2: "",
-            digit3: "",
-            digit4: "",
-            digit5: "",
-            digit6: "",
+            password: "",
+            repeatPassword: ""
         },
+
+        validate: (values) => {
+            const errors = {};
+
+            if (!values.password) {
+                errors.password = "Password is required";
+            } else if (!/[A-Za-z]/.test(values.password)) {
+                errors.password = "Password must contain at least one letter";
+            } else if (!/[0-9]/.test(values.password)) {
+                errors.password = "Password must contain at least one number";
+            } else if (values.password.length < 7) {
+                errors.password = "Password must be at least 7 characters";
+            }
+
+            if (!values.repeatPassword) {
+                errors.repeatPassword = "Please repeat your password";
+            } else if (values.password !== values.repeatPassword) {
+                errors.repeatPassword = "Passwords do not match";
+            }
+
+            return errors;
+        },
+
         onSubmit: async (values) => {
-            const code =
-                values.digit1 +
-                values.digit2 +
-                values.digit3 +
-                values.digit4 +
-                values.digit5 +
-                values.digit6
+            setLoading(true);
 
-            // const sendCode = await 
+            try {
+                if (!token) {
+                    console.error("User token not found");
+                    return;
+                }
 
+                const resetData = {
+                    token: token,
+                    newPassword: values.password,
+                    repeatPassword: values.repeatPassword
+                };
+
+                console.log("Password data sent to backend:", resetData);
+
+                const result = await NewPassword(resetData);
+
+                console.log("Password reset result:", result);
+
+                if (result?.statusCode >= 400 || result?.error) {
+                    console.error("Password reset failed:", result);
+                    return;
+                }
+
+                console.log("Password successfully changed");
+
+                navigate("/signin");
+            } catch (error) {
+                console.error("Password reset error:", error);
+            } finally {
+                setLoading(false);
+            }
         }
-    })
+    });
+
+    const hasLetter = /[A-Za-z]/.test(values.password);
+    const hasNumber = /[0-9]/.test(values.password);
+    const hasMinLength = values.password.length >= 7;
+
     return (
-        <div className='bg-[#101014] block min-[480px]:flex max-[480px]:px-5 h-screen min-[480px]:p-10 min-[480px]:justify-center min-[480px]:items-center '>
-            <div className=' min-[480px]:bg-[#18181C] overflow-hidden min-[480px]:w-[550px] min-[480px]:max-w-[96%] min-[480px]:p-11 max-[480px]:py-11 flex flex-col  min-[480px]:rounded-[14px] min-[480px]:border-1 min-[480px]:border-[#303033]'>
-                <div className='w-full'>
+        <div className='bg-[#101014] block min-[480px]:flex max-[480px]:px-5 h-screen min-[480px]:p-10 min-[480px]:justify-center min-[480px]:items-center'>
+            <div className='min-[480px]:bg-[#18181C] overflow-hidden min-[480px]:w-[550px] min-[480px]:max-w-[96%] min-[480px]:p-11 max-[480px]:py-11 flex flex-col min-[480px]:rounded-[14px] min-[480px]:border-1 min-[480px]:border-[#303033]'>
+
+                <div>
+                    <h2 className='text-white font-semibold pb-0 text-[23px]'>
+                        Create New Password
+                    </h2>
+
+                    <p className='text-[17px] pt-2 py-5 text-[#A7A7A9]'>
+                        Enter your new password for your Epic Games account.
+                    </p>
+                </div>
+
+                <form onSubmit={handleSubmit}>
                     <div>
-                        <Link to="/signin/register" className='flex group items-center text-[15px]'><IoIosArrowBack className='pr-1.5 duration-200 group-hover:mr-1.5 group-hover:text-white w-6 h-6 text-[#AEAEB0]' /> Back</Link>
-                    </div>
-                    <div>
-                        <h2 className='pt-3 text-white font-semibold pt-0 py-4 text-[23px]'>Check Your Inbox</h2>
-                        <p className='text-[17px] py-5 text-[#A7A7A9]'>Enter the 6-digit security code we sent to <span className='text-white font-semibold'>{email.slice(0, 1)}***{email.slice(email.length - 11, email.length)}</span></p>
-                    </div>
-                    <form onSubmit={handleSubmit} >
-                        <div className='flex gap-3 justify-center items-center'>
-                            {Object.keys(values).map((digit, index) => (
-                                <input maxLength={1} name={digit} value={values[digit]}
-                                    ref={(el) => (inputRefs.current[index] = el)}
-                                    onChange={(e) => {
-                                        const value = e.target.value;
+                        <p className='text-[#A7A7A9] text-[15px] mb-3'>
+                            New password
+                        </p>
 
-                                        setFieldValue(digit, value);
+                        <div className="relative w-[100%]">
+                            <input
+                                onFocus={() => setOpen(true)}
+                                onBlur={handleBlur}
+                                autoComplete="new-password"
+                                type={showPassword ? "text" : "password"}
+                                value={values.password}
+                                name="password"
+                                onChange={handleChange}
+                                className={`hover:border-[#9b9ba2] bg-[#242428] text-white w-[100%] duration-150 py-3 border px-5 rounded-[10px] outline-none ${
+                                    touched.password && errors.password
+                                        ? "border-[#FF6173]"
+                                        : "border-[#5a5a5f]"
+                                }`}
+                            />
 
-                                        const newValues = {
-                                            ...values,
-                                            [digit]: value
-                                        };
-
-                                        if (Object.values(newValues).every(value => value !== "")) {
-                                            setRed(false);
-                                        }
-
-                                        if (index < 5) {
-                                            inputRefs.current[index + 1]?.focus();
-                                        }
-                                    }}
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Backspace") {
-                                            const newValues = {
-                                                ...values,
-                                                [digit]: ""
-                                            };
-
-                                            setFieldValue(digit, "");
-
-                                            if (Object.values(newValues).some(value => value === "")) {
-                                                setRed(true);
-                                            }
-
-                                            if (!values[digit] && index > 0) {
-                                                const previousDigit = Object.keys(values)[index - 1];
-
-                                                setFieldValue(previousDigit, "");
-                                                inputRefs.current[index - 1]?.focus();
-                                            }
-                                        }
-                                    }}
-                                    key={index} type="text" inputMode='numeric' className={`hover:border-[#9b9ba2] ${red ? "border-red-400" : "border-[#7a7a82]"} bg-[#242428]  caret-white w-[50px] duration-150 py-4 border px-5 rounded-[7px] text-white text-center outline-none focus:border-white`}
-                                />
-                            ))}
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                tabIndex={-1}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 transition-colors"
+                            >
+                                {showPassword ? (
+                                    <EyeOff size={22} />
+                                ) : (
+                                    <Eye size={22} />
+                                )}
+                            </button>
                         </div>
 
-                        <button disabled={!Object.values(values).every(value => value != "")} type='submit' className='disabled:bg-[#444448] block text-center w-full my-6 mb-3 hover: rounded-[8px] duration-150 hover:bg-[#65ccfb] bg-[#26BBFF] py-2 text-black'>Continue</button>
-                    </form>
-                    <div className='text-center'>
-                        <p className='text-[15px]  text-[#A7A7A9]'>No email? Check the spam folder.</p>
-                        <p className={`text-[15px] text-[#A7A7A9] ${timer === 0 ? "hidden" : "inline"}`}>Resend code in {timer}s </p>
-                        <p className={`text-[15px] ${timer === 0 ? "inline" : "hidden"}`}><Link className='text-[#2290C3] underline'>Resend code </Link></p>
-                        <span className='inline text-[15px] py-5 text-[#A7A7A9] '>or <Link className='text-[#2290C3] underline' to="/signin/forgot">enter a diffirent email address</Link></span>
+                        {touched.password && errors.password && (
+                            <p className='text-[#FF6173] flex items-center text-[13px] pt-1'>
+                                <BiSolidError className='mr-1' />
+                                {errors.password}
+                            </p>
+                        )}
+
+                        <ul className={`pt-4 ${open ? "flex flex-col gap-3" : "hidden"}`}>
+                            <li className={`${hasLetter ? "text-[#71D687]" : "text-[#b5b5b5]"} flex items-center gap-2 text-[15px]`}>
+                                {hasLetter ? (
+                                    <HiCheckCircle className='text-[23px]' />
+                                ) : (
+                                    <TbPointFilled className='text-white' />
+                                )}
+                                At least one letter
+                            </li>
+
+                            <li className={`${hasNumber ? "text-[#71D687]" : "text-[#b5b5b5]"} flex items-center gap-2 text-[15px]`}>
+                                {hasNumber ? (
+                                    <HiCheckCircle className='text-[23px]' />
+                                ) : (
+                                    <TbPointFilled className='text-white' />
+                                )}
+                                At least one number
+                            </li>
+
+                            <li className={`${hasMinLength ? "text-[#71D687]" : "text-[#b5b5b5]"} flex items-center gap-2 text-[15px]`}>
+                                {hasMinLength ? (
+                                    <HiCheckCircle className='text-[23px]' />
+                                ) : (
+                                    <TbPointFilled className='text-white' />
+                                )}
+                                Minimum 7 characters
+                            </li>
+                        </ul>
                     </div>
-                    <div className='py-6 text-center'>
-                        <Link className='text-[#2290C3] underline text-[15px] '>Lost access to thes email address?</Link>
+
+                    <div className='mt-7'>
+                        <p className='text-[#A7A7A9] text-[15px] mb-3'>
+                            Repeat new password
+                        </p>
+
+                        <div className="relative w-[100%]">
+                            <input
+                                type={showRepeatPassword ? "text" : "password"}
+                                value={values.repeatPassword}
+                                name="repeatPassword"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                autoComplete="new-password"
+                                className={`hover:border-[#9b9ba2] bg-[#242428] text-white w-[100%] duration-150 py-3 border px-5 rounded-[10px] outline-none ${
+                                    touched.repeatPassword && errors.repeatPassword
+                                        ? "border-[#FF6173]"
+                                        : "border-[#5a5a5f]"
+                                }`}
+                            />
+
+                            <button
+                                type="button"
+                                onClick={() => setShowRepeatPassword((prev) => !prev)}
+                                tabIndex={-1}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 transition-colors"
+                            >
+                                {showRepeatPassword ? (
+                                    <EyeOff size={22} />
+                                ) : (
+                                    <Eye size={22} />
+                                )}
+                            </button>
+                        </div>
+
+                        {touched.repeatPassword && errors.repeatPassword && (
+                            <p className='text-[#FF6173] flex items-center text-[13px] pt-1'>
+                                <BiSolidError className='mr-1' />
+                                {errors.repeatPassword}
+                            </p>
+                        )}
                     </div>
-                </div>
+
+                    <button
+                        type='submit'
+                        disabled={loading}
+                        className={`block text-center w-full my-6 mb-3 rounded-[8px] duration-150 py-2 ${
+                            loading
+                                ? "bg-[#4a4a4e] text-[#151518]"
+                                : "bg-[#26BBFF] text-black hover:bg-[#42c5ff]"
+                        }`}
+                    >
+                        {loading ? "Creating..." : "Create Password"}
+                    </button>
+                </form>
             </div>
         </div>
-    )
+    );
 }
 
 export default ResetPassword

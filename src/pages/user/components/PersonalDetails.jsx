@@ -1,32 +1,29 @@
 import React, { useEffect, useState } from 'react'
-
 import { FiInfo, FiEdit2 } from 'react-icons/fi'
-
-import { UpdateProfile } from "../../../api/UpdateProfile";
-
-import { UsersGet } from '../../../api/UsersGet'
+import { UpdateProfile } from "../../../api/UpdateProfile"
+import { getCurrentUser } from "./../../../api/GetCurrentUser"
 
 function PersonalDetails() {
+        const [userId, setUserId] = useState('')
+        const [form, setForm] = useState({
+            username: '',
+            firstname: '',
+            lastname: '',
+            addressLine1: '',
+            addressLine2: '',
+            city: '',
+            region: '',
+            postalCode: '',
+            country: ''
 
-    const [userId, setUserId] = useState('')
-
-    const [form, setForm] = useState({
-        firstname: '',
-        lastname: '',
-        addressLine1: '',
-        addressLine2: '',
-        city: '',
-        region: '',
-        postalCode: '',
-        country: ''
     })
-
     const [originalForm, setOriginalForm] = useState({
-        firstname: '',
-        lastname: '',
-        addressLine1: '',
-        addressLine2: '',
-        city: '',
+            username: '',
+            firstname: '',
+            lastname: '',
+            addressLine1: '',
+            addressLine2: '',
+            city: '',
         region: '',
         postalCode: '',
         country: ''
@@ -39,16 +36,18 @@ function PersonalDetails() {
     useEffect(() => {
         const getUser = async () => {
             try {
-                const data = await UsersGet()
-                const email = localStorage.getItem('email')
-                const currentUser = data.find(
-                    item => item.email === email
-                )
+                const currentUser = await getCurrentUser()
+
+                console.log('Current user:', currentUser)
 
                 if (currentUser) {
+
+                    const savedUsername = localStorage.getItem('username')
+
                     const userData = {
-                        firstname: currentUser.firstname.slice(0, 1) + "***" + currentUser.firstname.slice(currentUser.firstname.length - 1) || '',
-                        lastname: currentUser.lastname.slice(0, 1) + "***" + currentUser.lastname.slice(currentUser.lastname.length - 1) || '',
+                        username: savedUsername || currentUser.username || '',
+                        firstname: currentUser.firstname || '',
+                        lastname: currentUser.lastname || '',
                         addressLine1: currentUser.addressLine1 || '',
                         addressLine2: currentUser.addressLine2 || '',
                         city: currentUser.city || '',
@@ -58,6 +57,7 @@ function PersonalDetails() {
                     }
 
                     setUserId(currentUser.id)
+
                     setForm(userData)
                     setOriginalForm(userData)
                 }
@@ -86,11 +86,8 @@ function PersonalDetails() {
         try {
             setSaving(true)
 
-            console.log('Sending data to backend...')
-            console.log('User ID:', userId)
-            console.log('Data:', form)
-
-            const response = await UpdateProfile({
+            const dataToSend = {
+                username: form.username,
                 firstname: form.firstname,
                 lastname: form.lastname,
                 addressLine1: form.addressLine1,
@@ -99,10 +96,17 @@ function PersonalDetails() {
                 region: form.region,
                 postalCode: form.postalCode,
                 country: form.country
-            })
+            }
+
+            console.log('User ID:', userId)
+            console.log('Data:', dataToSend)
+
+            const response = await UpdateProfile(dataToSend)
 
             console.log('Data successfully sent to backend')
             console.log('Backend response:', response)
+
+            localStorage.setItem('username', form.username)
 
             setOriginalForm(form)
         } catch (error) {
@@ -116,7 +120,7 @@ function PersonalDetails() {
     }
 
     return (
-        <div className=" text-white">
+        <div className="text-white">
             <div>
                 <h1 className="text-[25px] font-bold mb-4">
                     Personal details
@@ -127,6 +131,7 @@ function PersonalDetails() {
                 </p>
 
                 <div className="grid grid-cols-2 gap-[25px] mb-[40px]">
+
                     <div>
                         <p className="text-[15px] text-[#b9bac4] mb-[7px]">
                             First Name
@@ -154,6 +159,7 @@ function PersonalDetails() {
                             className="w-full h-[61px] px-4 rounded-[10px] border border-[#5a5b60] bg-[#1c1d20] text-[16px] text-white outline-none focus:border-[#20b5f5]"
                         />
                     </div>
+
                 </div>
 
                 <h2 className="text-[21px] font-semibold mb-[25px]">
@@ -161,6 +167,7 @@ function PersonalDetails() {
                 </h2>
 
                 <div className="grid grid-cols-2 gap-[25px]">
+
                     <div>
                         <p className="text-[15px] text-[#b9bac4] mb-[7px]">
                             Address Line 1
@@ -204,6 +211,7 @@ function PersonalDetails() {
                     </div>
 
                     <div className="grid grid-cols-2 gap-[25px]">
+
                         <div>
                             <p className="text-[15px] text-[#b9bac4] mb-[7px]">
                                 Region
@@ -231,15 +239,19 @@ function PersonalDetails() {
                                 className="w-full h-[61px] px-4 rounded-[10px] border border-[#5a5b60] bg-[#1c1d20] text-white outline-none focus:border-[#20b5f5]"
                             />
                         </div>
+
                     </div>
+
                 </div>
 
                 <div className="mt-[18px]">
+
                     <p className="text-[15px] text-[#b9bac4] mb-[7px]">
                         Country / Region
                     </p>
 
                     <div className="flex gap-[10px]">
+
                         {countryEdit ? (
                             <input
                                 type="text"
@@ -251,11 +263,13 @@ function PersonalDetails() {
                             />
                         ) : (
                             <div className="w-[380px] h-[61px] flex items-center justify-between px-4 rounded-[10px] border border-[#5a5b60] bg-[#1c1d20]">
+
                                 <span className="text-[16px] text-white">
                                     {form.country}
                                 </span>
 
                                 <FiInfo className="text-[22px] text-white" />
+
                             </div>
                         )}
 
@@ -265,19 +279,23 @@ function PersonalDetails() {
                         >
                             <FiEdit2 className="text-[22px] text-[#111216]" />
                         </button>
+
                     </div>
+
                 </div>
 
                 <button
                     onClick={handleSave}
                     disabled={!hasChanges || saving}
-                    className={`mt-[40px] h-[61px] px-[26px] rounded-[10px] text-[16px] font-semibold transition ${hasChanges
-                        ? 'bg-[#20b5f5] text-[#111216] hover:bg-[#18a9e8]'
-                        : 'bg-[#292a2e] text-[#66676d]'
-                        }`}
+                    className={`mt-[40px] h-[61px] px-[26px] rounded-[10px] text-[16px] font-semibold transition ${
+                        hasChanges && !saving
+                            ? 'bg-[#20b5f5] text-[#111216] hover:bg-[#18a9e8]'
+                            : 'bg-[#292a2e] text-[#66676d] cursor-not-allowed'
+                    }`}
                 >
                     {saving ? 'Saving...' : 'Save Changes'}
                 </button>
+
             </div>
         </div>
     )

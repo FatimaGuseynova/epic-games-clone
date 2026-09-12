@@ -1,6 +1,6 @@
 import React from 'react'
 import { Routes, Route } from 'react-router'
-
+import UserMain from '../pages/user/UserMain'
 import Header from '../components/header/Header'
 import Main from '../layout/Main'
 import MainRouter from './MainRouter'
@@ -27,6 +27,7 @@ const Router = () => {
             <Route path="/signin/*" element={<AuthRouter />} />
             <Route path='/filterchoose' element={<FiltersChoose />} />
             <Route path='/age' element={<AgeCheck />} />
+                        <Route path="/account" element={<UserMain />} />
     </Routes>
   )
 }

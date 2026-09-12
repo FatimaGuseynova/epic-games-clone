@@ -46,8 +46,8 @@ function Settings() {
                 {settingsOpen && (
                     <div className="bg-[#202023]">
 
-                        <div className="px-5 pt-7 pb-6">
-                            <h2 className="text-[16px] font-semibold text-white px-5 mb-2">
+                        <div className="px-5 py-7">
+                            <h2 className="text-[14px] font-semibold text-white px-5 mb-2">
                                 Account
                             </h2>
 
@@ -83,7 +83,7 @@ function Settings() {
 
                         <div className="border-t border-[#3b3b3f] px-5 pt-7 pb-6">
 
-                            <h2 className="text-[16px] font-semibold text-white px-5 mb-2">
+                            <h2 className="text-[14px] font-semibold text-white px-5 mb-2">
                                 Payment and rewards
                             </h2>
 
@@ -169,7 +169,7 @@ function Settings() {
 
                         <div className="border-t border-[#3b3b3f] px-5 pt-7 pb-7">
 
-                            <h2 className="text-[16px] font-semibold text-white px-5 mb-2">
+                            <h2 className="text-[14px] font-semibold text-white px-5 mb-2">
                                 Parental controls
                             </h2>
 
@@ -182,7 +182,7 @@ function Settings() {
 
                         <div className="border-t border-[#3b3b3f] px-5 pt-7 pb-7">
 
-                            <h2 className="text-[16px] font-semibold text-white px-5 mb-2">
+                            <h2 className="text-[14px] font-semibold text-white px-5 mb-2">
                                 Creator & developer tools
                             </h2>
 
@@ -205,8 +205,8 @@ function Settings() {
                     </div>
                 )}
             </div>
-            <div className="min-[1000px]:block max-[1000px]:hidden w-[400px] bg-[#202023] text-[#c9c9d1] rounded-t-[20px] overflow-hidden">
-                <div className="px-5 pt-7 pb-6">
+            <div className="min-[1000px]:block max-[1000px]:hidden w-[340px] bg-[#202023] text-[#c9c9d1] rounded-[20px] overflow-hidden">
+                <div className="px-1 py-7">
                     <h2 className="text-[21px] font-semibold text-white px-5 mb-2">
                         Account
                     </h2>
@@ -214,27 +214,27 @@ function Settings() {
                     <div className="space-y-1">
                         <div className="flex items-center gap-4 h-[50px] px-5 rounded-[10px] bg-[#303034] text-white">
                             <FiUser className="text-[#00b7ff] text-[25px]" />
-                            <span className="text-[18px]">Settings</span>
+                            <span className="text-[14px]">Settings</span>
                         </div>
 
                         <div className="flex items-center gap-4 h-[50px] px-5">
                             <FiShare2 className="text-[#00b7ff] text-[25px]" />
-                            <span className="text-[18px]">Linked accounts</span>
+                            <span className="text-[14px]">Linked accounts</span>
                         </div>
 
                         <div className="flex items-center gap-4 h-[50px] px-5">
                             <FiMail className="text-[#00b7ff] text-[25px]" />
-                            <span className="text-[18px]">Communication preferences</span>
+                            <span className="text-[14px]">Communication preferences</span>
                         </div>
 
                         <div className="flex items-center gap-4 h-[50px] px-5">
                             <FiShield className="text-[#00b7ff] text-[25px]" />
-                            <span className="text-[18px]">Password and security</span>
+                            <span className="text-[14px]">Password and security</span>
                         </div>
 
                         <div className="flex items-center gap-4 h-[50px] px-5">
                             <FiFileText className="text-[#00b7ff] text-[25px]" />
-                            <span className="text-[18px]">Legal history</span>
+                            <span className="text-[14px]">Legal history</span>
                         </div>
                     </div>
                 </div>
@@ -247,7 +247,7 @@ function Settings() {
                     <div className="space-y-1">
                         <div className="flex items-center gap-4 h-[50px] px-5">
                             <FiCreditCard className="text-[#7770ff] text-[25px]" />
-                            <span className="text-[18px]">Payment settings</span>
+                            <span className="text-[14px]">Payment settings</span>
                         </div>
 
                         <button
@@ -256,7 +256,7 @@ function Settings() {
                         >
                             <div className="flex items-center gap-4">
                                 <FiClock className="text-[#7770ff] text-[25px]" />
-                                <span className="text-[18px]">Transactions</span>
+                                <span className="text-[14px]">Transactions</span>
                             </div>
 
                             {transactionsOpen ? (
@@ -268,31 +268,31 @@ function Settings() {
 
                         {transactionsOpen && (
                             <div className="pl-[57px] py-1 space-y-1">
-                                <div className="h-[49px] flex items-center text-[18px]">
+                                <div className="h-[49px] flex items-center text-[14px]">
                                     Purchases
                                 </div>
 
-                                <div className="h-[49px] flex items-center text-[18px]">
+                                <div className="h-[49px] flex items-center text-[14px]">
                                     In-island transactions
                                 </div>
 
-                                <div className="h-[49px] flex items-center text-[18px]">
+                                <div className="h-[49px] flex items-center text-[14px]">
                                     Gifts
                                 </div>
 
-                                <div className="h-[49px] flex items-center text-[18px]">
+                                <div className="h-[49px] flex items-center text-[14px]">
                                     Subscriptions
                                 </div>
 
-                                <div className="h-[49px] flex items-center text-[18px]">
+                                <div className="h-[49px] flex items-center text-[14px]">
                                     Account balance
                                 </div>
 
-                                <div className="h-[49px] flex items-center text-[18px]">
+                                <div className="h-[49px] flex items-center text-[14px]">
                                     Code redemptions
                                 </div>
 
-                                <div className="h-[49px] flex items-center text-[18px]">
+                                <div className="h-[49px] flex items-center text-[14px]">
                                     V-Bucks Card redemptions
                                 </div>
                             </div>
@@ -300,22 +300,22 @@ function Settings() {
 
                         <div className="flex items-center gap-4 h-[50px] px-5">
                             <FiTag className="text-[#7770ff] text-[25px]" />
-                            <span className="text-[18px]">Subscriptions</span>
+                            <span className="text-[14px]">Subscriptions</span>
                         </div>
 
                         <div className="flex items-center gap-4 h-[50px] px-5">
                             <FiDollarSign className="text-[#7770ff] text-[25px]" />
-                            <span className="text-[18px]">In-game currency</span>
+                            <span className="text-[14px]">In-game currency</span>
                         </div>
 
                         <div className="flex items-center gap-4 h-[50px] px-5">
                             <FiStar className="text-[#7770ff] text-[25px]" />
-                            <span className="text-[18px]">Epic rewards</span>
+                            <span className="text-[14px]">Epic rewards</span>
                         </div>
 
                         <div className="flex items-center gap-4 h-[50px] px-5">
                             <FiGift className="text-[#7770ff] text-[25px]" />
-                            <span className="text-[18px]">Redeem code</span>
+                            <span className="text-[14px]">Redeem code</span>
                         </div>
                     </div>
                 </div>
@@ -327,7 +327,7 @@ function Settings() {
 
                     <div className="flex items-center gap-4 h-[50px] px-5">
                         <FiUsers className="text-[#c348ff] text-[25px]" />
-                        <span className="text-[18px]">Parental controls</span>
+                        <span className="text-[14px]">Parental controls</span>
                     </div>
                 </div>
                 <div className="border-t border-[#3b3b3f] px-5 pt-7 pb-7">
@@ -338,11 +338,11 @@ function Settings() {
                     <div className="flex flex-col justify-center gap-4 h-[50px] px-5">
                         <div className='flex  pt-5 items-center gap-4 h-[50px]'>
                             <CiStar className="text-[#ff58de] text-[26px]" />
-                            <span className="text-[18px]">Programs</span>
+                            <span className="text-[14px]">Programs</span>
                         </div>
                         <div className='flex items-center gap-4 h-[50px]'>
                             <IoStorefrontOutline className="text-[#ff58de] text-[25px]" />
-                            <span className="text-[18px]">Publisher profile</span>
+                            <span className="text-[14px]">Publisher profile</span>
                         </div>
                     </div>
                 </div>

@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
+
 import { IoMdClose } from "react-icons/io";
+
 import ChangeLanguage from '../dropdown/ChangeLanguage';
+
 import { Link } from 'react-router';
+
 import DistributeMobile from './DistributeMobile';
 
 function Hamburgermenu({ menulOpen, setMenulOpen }) {
+
     const [open, setOpen] = useState(false);
     const [distOpen, setDistOpen] = useState(false);
 
+    const accessToken = localStorage.getItem("accessToken");
+
     return (
         <div>
-
             {!menulOpen && (
                 <button
                     type="button"
@@ -60,8 +66,6 @@ function Hamburgermenu({ menulOpen, setMenulOpen }) {
                         h-[calc(100vh-60px)]
                     "
                 >
-
-                
                     <div
                         className="
                             flex
@@ -71,9 +75,6 @@ function Hamburgermenu({ menulOpen, setMenulOpen }) {
                             bg-[#121216]
                         "
                     >
-
-             
-
                         <div className="mr-4">
                             <ChangeLanguage
                                 open={open}
@@ -81,29 +82,29 @@ function Hamburgermenu({ menulOpen, setMenulOpen }) {
                             />
                         </div>
 
-                        <Link to="/signin"
-                            type="button"
-                            className={`
-                                duration-200
-                                px-2.5
-                                py-1
-                                cta-button
-                                cta-button-primary
-                                text-[16px]
-                                rounded-[6px]
-                                dark:bg-[#353539]
-                                dark:text-white
-                                mr-2.5
-                                hover:bg-[#838383]
-                                ${open ? "opacity-0" : "opacity-100"}
-                            `}
-                        >
-                            Sign in
-                        </Link>
-
+                        {!accessToken && (
+                            <Link
+                                to="/signin"
+                                type="button"
+                                className={`
+                                    duration-200
+                                    px-2.5
+                                    py-1
+                                    cta-button
+                                    cta-button-primary
+                                    text-[16px]
+                                    rounded-[6px]
+                                    dark:bg-[#353539]
+                                    dark:text-white
+                                    mr-2.5
+                                    hover:bg-[#838383]
+                                    ${open ? "opacity-0" : "opacity-100"}
+                                `}
+                            >
+                                Sign in
+                            </Link>
+                        )}
                     </div>
-
-
 
                     <div
                         className="
@@ -112,7 +113,6 @@ function Hamburgermenu({ menulOpen, setMenulOpen }) {
                             text-white
                         "
                     >
-
                         {!distOpen && (
                             <>
                                 <h2
@@ -148,12 +148,9 @@ function Hamburgermenu({ menulOpen, setMenulOpen }) {
                             opend={distOpen}
                             setOpend={setDistOpen}
                         />
-
                     </div>
-
                 </div>
             )}
-
         </div>
     );
 }

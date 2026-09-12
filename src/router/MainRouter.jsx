@@ -6,7 +6,6 @@ import MainNews from '../pages/news/MainNews'
 import Admin from '../admin/Admin'
 import DetailPage from '../pages/browse/components/DetailPage'
 import NewsDetail from '../pages/news/components/NewsDetail'
-import UserMain from '../pages/user/UserMain'
 import ActionPage from '../pages/browse/components/ActionPage'
 import ActionAdvPage from '../pages/browse/components/ActionAdvPage'
 import AdventurePage from '../pages/browse/components/AdventurePage'
@@ -23,7 +22,6 @@ const MainRouter = () => {
             <Route path="/admin" element={<Admin />} />
             <Route path="/detail" element={<DetailPage />} />
             <Route path="/newsdetail" element={<NewsDetail />} />
-            <Route path="/account" element={<UserMain />} />
             <Route path="/browse/action" element={<ActionPage />} />
             <Route path="/browse/action-adventure" element={<ActionAdvPage />} />
             <Route path="/browse/adventure" element={<AdventurePage />} />
