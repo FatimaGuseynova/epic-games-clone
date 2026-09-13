@@ -9,6 +9,7 @@ import FiltersChoose from '../pages/browse/components/FiltersChoose'
 import AuthRouter from './AuthRouter'
 import Footer from '../layout/Footer'
 import AgeCheck from '../pages/browse/components/AgeCheck'
+import BalanceMain from '../pages/user/BalanceMain'
 const Router = () => {
   return (
     <Routes>
@@ -19,15 +20,16 @@ const Router = () => {
             <Header />
             <Main />
             <MainRouter />
-            <Footer/>
+            <Footer />
           </>
         }
       />
       <Route path='/support' element={<MainSupport />} />
-            <Route path="/signin/*" element={<AuthRouter />} />
-            <Route path='/filterchoose' element={<FiltersChoose />} />
-            <Route path='/age' element={<AgeCheck />} />
-                        <Route path="/account" element={<UserMain />} />
+      <Route path="/signin/*" element={<AuthRouter />} />
+      <Route path='/filterchoose' element={<FiltersChoose />} />
+      <Route path='/age' element={<AgeCheck />} />
+      <Route path="/account" element={<UserMain />} />
+      <Route path="/balance" element={<BalanceMain />} />
     </Routes>
   )
 }

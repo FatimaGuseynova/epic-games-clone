@@ -17,13 +17,12 @@ const refreshAccessToken = async () => {
         }),
     });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => null);
 
     if (!response.ok) {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-
-        throw new Error(data.message || "Session expired");
+        throw new Error(data?.message || "Session expired");
     }
 
     const newAccessToken = data.accessToken;
@@ -49,7 +48,6 @@ export const apiFetch = async (url, options = {}) => {
         },
     });
 
-
     if (response.status === 401) {
         token = await refreshAccessToken();
 
@@ -64,4 +62,4 @@ export const apiFetch = async (url, options = {}) => {
     }
 
     return response;
-};
+}; 

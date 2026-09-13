@@ -4,26 +4,26 @@ import { UpdateProfile } from "../../../api/UpdateProfile"
 import { getCurrentUser } from "./../../../api/GetCurrentUser"
 
 function PersonalDetails() {
-        const [userId, setUserId] = useState('')
-        const [form, setForm] = useState({
-            username: '',
-            firstname: '',
-            lastname: '',
-            addressLine1: '',
-            addressLine2: '',
-            city: '',
-            region: '',
-            postalCode: '',
-            country: ''
-
+    const [userId, setUserId] = useState('')
+    const [form, setForm] = useState({
+        username: '',
+        firstname: '',
+        lastname: '',
+        addressLine1: '',
+        addressLine2: '',
+        city: '',
+        region: '',
+        postalCode: '',
+        country: ''
     })
+
     const [originalForm, setOriginalForm] = useState({
-            username: '',
-            firstname: '',
-            lastname: '',
-            addressLine1: '',
-            addressLine2: '',
-            city: '',
+        username: '',
+        firstname: '',
+        lastname: '',
+        addressLine1: '',
+        addressLine2: '',
+        city: '',
         region: '',
         postalCode: '',
         country: ''
@@ -31,6 +31,7 @@ function PersonalDetails() {
 
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
+    const [showSuccess, setShowSuccess] = useState(false)
     const [countryEdit, setCountryEdit] = useState(false)
 
     useEffect(() => {
@@ -41,7 +42,6 @@ function PersonalDetails() {
                 console.log('Current user:', currentUser)
 
                 if (currentUser) {
-
                     const savedUsername = localStorage.getItem('username')
 
                     const userData = {
@@ -57,7 +57,6 @@ function PersonalDetails() {
                     }
 
                     setUserId(currentUser.id)
-
                     setForm(userData)
                     setOriginalForm(userData)
                 }
@@ -86,34 +85,42 @@ function PersonalDetails() {
         try {
             setSaving(true)
 
-            const dataToSend = {
-                username: form.username,
+            const savedUsername = localStorage.getItem('username')
+
+            const userData = {
                 firstname: form.firstname,
                 lastname: form.lastname,
-                addressLine1: form.addressLine1,
-                addressLine2: form.addressLine2,
-                city: form.city,
-                region: form.region,
-                postalCode: form.postalCode,
-                country: form.country
+                username: savedUsername || form.username
             }
 
-            console.log('User ID:', userId)
-            console.log('Data:', dataToSend)
+            console.log('User data:', userData)
 
-            const response = await UpdateProfile(dataToSend)
+            const response = await UpdateProfile(userData)
 
             console.log('Data successfully sent to backend')
             console.log('Backend response:', response)
 
-            localStorage.setItem('username', form.username)
+            setForm(prev => ({
+                ...prev,
+                username: userData.username
+            }))
 
-            setOriginalForm(form)
+            setOriginalForm(prev => ({
+                ...prev,
+                username: userData.username,
+                firstname: userData.firstname,
+                lastname: userData.lastname
+            }))
+
+            setShowSuccess(true)
+
+            setTimeout(() => {
+                setShowSuccess(false)
+            }, 5000)
+
         } catch (error) {
             console.error('Failed to send data to backend')
             console.error('Error:', error)
-            console.error('Backend response:', error.response?.data)
-            console.error('Status:', error.response?.status)
         } finally {
             setSaving(false)
         }
@@ -121,6 +128,21 @@ function PersonalDetails() {
 
     return (
         <div className="text-white">
+
+            {showSuccess && (
+                <div className="fixed bottom-3 left-1/2 -translate-x-1/2 z-50 w-[310px] h-[60px] bg-[#303035] border border-[#4a4a50] rounded-[18px] flex items-center px-8 shadow-2xl">
+                    <div className="w-[24px] h-[24px] rounded-full bg-[#45c765] flex items-center justify-center mr-6">
+                        <span className="text-[#111216] text-[17px] font-bold">
+                            ✓
+                        </span>
+                    </div>
+
+                    <span className="text-white text-center text-[18px] font-medium">
+                        Account updated!
+                    </span>
+                </div>
+            )}
+
             <div>
                 <h1 className="text-[25px] font-bold mb-4">
                     Personal details

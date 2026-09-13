@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
+import { getCurrentUser } from '../../../api/GetCurrentUser'
+import { DeleteUser } from '../../../api/DeleteUser'
 
 function Downloads() {
     const navigate = useNavigate()
@@ -7,71 +9,55 @@ function Downloads() {
     const [showModal, setShowModal] = useState(false)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
+    const [confirmed, setConfirmed] = useState(false)
+
+    const handleOpenModal = () => {
+        setError("")
+        setConfirmed(false)
+        setShowModal(true)
+    }
+
+    const handleCloseModal = () => {
+        if (loading) return
+
+        setShowModal(false)
+        setConfirmed(false)
+        setError("")
+    }
 
     const handleDeleteAccount = async () => {
+        if (!confirmed) {
+            return
+        }
+
         try {
             setLoading(true)
             setError("")
 
-            const token = localStorage.getItem("accessToken")
-            const email = localStorage.getItem("email")
+            const currentUser = await getCurrentUser()
 
-            if (!token || !email) {
-                throw new Error("User information not found")
-            }
-
-            const usersResponse = await fetch("http://localhost:3000/api/users", {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    Accept: "application/json"
-                }
-            })
-
-            const users = await usersResponse.json()
-
-            if (!usersResponse.ok) {
-                throw new Error(users?.message || "Failed to get user")
-            }
-
-            const currentUser = users.find(user => user.email === email)
-
-            if (!currentUser) {
+            if (!currentUser?.id) {
                 throw new Error("Current user not found")
             }
 
-            const deleteResponse = await fetch(
-                `http://localhost:3000/api/users/${currentUser.id}`,
-                {
-                    method: "DELETE",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        Accept: "application/json"
-                    }
-                }
-            )
-
-            const deleteData = await deleteResponse.json().catch(() => null)
-
-            if (!deleteResponse.ok) {
-                throw new Error(
-                    deleteData?.message || "Failed to delete account"
-                )
-            }
+            await DeleteUser(currentUser.id)
 
             localStorage.removeItem("accessToken")
             localStorage.removeItem("refreshToken")
             localStorage.removeItem("email")
+            localStorage.removeItem("username")
 
             navigate("/")
         } catch (error) {
-            setError(error.message)
+            console.error(error)
+            setError(error.message || "Failed to delete account")
             setLoading(false)
         }
     }
 
     return (
         <div className="w-full text-white pt-20">
+
             <section className="pb-13 border-b border-[#29292d]">
                 <h2 className="text-[20px] leading-[36px] font-bold mb-[20px]">
                     Download account data
@@ -98,10 +84,7 @@ function Downloads() {
                 </p>
 
                 <button
-                    onClick={() => {
-                        setError("")
-                        setShowModal(true)
-                    }}
+                    onClick={handleOpenModal}
                     className="mt-[20px] bg-[#ff3d57] hover:bg-[#ff5269] transition-colors rounded-[12px] px-4 py-3 font-semibold text-black"
                 >
                     Delete account
@@ -110,17 +93,43 @@ function Downloads() {
 
             {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+
                     <div className="w-full max-w-[500px] bg-[#18181b] rounded-[12px] p-6 shadow-2xl">
+
                         <h2 className="text-[22px] font-bold mb-4">
                             Delete your account?
                         </h2>
 
                         <p className="text-[#b7b7c0] leading-[26px] mb-6">
-<p className='py-3'>Your personal information, purchases, game progress, in-game content, Epic account balance, and any Unreal projects will be permanently deleted.
-</p>
-<p className='pb-3'>You have 14 days to cancel this request by signing into your account.</p>
+                            Your account will be permanently deleted in 30 days.
 
-If you need help, contact <span className='text-[#26BBFF] underline'>Player Support.</span>                        </p>
+                            <span className="block py-3">
+                                Your personal information, purchases, game progress, in-game content, Epic account balance, and any Unreal projects will be permanently deleted.
+                            </span>
+
+                            <span className="block pb-3">
+                                You have 14 days to cancel this request by signing into your account.
+                            </span>
+
+                            If you need help, contact{" "}
+                            <span className="text-[#26BBFF] underline">
+                                Player Support.
+                            </span>
+                        </p>
+
+                        <label className="flex items-start gap-3 cursor-pointer mb-5">
+                            <input
+                                type="checkbox"
+                                checked={confirmed}
+                                onChange={(e) => setConfirmed(e.target.checked)}
+                                disabled={loading}
+                                className="mt-1 w-4 h-4 accent-[#26BBFF] cursor-pointer"
+                            />
+
+                            <span className="text-[#b7b7c0] text-sm leading-[22px]">
+                                I understand that my account and all associated data will be permanently deleted.
+                            </span>
+                        </label>
 
                         {error && (
                             <p className="text-[#ff3d57] text-sm mb-4">
@@ -129,25 +138,33 @@ If you need help, contact <span className='text-[#26BBFF] underline'>Player Supp
                         )}
 
                         <div className="flex justify-end gap-3">
+
                             <button
-                                onClick={() => setShowModal(false)}
+                                onClick={handleCloseModal}
                                 disabled={loading}
-                                className="bg-[#353539] hover:bg-[#414145] transition-colors rounded-[10px] px-5 py-3 font-semibold"
+                                className="bg-[#353539] hover:bg-[#414145] transition-colors rounded-[10px] px-5 py-3 font-semibold disabled:opacity-50"
                             >
                                 Cancel
                             </button>
 
                             <button
                                 onClick={handleDeleteAccount}
-                                disabled={loading}
-                                className="bg-[#ff3d57] hover:bg-[#ff5269] transition-colors rounded-[10px] px-5 py-3 font-semibold text-black disabled:opacity-50"
+                                disabled={loading || !confirmed}
+                                className={`transition-colors rounded-[10px] px-5 py-3 font-semibold text-black ${
+                                    confirmed && !loading
+                                        ? "bg-[#ff3d57] hover:bg-[#ff5269]"
+                                        : "bg-[#4a4a4f] text-[#888] cursor-not-allowed"
+                                }`}
                             >
                                 {loading ? "Deleting..." : "Confirm"}
                             </button>
+
                         </div>
+
                     </div>
                 </div>
             )}
+
         </div>
     )
 }

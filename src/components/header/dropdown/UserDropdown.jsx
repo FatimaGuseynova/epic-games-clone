@@ -57,11 +57,13 @@ const UserDropdown = ({ user, setUser }) => {
         {
             key: "balance",
             label: (
-                <div className="flex items-center gap-2 px-2 py-1 text-[14px] text-white rounded-[7px] hover:bg-[#ffffff12] cursor-pointer"
+                <Link to="/balance" className="flex items-center gap-2 px-2 py-1 text-[14px] text-white rounded-[7px] hover:bg-[#ffffff12] cursor-pointer"
                 >
-                    <WalletCards size={19} />
-                    Account Balance
-                </div>
+                    <div className='text-white flex items-center gap-2'>
+                        <WalletCards size={19} />
+                        Account Balance
+                    </div>
+                </Link>
             )
         },
         {

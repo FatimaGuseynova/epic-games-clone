@@ -86,7 +86,7 @@ function RegisterName() {
                 navigate("/signin/otp");
             } catch (error) {
                 console.error("Registration error:", error);
-            }
+            } 
         }
     });
 
