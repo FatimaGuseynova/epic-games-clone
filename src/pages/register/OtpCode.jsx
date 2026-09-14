@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { IoIosArrowBack } from "react-icons/io";
-import { OtpVerify } from "../../api/otpVerify";
+import { OtpVerify } from "../../api/OtpVerify";
 import { OtpGet } from "../../api/otpGet";
 
 function OtpCode() {
