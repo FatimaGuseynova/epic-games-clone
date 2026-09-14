@@ -24,7 +24,7 @@ function Settings() {
     const [settingsOpen, setSettingsOpen] = useState(false)
 
     return (
-        <div>
+        <div className='pt-5'>
             <div className="min-[1000px]:hidden w-full bg-[#202023] text-[#c9c9d1] overflow-hidden">
 
                 <button

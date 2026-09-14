@@ -70,7 +70,7 @@ function Header() {
                         <ChangeLanguage open={langOpen} setOpen={setLangOpen} />
                     </div>
                     {user ? (
-                        <div className="mr-2.5 max-[600px]:hidden">
+                        <div className="mr-2.5 max-[650px]:hidden">
                             <UserDropdown user={user} setUser={setUser} />
                         </div>
                     ) : (
@@ -85,7 +85,7 @@ function Header() {
                         Download
                     </button>
                     <div className={`min-[720px]:hidden p-4 lg:hidden ${epicOpen ? "hidden" : "flex"}`}>
-                        <Hamburgermenu menulOpen={menuOpen} setMenulOpen={setMenuOpen} />
+                        <Hamburgermenu menulOpen={menuOpen} setMenulOpen={setMenuOpen} user={user} />
                     </div>
                 </div>
             </div>

@@ -4,6 +4,7 @@ import AccountInf from './components/AccountInf'
 import PersonalDetails from './components/PersonalDetails'
 import Downloads from './components/Downloads'
 import Header from '../../components/header/Header'
+import Footer from '../../layout/Footer'
 
 function UserMain() {
     return (
@@ -19,6 +20,7 @@ function UserMain() {
                     </div>
                 </div>
             </div>
+            <Footer/>
         </div>
 
     )

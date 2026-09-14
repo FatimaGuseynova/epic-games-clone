@@ -5,6 +5,7 @@ import PersonalDetails from './components/PersonalDetails'
 import Downloads from './components/Downloads'
 import Header from '../../components/header/Header'
 import Payment from './components/Payment'
+import Footer from '../../layout/Footer'
 
 function BalanceMain() {
     return (
@@ -18,6 +19,7 @@ function BalanceMain() {
                     </div>
                 </div>
             </div>
+                <Footer/>
         </div>
 
     )

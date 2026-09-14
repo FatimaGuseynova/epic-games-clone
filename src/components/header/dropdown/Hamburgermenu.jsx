@@ -8,12 +8,13 @@ import { Link } from 'react-router';
 
 import DistributeMobile from './DistributeMobile';
 
-function Hamburgermenu({ menulOpen, setMenulOpen }) {
+import UserDropdownMobile from './UserDropdownMobile';
+
+function Hamburgermenu({ menulOpen, setMenulOpen, user, setUser }) {
 
     const [open, setOpen] = useState(false);
     const [distOpen, setDistOpen] = useState(false);
-
-    const accessToken = localStorage.getItem("accessToken");
+    const [profileOpen, setProfileOpen] = useState(false);
 
     return (
         <div>
@@ -47,6 +48,7 @@ function Hamburgermenu({ menulOpen, setMenulOpen }) {
                         setMenulOpen(false);
                         setOpen(false);
                         setDistOpen(false);
+                        setProfileOpen(false);
                     }}
                     className="w-7 h-7"
                 >
@@ -54,7 +56,7 @@ function Hamburgermenu({ menulOpen, setMenulOpen }) {
                 </button>
             )}
 
-            {menulOpen && (
+            {menulOpen && !profileOpen && (
                 <div
                     className="
                         fixed
@@ -82,7 +84,7 @@ function Hamburgermenu({ menulOpen, setMenulOpen }) {
                             />
                         </div>
 
-                        {!accessToken && (
+                        {!user ? (
                             <Link
                                 to="/signin"
                                 type="button"
@@ -103,6 +105,32 @@ function Hamburgermenu({ menulOpen, setMenulOpen }) {
                             >
                                 Sign in
                             </Link>
+                        ) : (
+                            <button
+                                type="button"
+                                onClick={() => setProfileOpen(true)}
+                                className={`
+                                    flex
+                                    items-center
+                                    mr-2.5
+                                    duration-200
+                                    ${open ? "opacity-0" : "opacity-100"}
+                                `}
+                            >
+                                <div className="
+                                    w-9
+                                    h-9
+                                    rounded-full
+                                    bg-[#454549]
+                                    flex
+                                    items-center
+                                    justify-center
+                                    text-white
+                                    text-[17px]
+                                ">
+                                    {user?.username?.charAt(0).toUpperCase()}
+                                </div>
+                            </button>
                         )}
                     </div>
 
@@ -150,6 +178,14 @@ function Hamburgermenu({ menulOpen, setMenulOpen }) {
                         />
                     </div>
                 </div>
+            )}
+
+            {menulOpen && profileOpen && (
+                <UserDropdownMobile
+                    user={user}
+                    setProfileOpen={setProfileOpen}
+                    setUser={setUser}
+                />
             )}
         </div>
     );

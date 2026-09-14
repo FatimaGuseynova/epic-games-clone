@@ -193,7 +193,7 @@ const UserDropdown = ({ user, setUser }) => {
                 <div className="w-7 h-7 rounded-full bg-[#36363b] flex items-center justify-center text-[14px] font-semibold text-[#e5e5e5]">
                     {user?.username?.[0]?.toUpperCase()}
                 </div>
-                <span className="text-[15px] max-[720px]:hidden text-white">
+                <span className="text-[15px] text-white">
                     {user?.username}
                 </span>
             </button>

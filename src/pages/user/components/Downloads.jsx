@@ -56,7 +56,7 @@ function Downloads() {
     }
 
     return (
-        <div className="w-full text-white pt-20">
+        <div className="w-full mb-[100px] text-white pt-20">
 
             <section className="pb-13 border-b border-[#29292d]">
                 <h2 className="text-[20px] leading-[36px] font-bold mb-[20px]">
@@ -150,7 +150,7 @@ function Downloads() {
                             <button
                                 onClick={handleDeleteAccount}
                                 disabled={loading || !confirmed}
-                                className={`transition-colors rounded-[10px] px-5 py-3 font-semibold text-black ${
+                                className={` transition-colors rounded-[10px] px-5 py-3 font-semibold text-black ${
                                     confirmed && !loading
                                         ? "bg-[#ff3d57] hover:bg-[#ff5269]"
                                         : "bg-[#4a4a4f] text-[#888] cursor-not-allowed"

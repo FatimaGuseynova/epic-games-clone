@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
+
 import { GrLanguage } from "react-icons/gr";
+
 import { Dropdown } from 'antd';
+
 import { IoIosArrowBack } from "react-icons/io";
 
 const languages = [
@@ -11,76 +14,136 @@ const languages = [
 
 function ChangeLanguage({ open, setOpen }) {
 
-useEffect(() => {
-    window.googleTranslateElementInit = () => {
-        new window.google.translate.TranslateElement(
-            {
-                pageLanguage: 'en',
-                includedLanguages: 'en,ru,de',
-                autoDisplay: false,
-            },
-            'google_translate_element'
+    useEffect(() => {
+
+        const initGoogleTranslate = () => {
+
+            if (!window.google?.translate) {
+                return;
+            }
+
+            const element = document.getElementById('google_translate_element');
+
+            if (!element) {
+                return;
+            }
+
+            if (element.querySelector('.goog-te-combo')) {
+                return;
+            }
+
+            new window.google.translate.TranslateElement(
+                {
+                    pageLanguage: 'en',
+                    includedLanguages: 'en,ru,de',
+                    autoDisplay: false,
+                },
+                'google_translate_element'
+            );
+        };
+
+        window.googleTranslateElementInit = initGoogleTranslate;
+
+        if (window.google?.translate) {
+            initGoogleTranslate();
+            return;
+        }
+
+        const existingScript = document.getElementById(
+            'google-translate-script'
         );
+
+        if (!existingScript) {
+
+            const script = document.createElement('script');
+
+            script.id = 'google-translate-script';
+
+            script.src =
+                'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+
+            script.async = true;
+
+            document.body.appendChild(script);
+        }
+
+        return () => {
+            window.googleTranslateElementInit = undefined;
+        };
+
+    }, []);
+
+    useEffect(() => {
+
+        if (open) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+
+        return () => {
+            document.body.style.overflow = "";
+        };
+
+    }, [open]);
+
+    const changeLanguage = (langCode) => {
+
+        let attempts = 0;
+
+        const findSelect = () => {
+
+            const select = document.querySelector('.goog-te-combo');
+
+            console.log('CLICKED:', langCode);
+            console.log('SELECT:', select);
+
+            if (select) {
+
+                select.value = langCode;
+
+                console.log('VALUE:', select.value);
+
+                select.dispatchEvent(
+                    new Event('change', {
+                        bubbles: true
+                    })
+                );
+
+                console.log('CHANGE EVENT FIRED');
+
+                setTimeout(() => {
+                    setOpen(false);
+                }, 500);
+
+                return;
+            }
+
+            attempts++;
+
+            if (attempts < 30) {
+                setTimeout(findSelect, 300);
+            } else {
+                console.log('GOOGLE TRANSLATE SELECT NOT FOUND');
+            }
+        };
+
+        findSelect();
     };
 
-    if (window.google?.translate) {
-        window.googleTranslateElementInit();
-        return;
-    }
-
-    if (document.getElementById('google-translate-script')) {
-        return;
-    }
-
-    const script = document.createElement('script');
-
-    script.id = 'google-translate-script';
-    script.src =
-        'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-
-    script.async = true;
-
-    document.body.appendChild(script);
-}, []);
-
-const changeLanguage = (langCode) => {
-    const select = document.querySelector('.goog-te-combo');
-
-    console.log('CLICKED:', langCode);
-    console.log('SELECT:', select);
-
-    if (!select) {
-        console.log('SELECT NOT FOUND');
-        return;
-    }
-
-    select.value = langCode;
-
-    console.log('VALUE:', select.value);
-
-    select.dispatchEvent(
-        new Event('change', {
-            bubbles: true
-        })
-    );
-
-    console.log('CHANGE EVENT FIRED');
-
-    setTimeout(() => {
-        setOpen(false);
-    }, 500);
-};
     const languageContent = (
-        <div className="
-            min-[720px]:w-48
-            min-[720px]:rounded-2xl
-            min-[720px]:font-semibold
-            min-[720px]:bg-gradient-to-br
-            min-[720px]:from-[#2b2b2f]
-            min-[720px]:to-[#555]
-            min-[720px]:p-2
-            min-[720px]:shadow-2xl
-        ">
+        <div
+            className="
+                min-[720px]:w-48
+                min-[720px]:rounded-2xl
+                min-[720px]:font-semibold
+                min-[720px]:bg-gradient-to-br
+                min-[720px]:from-[#2b2b2f]
+                min-[720px]:to-[#555]
+                min-[720px]:p-2
+                min-[720px]:shadow-2xl
+            "
+        >
             {languages.map((lang) => (
                 <button
                     key={lang.code}
@@ -106,17 +169,18 @@ const changeLanguage = (langCode) => {
 
     return (
         <>
-          <div
-    id="google_translate_element"
-    style={{
-        position: 'absolute',
-        width: '1px',
-        height: '1px',
-        overflow: 'hidden',
-        opacity: 0,
-        pointerEvents: 'none',
-    }}
-/>
+            <div
+                id="google_translate_element"
+                style={{
+                    position: 'absolute',
+                    width: '1px',
+                    height: '1px',
+                    overflow: 'hidden',
+                    opacity: 0,
+                    pointerEvents: 'none',
+                }}
+            />
+
             <div className="min-[720px]:block max-[719px]:hidden">
 
                 <Dropdown
@@ -125,8 +189,15 @@ const changeLanguage = (langCode) => {
                     onOpenChange={setOpen}
                     popupRender={() => languageContent}
                 >
-                    <button className="group hover:text-[#8b8b92] cursor-pointer">
-                        <GrLanguage  size={20}/>
+                    <button
+                        type="button"
+                        className="
+                            group
+                            hover:text-[#8b8b92]
+                            cursor-pointer
+                        "
+                    >
+                        <GrLanguage size={20} />
                     </button>
                 </Dropdown>
 
@@ -135,48 +206,50 @@ const changeLanguage = (langCode) => {
             <div className="min-[720px]:hidden">
 
                 <button
+                    type="button"
                     onClick={() => setOpen(true)}
                     className={`
                         duration-200
                         ${open ? "opacity-0" : "opacity-100"}
                     `}
                 >
-                    <GrLanguage/>
+                    <GrLanguage />
                 </button>
-
 
                 <div
                     className={`
                         fixed
                         inset-0
+                        top-17
                         z-[9999]
                         bg-[#121216]
                         w-screen
                         h-screen
-                        p-6
-                        pt-0
+                        p-4
                         duration-300
-                        top-30
+                        overflow-y-auto
                         ${
                             open
-                                ? "opacity-100 "
-                                : "opacity-0  pointer-events-none"
+                                ? "opacity-100 pointer-events-auto"
+                                : "opacity-0 pointer-events-none"
                         }
                     `}
                 >
 
                     <button
+                        type="button"
                         onClick={() => setOpen(false)}
                         className="
-                            pb-2.5
                             text-[17px]
                             flex
-                            gap-4
+                            gap-2
                             items-center
                             text-white
+                            mb-5
                         "
                     >
                         <IoIosArrowBack />
+
                         Back
                     </button>
 
@@ -185,9 +258,8 @@ const changeLanguage = (langCode) => {
                             font-extrabold
                             text-[29px]
                             text-white
-                            pb-2.5
+                            pb-3
                             text-start
-                            py-6
                         "
                     >
                         Languages
@@ -195,6 +267,7 @@ const changeLanguage = (langCode) => {
 
                     {languages.map((lang) => (
                         <button
+                            type="button"
                             key={lang.code}
                             onClick={() => changeLanguage(lang.code)}
                             className="
@@ -207,7 +280,6 @@ const changeLanguage = (langCode) => {
                                 rounded-[7px]
                                 p-3
                                 duration-200
-                                pt-4
                             "
                         >
                             {lang.label}
