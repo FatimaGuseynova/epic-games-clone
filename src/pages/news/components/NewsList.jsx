@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
+
 import { NewsGet } from "../../../api/NewsGet";
+
 import { Link } from "react-router";
 
 function getTimeAgo(date) {
     const now = new Date();
     const created = new Date(date);
+
     const diff = Math.floor((now - created) / 1000);
 
     const minutes = Math.floor(diff / 60);
@@ -27,7 +30,7 @@ function getTimeAgo(date) {
 }
 
 function NewsList() {
-    const [news, setNews] = useState([]);
+    const [allNews, setAllNews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -37,19 +40,57 @@ function NewsList() {
             setLoading(true);
 
             try {
-                const res = await NewsGet(currentPage);
+                const firstResponse = await NewsGet(1);
 
-                setNews(res.data || []);
-                setTotalPages(res.totalPages || 1);
+                const pages = firstResponse.totalPages || 1;
+
+                const requests = [];
+
+                for (let page = 1; page <= pages; page++) {
+                    if (page === 1) {
+                        requests.push(Promise.resolve(firstResponse));
+                    } else {
+                        requests.push(NewsGet(page));
+                    }
+                }
+
+                const responses = await Promise.all(requests);
+
+                const all = responses.flatMap(
+                    (response) => response.data || []
+                );
+
+                const sortedNews = all.sort(
+                    (a, b) =>
+                        new Date(b.createdAt) - new Date(a.createdAt)
+                );
+
+                setAllNews(sortedNews);
+
+                const newsWithoutLastTwo =
+                    sortedNews.length > 2
+                        ? sortedNews.slice(0, -2)
+                        : [];
+
+                const pagesCount =
+                    newsWithoutLastTwo.length <= 8
+                        ? 1
+                        : 1 +
+                          Math.ceil(
+                              (newsWithoutLastTwo.length - 8) / 10
+                          );
+
+                setTotalPages(pagesCount);
             } catch (error) {
                 console.error(error);
+                setAllNews([]);
             } finally {
                 setLoading(false);
             }
         };
 
         getNews();
-    }, [currentPage]);
+    }, []);
 
     const getPages = () => {
         if (totalPages <= 7) {
@@ -106,55 +147,68 @@ function NewsList() {
             </div>
         );
     }
+
+    const newsWithoutLastTwo =
+        allNews.length > 2
+            ? allNews.slice(0, -2)
+            : [];
+
+    let visibleNews = [];
+
+    if (currentPage === 1) {
+        visibleNews = newsWithoutLastTwo.slice(0, 8);
+    } else {
+        const start = 8 + (currentPage - 2) * 10;
+        const end = start + 10;
+
+        visibleNews = newsWithoutLastTwo.slice(start, end);
+    }
+
     return (
         <div className="min-h-screen bg-[#101014] text-white">
-
             <div className="w-full max-w-[1025px] mx-auto px-6 md:px-10 lg:px-0">
 
-                {news.slice(2, news.length).map((item) => (
+                {visibleNews.map((item) => (
                     <div
                         key={item.id}
                         className="border-t border-[#3a3a3f] py-6 md:py-7"
                     >
-
                         <div className="flex flex-col sm:flex-row gap-6">
 
                             <div className="w-full sm:w-[250px] flex-shrink-0 overflow-hidden rounded-[5px]">
-
                                 <img
                                     src={item.media?.url}
                                     alt={item.title}
                                     className="w-full h-full object-cover"
                                 />
-
                             </div>
 
                             <div className="flex flex-col flex-1 min-w-0">
 
                                 <div className="flex items-center gap-3 mb-8">
-
                                     <span className="text-[#aaaab0] text-[11px] font-medium tracking-[1.5px]">
                                         {getTimeAgo(item.createdAt)}
                                     </span>
-
                                 </div>
 
                                 <h2 className="md:text-[20px] lg:text-[19px] font-bold leading-[1.3] max-w-[1050px]">
                                     {item.title}
                                 </h2>
 
-                                <Link to="/newsdetail" state={{news: item}} className="text-left text-white text-[14px] mt-7 w-fit border-b border-[#77777d] leading-[1.1] pb-[2px] hover:border-white transition-colors">
+                                <Link
+                                    to="/newsdetail"
+                                    state={{ news: item }}
+                                    className="text-left text-white text-[14px] mt-7 w-fit border-b border-[#77777d] leading-[1.1] pb-[2px] hover:border-white transition-colors"
+                                >
                                     Read more
                                 </Link>
 
                             </div>
-
                         </div>
-
                     </div>
                 ))}
 
-                {news.length === 0 && (
+                {visibleNews.length === 0 && (
                     <div className="border-t border-[#3a3a3f] py-10 text-gray-400">
                         No news found
                     </div>
@@ -182,7 +236,9 @@ function NewsList() {
 
                         {currentPage < totalPages && (
                             <button
-                                onClick={() => handlePageChange(currentPage + 1)}
+                                onClick={() =>
+                                    handlePageChange(currentPage + 1)
+                                }
                                 className="w-[32px] h-[32px] ml-1 rounded-full bg-[#303035] flex items-center justify-center text-white hover:bg-[#3a3a40] transition-colors"
                             >
                                 ›
@@ -193,7 +249,6 @@ function NewsList() {
                 )}
 
             </div>
-
         </div>
     );
 }

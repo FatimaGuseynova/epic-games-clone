@@ -10,6 +10,7 @@ function GamesBrowse({ sort = 1, genreId }) {
         page: 1
 
     })
+        console.log("GAMES BROWSE TEST");
     const [currentPage, setCurrentPage] = useState(1)
     const [loading, setLoading] = useState(true)
     const [searchParams] = useSearchParams()
@@ -187,6 +188,7 @@ function GamesBrowse({ sort = 1, genreId }) {
     const noResults = currentGames.length === 0
 
     return (
+        
         <div className='bg-[#121216] min-h-screen'>
             {noResults && (
                 <div className='text-center pt-10 pb-5'>
@@ -271,7 +273,7 @@ function GamesBrowse({ sort = 1, genreId }) {
                                         )}
 
                                         <h5
-                                            className={`${item?.discount > 0 ? "flex" : "hidden"} items-center gap-2`}
+                                            className={`${item?.discount > 0 ? "flex min-[1000px]:max-[1450px]:grid min-[1000px]:max-[1450px]:grid-cols-2" : "hidden"}  items-center gap-2`}
                                         >
                                             <div className='bg-[#26BAFE] px-1 py-0.5 text-black text-[14px] rounded-2xl'>
                                                 {item?.discount > 0 &&
@@ -282,7 +284,7 @@ function GamesBrowse({ sort = 1, genreId }) {
                                                 ${item.price}
                                             </div>
 
-                                            <div className='text-white text-[15px]'>
+                                            <div className='text-white block text-[15px]'>
                                                 ${item.discount}
                                             </div>
                                         </h5>
@@ -367,7 +369,7 @@ function GamesBrowse({ sort = 1, genreId }) {
                                         )}
 
                                         <h5
-                                            className={`${item?.discount > 0 ? "flex" : "hidden"} items-center gap-2`}
+                                            className={`${item?.discount > 0 ? "flex  min-[1000px]:max-[1450px]:grid min-[1000px]:max-[1450px]:grid-cols-2" : "hidden"}  items-center gap-2`}
                                         >
                                             <div className='bg-[#26BAFE] px-1 py-0.5 text-black text-[14px] rounded-2xl'>
                                                 {item?.discount > 0 &&

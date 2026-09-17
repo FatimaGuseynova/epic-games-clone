@@ -112,7 +112,7 @@ function UpcomingGames() {
                     
                     <ComingSoon />
 
-                    <div className="px-5 border-r border-[#38383d] max-[899px]:border-r-0">
+                    <div className="px-5 max-[899px]:border-r-0">
                         <Link className="flex items-center gap-2 text-white text-[25px] font-bold mb-7 group">
                             Top Upcoming Wishlisted
                             <IoIosArrowForward className="duration-200 group-hover:translate-x-1" />

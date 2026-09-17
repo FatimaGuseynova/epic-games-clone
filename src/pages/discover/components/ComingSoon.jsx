@@ -48,7 +48,7 @@ function ComingSoon() {
 
     return (
         <div className="bg-[#121216] py-8 pt-0">
-            <div className="min-[1100px]:w-[90%] w-[93%] mx-auto">
+            <div className="min-[1100px]:w-[90%] w-[93%] mx-auto ">
                 <div className="flex items-center justify-between mb-7">
                     <Link
                         to="/"
@@ -59,7 +59,7 @@ function ComingSoon() {
                     </Link>
                 </div>
 
-                <div className="grid grid-cols-1 min-[700px]:grid-cols-2 min-[1100px]:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 gap-6">
                     {products.map(item => (
                         <Link
                             to="/detail"

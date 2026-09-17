@@ -8,14 +8,18 @@ import "swiper/css";
 
 function DiscoverNew() {
     const [products, setProducts] = useState([]);
-
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         const getProducts = async () => {
+
+            setLoading(true);
+
             try {
                 let page = 1;
                 let allProducts = [];
 
                 while (true) {
+
                     const res = await ProductsGet(page);
 
                     if (!res?.data || res.data.length === 0) {
@@ -27,8 +31,12 @@ function DiscoverNew() {
                 }
 
                 setProducts(allProducts);
+                setLoading(false);
+
             } catch (error) {
+
                 console.log(error);
+
             }
         };
 
@@ -42,80 +50,88 @@ function DiscoverNew() {
     }
 
     return (
-        <div className="bg-[#121216] py-23">
-            <div className="min-[1100px]:w-[77%] w-[93%] mx-auto">
-                <div className="flex items-center max-[770px]:flex-col justify-between gap-11">
-                    <div
-                        className="w-88 max-[770px]:w-full max-[770px]:h-[410px] shrink-0 flex justify-center items-end h-[330px] bg-cover bg-center bg-no-repeat rounded-[12px]"
-                        style={{ backgroundImage: "url('https://cdn2.unrealengine.com/en-discoversn-bhn-target-recmin-1200x1200-1200x1200-82f0776c4b35.jpg?resize=1&w=360&h=480&quality=medium')" }}
-                    >
-                        <Link
-                            to="/"
-                            className="text-center bg-white h-fit text-black duration-150 px-5 w-[60%] py-3 rounded-[10px] text-[16px] font-medium hover:bg-gray-300 mb-7"
-                        >
-                            View More
-                        </Link>
-                    </div>
-
-                    <div className="w-full overflow-hidden">
-                        <div className="flex justify-end gap-2 mb-4">
-                            <button className="discover-prev w-8 h-8 rounded-full bg-[#29292e] flex items-center justify-center text-white">
-                                <IoChevronBack size={17} />
-                            </button>
-
-                            <button className="discover-next w-8 h-8 rounded-full bg-[#29292e] flex items-center justify-center text-white">
-                                <IoChevronForward size={17} />
-                            </button>
-                        </div>
-
-                        <Swiper
-                            modules={[Navigation]}
-                            navigation={{
-                                prevEl: ".discover-prev",
-                                nextEl: ".discover-next"
-                            }}
-                            slidesPerView={1}
-                            spaceBetween={30}
-                        >
-                            {slides.map((slide, index) => (
-                                <SwiperSlide key={index}>
-                                    <div className="grid grid-cols-2 gap-x-10 gap-y-4">
-                                        {slide.map((item) => (
-                                            <Link
-                                                to="/detail"
-                                                state={{ product: item }}
-                                                key={item.id}
-                                                className="flex items-center gap-3"
-                                            >
-                                                <img
-                                                    src={item?.coverImage?.url}
-                                                    alt={item?.name}
-                                                    className="w-16 rounded-[3px] object-cover shrink-0"
-                                                />
-
-                                                <div className="min-w-0">
-                                                    <p className="text-white text-[13px] font-semibold truncate">
-                                                        {item?.name}
-                                                    </p>
-
-                                                    <p className="text-white text-[12px] font-semibold mt-1">
-                                                        {item?.price === 0
-                                                            ? "Free"
-                                                            : item?.discount > 0
-                                                            ? "$" + item.discount
-                                                            : "$" + item.price}
-                                                    </p>
-                                                </div>
-                                            </Link>
-                                        ))}
-                                    </div>
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-                    </div>
+        loading ? (
+            <div className='bg-[#121216]'>
+                <div className='flex items-center justify-center gap-3 py-8 border-b border-[#29292d]'>
+                    <div className='w-5 h-5 rounded-full border-2 border-[#26BBFF] border-t-transparent animate-spin'></div>
+                    <span className='text-white text-[14px]'>Loading...</span>
                 </div>
             </div>
-        </div>
+        ) : (
+            <div className="bg-[#121216] py-23">
+                <div className="min-[1100px]:w-[77%] w-[93%] mx-auto">
+                    <div className="flex items-center max-[770px]:flex-col justify-between gap-11">
+                        <div
+                            className="w-88 max-[770px]:w-full max-[770px]:h-[410px] shrink-0 flex justify-center items-end h-[330px] bg-cover bg-center bg-no-repeat rounded-[12px]"
+                            style={{ backgroundImage: "url('https://cdn2.unrealengine.com/en-discoversn-bhn-target-recmin-1200x1200-1200x1200-82f0776c4b35.jpg?resize=1&w=360&h=480&quality=medium')" }}
+                        >
+                            <Link
+                                to="/"
+                                className="text-center bg-white h-fit text-black duration-150 px-5 w-[60%] py-3 rounded-[10px] text-[16px] font-medium hover:bg-gray-300 mb-7"
+                            >
+                                View More
+                            </Link>
+                        </div>
+
+                        <div className="w-full overflow-hidden">
+                            <div className="flex justify-end gap-2 mb-4">
+                                <button className="discover-prev w-8 h-8 rounded-full bg-[#29292e] flex items-center justify-center text-white">
+                                    <IoChevronBack size={17} />
+                                </button>
+
+                                <button className="discover-next w-8 h-8 rounded-full bg-[#29292e] flex items-center justify-center text-white">
+                                    <IoChevronForward size={17} />
+                                </button>
+                            </div>
+
+                            <Swiper
+                                modules={[Navigation]}
+                                navigation={{
+                                    prevEl: ".discover-prev",
+                                    nextEl: ".discover-next"
+                                }}
+                                slidesPerView={1}
+                                spaceBetween={30}
+                            >
+                                {slides.map((slide, index) => (
+                                    <SwiperSlide key={index}>
+                                        <div className="grid grid-cols-2 gap-x-10 gap-y-4">
+                                            {slide.map((item) => (
+                                                <Link
+                                                    to="/detail"
+                                                    state={{ product: item }}
+                                                    key={item.id}
+                                                    className="flex items-center gap-3"
+                                                >
+                                                    <img
+                                                        src={item?.coverImage?.url}
+                                                        alt={item?.name}
+                                                        className="w-16 rounded-[3px] object-cover shrink-0"
+                                                    />
+
+                                                    <div className="min-w-0">
+                                                        <p className="text-white text-[13px] font-semibold truncate">
+                                                            {item?.name}
+                                                        </p>
+
+                                                        <p className="text-white text-[12px] font-semibold mt-1">
+                                                            {item?.price === 0
+                                                                ? "Free"
+                                                                : item?.discount > 0
+                                                                    ? "$" + item.discount
+                                                                    : "$" + item.price}
+                                                        </p>
+                                                    </div>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </SwiperSlide>
+                                ))}
+                            </Swiper>
+                        </div>
+                    </div>
+                </div>
+            </div>)
     );
 }
 

@@ -1,20 +1,52 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+
+import { useLocation } from 'react-router'
 
 import { FiAlertCircle, FiPlus, FiCreditCard, FiGift } from 'react-icons/fi'
 
 import AddFunds from './AddFunds'
+import { getCurrentUser } from './../../../api/GetCurrentUser'
 
 function Payment() {
 
+    const location = useLocation()
+    const product = location.state?.product
     const [agreed, setAgreed] = useState(false)
     const [addFundsOpen, setAddFundsOpen] = useState(false)
-
+    const [balance, setBalance] = useState(0)
+    const [showSuccess, setShowSuccess] = useState(false)
     const handleAgree = () => {
         setAgreed(true)
     }
 
+    useEffect(() => {
+        const loadBalance = async () => {
+            try {
+                const user = await getCurrentUser()
+                setBalance(Number(user.balance) || 0)
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        loadBalance()
+    }, [])
+
     return (
         <div className="w-full text-white">
+            {showSuccess && (
+                <div className="fixed bottom-3 left-1/2 -translate-x-1/2 z-[1000] w-[360px] h-[60px] bg-[#303035] border border-[#4a4a50] rounded-[18px] flex items-center px-8 shadow-2xl">
+                    <div className="w-[24px] h-[24px] rounded-full bg-[#45c765] flex items-center justify-center mr-6">
+                        <span className="text-[#111216] text-[17px] font-bold">
+                            ✓
+                        </span>
+                    </div>
+
+                    <span className="text-white text-center text-[18px] font-medium">
+                        Funds added successfully!
+                    </span>
+                </div>
+            )}
 
             <h1 className="text-[30px] leading-[58px] font-bold mb-[7px]">
                 Payment settings
@@ -107,11 +139,9 @@ function Payment() {
                 <h2 className="text-[26px] leading-[38px] font-bold">
                     Balance
                 </h2>
-
                 <p className="text-[70px] leading-[90px] font-light mt-[18px]">
-                    $0.00
+                    ${balance.toFixed(2)}
                 </p>
-
                 <div className="flex items-center gap-[30px] mt-[48px]">
 
                     <button
@@ -308,6 +338,15 @@ function Payment() {
             {addFundsOpen && (
                 <AddFunds
                     setOpen={setAddFundsOpen}
+                    product={product}
+                    onBalanceUpdate={(newBalance) => {
+                        setBalance(Number(newBalance) || 0)
+                        setShowSuccess(true)
+
+                        setTimeout(() => {
+                            setShowSuccess(false)
+                        }, 5000)
+                    }}
                 />
             )}
 

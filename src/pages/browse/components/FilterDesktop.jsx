@@ -174,7 +174,7 @@ function FilterDesktop({ paramss }) {
             <div className='py-4'>
                 <ul className="flex flex-col">
                     {filters.map((filter) => (
-                        <div key={filter.id}>
+                        <li key={filter.id}>
                             <li
                                 onClick={() => {
                                     setOpen(
@@ -235,7 +235,7 @@ function FilterDesktop({ paramss }) {
                                     ))}
                                 </div>
                             </div>
-                        </div>
+                        </li>
                     ))}
                 </ul>
 
