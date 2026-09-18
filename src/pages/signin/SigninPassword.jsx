@@ -13,6 +13,8 @@ function SigninPassword() {
     const [message, setMessage] = useState("")
     const emailSend = localStorage.getItem("email")
     const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(false)
+
     useEffect(() => {
         const loadUsers = async () => {
             try {
@@ -38,6 +40,9 @@ function SigninPassword() {
                 password: values.password
             };
 
+            setLoading(true);
+            setMessage("");
+
             try {
                 const response = await loginUsers(obj);
 
@@ -58,6 +63,8 @@ function SigninPassword() {
             } catch (error) {
                 console.log(error);
                 setMessage("Something went wrong");
+            } finally {
+                setLoading(false);
             }
         }
     })
@@ -92,8 +99,20 @@ function SigninPassword() {
                     </div>
 
 
-                    <button type='submit' className='w-full my-6 rounded-[8px] bg-[#26BBFF] block text-center py-2 text-black'>Sign in</button>
-                </form>
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className='w-full my-6 rounded-[8px] bg-[#26BBFF] block text-center py-2 text-black disabled:opacity-60 disabled:cursor-not-allowed'
+                    >
+                        {loading ? (
+                            <span className="flex items-center justify-center gap-2">
+                                <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin"></span>
+                                Signing in...
+                            </span>
+                        ) : (
+                            "Sign in"
+                        )}
+                    </button>                </form>
 
                 <div className='text-center pb-5'>
                     <Link to="/signin/privacy" className="text-[#2290C3] text-[15px] underline">Privacy Policy</Link>

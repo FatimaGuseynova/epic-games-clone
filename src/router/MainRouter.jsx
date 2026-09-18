@@ -12,6 +12,7 @@ import AdventurePage from '../pages/browse/components/AdventurePage'
 import CasualPage from '../pages/browse/components/CasualPage'
 import CityPage from '../pages/browse/components/CityPage'
 import Achivments from '../pages/browse/components/Achivments'
+import WishlistMain from '../pages/user/WishlistMain'
 
 const MainRouter = () => {
     return (
@@ -28,6 +29,7 @@ const MainRouter = () => {
             <Route path="/browse/casual" element={<CasualPage />} />
             <Route path="/browse/city" element={<CityPage />} />
             <Route path="/browse/achievements" element={<Achivments />} />
+            <Route path="/wishlist" element={<WishlistMain />} />
             
 
         </Routes>

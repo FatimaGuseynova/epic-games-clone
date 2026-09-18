@@ -50,7 +50,7 @@ function ForgotPassword() {
                     <div className='flex items-center justify-between gap-4'>
                         <div>
                             <p className='text-white font-semibold text-[16px]'>
-                                Security code sent
+                                Mail sent successfully
                             </p>
 
                             <p className='text-[#A7A7A9] text-[13px] mt-1'>
@@ -89,8 +89,7 @@ function ForgotPassword() {
                         </h2>
 
                         <p className='text-[17px] py-5 text-[#A7A7A9]'>
-                            Enter your Epic Games account email address and we'll
-                            send you a security code.
+                            Enter your Epic Games account email address and reset your password.
                         </p>
 
                         <p className='text-[15px] pb-1 pt-5 text-[#A7A7A9]'>

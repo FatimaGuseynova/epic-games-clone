@@ -121,11 +121,14 @@ const UserDropdown = ({ user, setUser }) => {
         {
             key: "wishlist",
             label: (
-                <div className="flex items-center gap-2 px-2 py-1 text-[14px] text-white rounded-[7px] hover:bg-[#ffffff12] cursor-pointer"
+                <Link to="/wishlist" className="flex items-center gap-2 px-2 py-1 text-[14px] text-white rounded-[7px] hover:bg-[#ffffff12] cursor-pointer"
                 >
-                    <Bookmark size={19} />
-                    Wishlist
-                </div>
+                    <div className="flex text-white items-center gap-3">
+
+                        <Bookmark size={19} />
+                        Wishlist
+                    </div>
+                </Link>
             )
         },
         {

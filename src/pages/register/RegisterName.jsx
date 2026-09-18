@@ -13,14 +13,15 @@ import { postUsers } from "../../api/postUsers";
 import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 
 function RegisterName() {
-        const [showPassword, setShowPassword] = useState(false);
-        const [existsUser, setExistUser] = useState(false);
-        const [existNick, setExistNick] = useState(false);
-        const [users, setUsers] = useState([]);
-        const [open, setOpen] = useState(false);
-        const navigate = useNavigate();
-        const savedEmail = localStorage.getItem("email");
-        const savedBirth = localStorage.getItem("birthDate");
+    const [showPassword, setShowPassword] = useState(false);
+    const [existsUser, setExistUser] = useState(false);
+    const [existNick, setExistNick] = useState(false);
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
+    const savedEmail = localStorage.getItem("email");
+    const savedBirth = localStorage.getItem("birthDate");
 
     const {
         values,
@@ -42,6 +43,8 @@ function RegisterName() {
         },
         validationSchema: nameRegister,
         onSubmit: async (values) => {
+            setLoading(true);
+
             try {
                 const emailExists = users.some(
                     (user) =>
@@ -76,17 +79,24 @@ function RegisterName() {
                     dateOfBirth: String(savedBirth),
                     country: "string"
                 };
+
                 localStorage.setItem(
                     "userinf",
                     JSON.stringify(registerfinal)
                 );
+
                 const result = await postUsers(registerfinal);
+
                 console.log(result);
+
                 localStorage.setItem("email", values.email);
+
                 navigate("/signin/otp");
             } catch (error) {
                 console.error("Registration error:", error);
-            } 
+            } finally {
+                setLoading(false);
+            }
         }
     });
 
@@ -446,9 +456,17 @@ function RegisterName() {
 
                     <button
                         type='submit'
-                        className='block text-center w-full my-6 mb-3 rounded-[8px] duration-150 hover:bg-[#65ccfb] bg-[#26BBFF] py-2 text-black'
+                        disabled={loading}
+                        className='block text-center w-full my-6 mb-3 rounded-[8px] duration-150 hover:bg-[#65ccfb] bg-[#26BBFF] py-2 text-black disabled:opacity-60 disabled:cursor-not-allowed'
                     >
-                        Continue
+                        {loading ? (
+                            <span className="flex items-center justify-center gap-2">
+                                <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin"></span>
+                                Creating account...
+                            </span>
+                        ) : (
+                            "Continue"
+                        )}
                     </button>
                 </form>
 

@@ -66,7 +66,7 @@ function Search({ opened, setOpen }) {
         const value = query.trim();
 
         if (value) {
-            navigate(`/search?q=${encodeURIComponent(value)}`);
+            navigate(`/browse`);
             setOpen(false);
         }
     };
@@ -134,9 +134,7 @@ function Search({ opened, setOpen }) {
 
                                             <img
                                                 src={
-                                                    product.image ||
-                                                    product.thumbnail ||
-                                                    product.cover
+                                                    product.coverImage.url
                                                 }
                                                 alt=""
                                                 className="w-[50px] h-[50px] object-cover rounded"
@@ -149,7 +147,7 @@ function Search({ opened, setOpen }) {
                                                 </span>
 
                                                 <span className="text-[16px] font-semibold text-white">
-                                                    {product.name || product.title}
+                                                    {product.name}
                                                 </span>
 
                                             </div>
@@ -238,9 +236,7 @@ function Search({ opened, setOpen }) {
 
                                             <img
                                                 src={
-                                                    product.image ||
-                                                    product.thumbnail ||
-                                                    product.cover
+                                                    product.coverImage.url
                                                 }
                                                 alt=""
                                                 className="w-[30px] h-[40px] object-cover rounded"

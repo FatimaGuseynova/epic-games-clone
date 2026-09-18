@@ -275,7 +275,7 @@ function GamesBrowse({ sort = 1, genreId }) {
                                         <h5
                                             className={`${item?.discount > 0 ? "flex min-[1000px]:max-[1450px]:grid min-[1000px]:max-[1450px]:grid-cols-2" : "hidden"}  items-center gap-2`}
                                         >
-                                            <div className='bg-[#26BAFE] px-1 py-0.5 text-black text-[14px] rounded-2xl'>
+                                            <div className='bg-[#26BAFE] px-1 py-0.5 text-black text-[14px] w-fit rounded-2xl'>
                                                 {item?.discount > 0 &&
                                                     `-${Math.round(100 - ((item.discount / item.price) * 100))}%`}
                                             </div>
@@ -371,7 +371,7 @@ function GamesBrowse({ sort = 1, genreId }) {
                                         <h5
                                             className={`${item?.discount > 0 ? "flex  min-[1000px]:max-[1450px]:grid min-[1000px]:max-[1450px]:grid-cols-2" : "hidden"}  items-center gap-2`}
                                         >
-                                            <div className='bg-[#26BAFE] px-1 py-0.5 text-black text-[14px] rounded-2xl'>
+                                            <div className='bg-[#26BAFE] w-fit px-1 py-0.5 text-black text-[14px] rounded-2xl'>
                                                 {item?.discount > 0 &&
                                                     `-${Math.round(100 - ((item.discount / item.price) * 100))}%`}
                                             </div>
