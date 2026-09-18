@@ -19,13 +19,16 @@ import { FaFacebookF, FaXTwitter, FaInstagram, FaTwitch, FaDiscord, FaYoutube, F
 import { IoGlobeOutline } from "react-icons/io5";
 import red from '../../../images2/red.png'
 import CheckoutModal from './CheckoutModal'
-function DetailPage() {
 
+function DetailPage() {
   const location = useLocation()
   const product = location.state?.product
   const navigate = useNavigate()
+
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
   const [isWishlisted, setIsWishlisted] = useState(false)
+  const [wishlistLoading, setWishlistLoading] = useState(false)
+
   const handleWishlist = async () => {
     const token = localStorage.getItem("accessToken")
 
@@ -34,23 +37,32 @@ function DetailPage() {
       return
     }
 
+    if (wishlistLoading) {
+      return
+    }
+
     try {
+      setWishlistLoading(true)
+
       await WishlistToggle(product.id)
+
       setIsWishlisted(prev => !prev)
     } catch (error) {
       console.error(error)
+    } finally {
+      setWishlistLoading(false)
     }
   }
   const handleAuthAction = () => {
-  const token = localStorage.getItem("accessToken")
+    const token = localStorage.getItem("accessToken")
 
-  if (!token) {
-    navigate("/signin")
-    return
+    if (!token) {
+      navigate("/signin")
+      return
+    }
+
+    setIsCheckoutOpen(true)
   }
-
-  setIsCheckoutOpen(true)
-}
   return (
 
     <div className='bg-[#121216] h-full pt-7'>
@@ -200,13 +212,20 @@ function DetailPage() {
 
               <button
                 onClick={handleWishlist}
+                disabled={wishlistLoading}
                 className={`w-full flex items-center justify-center rounded-[8px] my-3 block text-center gap-2 py-3 text-white duration-150 ${isWishlisted
                     ? "bg-[#66666a]"
                     : "bg-[#343437] hover:bg-[#646469]"
-                  }`}
+                  } ${wishlistLoading ? "opacity-70 cursor-not-allowed" : ""}`}
               >
                 <CiBookmark size={20} />
-                {isWishlisted ? "In Wishlist" : "Wishlist"}
+
+                {wishlistLoading
+                  ? "Loading..."
+                  : isWishlisted
+                    ? "In Wishlist"
+                    : "Wishlist"
+                }
               </button>
 
             </div>

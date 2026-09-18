@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-
+import { DeleteWishlist } from '../../../api/DeleteWishlist'
 import { getCurrentUser } from './../../../api/GetCurrentUser'
 import { LuExternalLink } from 'react-icons/lu'
 import { IoMailOutline } from 'react-icons/io5'
@@ -60,8 +60,26 @@ function Wishlist() {
     loadWishlist()
   }, [])
 
-  const handleRemove = product => {
-    console.log('Remove:', product)
+  const handleRemove = async (product) => {
+    try {
+      const wishlistItem = wishlist.find(
+        item => item.product?.id === product.id
+      )
+
+      if (!wishlistItem) {
+        console.error('Wishlist item not found')
+        return
+      }
+
+      await DeleteWishlist(wishlistItem.id)
+
+      setWishlist(prev =>
+        prev.filter(item => item.id !== wishlistItem.id)
+      )
+
+    } catch (error) {
+      console.error('Failed to remove from wishlist:', error)
+    }
   }
 
   const handleAddToCart = product => {
@@ -189,14 +207,12 @@ function Wishlist() {
         ) : (
 
           wishlist.map(item => (
-
             <WishlistCard
               key={item.id}
               product={item.product}
               onRemove={handleRemove}
               onAddToCart={handleAddToCart}
             />
-
           ))
 
         )}

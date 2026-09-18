@@ -7,6 +7,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { ProductsGet } from "../../../api/ProductsGet";
 
 import ComingSoon from "./ComingSoon";
+import UpcomingWishlisted from "./UpcomingWishlisted";
 
 function UpcomingGames() {
     const [products, setProducts] = useState([]);
@@ -109,25 +110,10 @@ function UpcomingGames() {
         <div className="bg-[#121216] py-8">
             <div className="min-[1100px]:w-[90%] w-[93%] mx-auto">
                 <div className="grid grid-cols-1 min-[900px]:grid-cols-3">
-                    
+
                     <ComingSoon />
 
-                    <div className="px-5 max-[899px]:border-r-0">
-                        <Link className="flex items-center gap-2 text-white text-[25px] font-bold mb-7 group">
-                            Top Upcoming Wishlisted
-                            <IoIosArrowForward className="duration-200 group-hover:translate-x-1" />
-                        </Link>
-
-                        <div className="flex flex-col gap-6">
-                            {upcomingWishlisted.map(item => (
-                                <GameItem
-                                    key={item.id}
-                                    item={item}
-                                    coming
-                                />
-                            ))}
-                        </div>
-                    </div>
+                    <UpcomingWishlisted />
 
                     <div className="px-5">
                         <Link className="flex items-center gap-2 text-white text-[25px] font-bold mb-7 group">
