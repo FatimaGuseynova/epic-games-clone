@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { IoClose } from "react-icons/io5"
 import { FaChevronDown, FaChevronUp } from "react-icons/fa"
 
 import Payment from '../../user/components/Payment'
 import AddFunds from '../../user/components/AddFunds'
+
 import Logo from '../../../components/ui/Logo'
 
-function CheckoutModal({ product, onClose }) {
+import { getCurrentUser } from '../../../api/GetCurrentUser'
 
+function CheckoutModal({ product, onClose }) {
     const price = product?.price ?? 0
     const vat = +(price * 0.18).toFixed(2)
     const subtotal = price
@@ -17,18 +19,49 @@ function CheckoutModal({ product, onClose }) {
 
     const [openSection, setOpenSection] = useState(null)
     const [module, setModule] = useState(false)
+    const [balance, setBalance] = useState(0)
+    const [balanceLoading, setBalanceLoading] = useState(true)
 
     const toggleSection = (section) => {
         setOpenSection(prev => prev === section ? null : section)
     }
 
+    useEffect(() => {
+        const loadBalance = async () => {
+            try {
+                setBalanceLoading(true)
+
+                const user = await getCurrentUser()
+
+                setBalance(Number(user?.balance ?? 0))
+            } catch (error) {
+                console.error('Failed to load balance:', error)
+                setBalance(0)
+            } finally {
+                setBalanceLoading(false)
+            }
+        }
+
+        loadBalance()
+    }, [])
+
+    const handleAddFundsClose = async () => {
+        setModule(false)
+
+        try {
+            const user = await getCurrentUser()
+            setBalance(Number(user?.balance ?? 0))
+        } catch (error) {
+            console.error('Failed to update balance:', error)
+        }
+    }
+
     return (
         <div>
-
             {module && (
                 <AddFunds
                     product={product}
-                    setOpen={() => setModule(false)}
+                    setOpen={handleAddFundsClose}
                 />
             )}
 
@@ -40,6 +73,7 @@ function CheckoutModal({ product, onClose }) {
 
                             <div className='flex items-center gap-2 mb-6'>
                                 <Logo />
+
                                 <h2 className='text-white text-[20px] font-bold'>
                                     Checkout
                                 </h2>
@@ -97,10 +131,15 @@ function CheckoutModal({ product, onClose }) {
                             </div>
 
                             <div className='mt-4 inline-flex items-center gap-1 bg-[#0f2e26] text-[#3ddc97] text-[13px] px-3 py-1.5 rounded-full'>
-                                <span className='text-[15px]'>⊕</span>
+
+                                <span className='text-[15px]'>
+                                    ⊕
+                                </span>
+
                                 <span>
                                     Get ${reward.toFixed(2)} in Epic Rewards.
                                 </span>
+
                             </div>
 
                         </div>
@@ -128,8 +167,13 @@ function CheckoutModal({ product, onClose }) {
                                     >
 
                                         <span className='flex items-center gap-3 text-[15px]'>
-                                            <span className='text-[#3ddc97]'>▤</span>
+
+                                            <span className='text-[#3ddc97]'>
+                                                ▤
+                                            </span>
+
                                             Account Balance
+
                                         </span>
 
                                         {openSection === 'balance'
@@ -140,11 +184,30 @@ function CheckoutModal({ product, onClose }) {
                                     </button>
 
                                     {openSection === 'balance' && (
-                                        <div
-                                            onClick={() => setModule(true)}
-                                            className='px-4 pb-4 pt-1 text-[#26BBFF] text-[14px] cursor-pointer hover:underline'
-                                        >
-                                            Add funds
+                                        <div className='px-4 pb-4 pt-1'>
+
+                                            <div className='flex items-center justify-between text-[14px] mb-3'>
+
+                                                <span className='text-[#a0a0a3]'>
+                                                    Current balance
+                                                </span>
+
+                                                <span className='text-white font-medium'>
+                                                    {balanceLoading
+                                                        ? 'Loading...'
+                                                        : `$${balance.toFixed(2)}`
+                                                    }
+                                                </span>
+
+                                            </div>
+
+                                            <div
+                                                onClick={() => setModule(true)}
+                                                className='text-[#26BBFF] text-[14px] cursor-pointer hover:underline'
+                                            >
+                                                Add funds
+                                            </div>
+
                                         </div>
                                     )}
 
@@ -158,8 +221,13 @@ function CheckoutModal({ product, onClose }) {
                                     >
 
                                         <span className='flex items-center gap-3 text-[15px]'>
-                                            <span className='text-[#3ddc97]'>⊕</span>
+
+                                            <span className='text-[#3ddc97]'>
+                                                ⊕
+                                            </span>
+
                                             Epic Rewards
+
                                         </span>
 
                                         {openSection === 'rewards'
@@ -188,8 +256,13 @@ function CheckoutModal({ product, onClose }) {
                                 <label className='w-full flex items-center justify-between bg-[#232326] hover:bg-[#2c2c30] rounded-lg px-4 py-3 text-white cursor-pointer'>
 
                                     <span className='flex items-center gap-3 text-[15px]'>
-                                        <span>💳</span>
+
+                                        <span>
+                                            💳
+                                        </span>
+
                                         Credit Card / Debit Card
+
                                     </span>
 
                                     <input
@@ -203,10 +276,13 @@ function CheckoutModal({ product, onClose }) {
                                 <label className='w-full flex items-center justify-between bg-[#232326] hover:bg-[#2c2c30] rounded-lg px-4 py-3 text-white cursor-pointer'>
 
                                     <span className='flex items-center gap-3 text-[15px]'>
+
                                         <span className='text-[#0070ba] font-bold'>
                                             PP
                                         </span>
+
                                         PayPal
+
                                     </span>
 
                                     <input
@@ -220,8 +296,13 @@ function CheckoutModal({ product, onClose }) {
                             </div>
 
                             <button className='mt-4 flex items-center gap-2 text-white text-[14px] bg-[#232326] hover:bg-[#2c2c30] px-4 py-2.5 rounded-lg'>
-                                <span>+</span>
+
+                                <span>
+                                    +
+                                </span>
+
                                 Creator Code
+
                             </button>
 
                             <button
@@ -232,21 +313,25 @@ function CheckoutModal({ product, onClose }) {
                             </button>
 
                             <p className='text-[#7a7a7d] text-[12px] mt-4 leading-relaxed'>
+
                                 By selecting 'Pay Now', you certify that you are over 18,
                                 are authorized to use this payment method, and agree to the{" "}
 
                                 <span className='text-[#26BBFF] underline cursor-pointer'>
                                     End User License Agreement
                                 </span>.
+
                             </p>
 
                             <p className='text-[#7a7a7d] text-[12px] mt-3 leading-relaxed'>
+
                                 You are paying for a digital license for this product;
                                 for terms, see{" "}
 
                                 <span className='text-[#26BBFF] underline cursor-pointer'>
                                     purchase policy
                                 </span>.
+
                             </p>
 
                         </div>
@@ -254,7 +339,6 @@ function CheckoutModal({ product, onClose }) {
                     </div>
                 </div>
             )}
-
         </div>
     )
 }

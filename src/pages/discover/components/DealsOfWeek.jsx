@@ -80,7 +80,7 @@ function DealsOfWeek() {
                                     backgroundImage: `url(${item?.productLogo?.url})`
                                 }}
                             >
-                                <div className="w-full rounded-b-[6px] py-1 h-fit absolute bottom-20 bg-gradient-to-r from-[#160FF3] via-[#4C08F9] to-[#7A03FD]">
+                                <div className="w-full rounded-b-[6px] py-1 h-fit absolute bottom-30 bg-gradient-to-r from-[#160FF3] via-[#4C08F9] to-[#7A03FD]">
                                     <h5 className="text-[13px]  font-semibold">
                                         {item?.events?.[0]?.name}
                                     </h5>

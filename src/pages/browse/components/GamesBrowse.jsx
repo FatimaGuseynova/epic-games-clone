@@ -1,41 +1,59 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { FaCrown } from "react-icons/fa";
-import { ProductsGet } from "../../../api/ProductsGet";
-import { Link, useSearchParams } from 'react-router';
-function GamesBrowse({ sort = 1, genreId }) {
+
+import { FaCrown } from "react-icons/fa"
+
+import { ProductsGet } from "../../../api/ProductsGet"
+
+import { Link, useSearchParams } from 'react-router'
+
+function GamesBrowse({ sort = 1, genreId, setGamesLoading }) {
     console.log("genre:", genreId)
+
     const [res, setRes] = useState({
         data: [],
         totalPages: 1,
         page: 1
-
     })
-        console.log("GAMES BROWSE TEST");
+
+    console.log("GAMES BROWSE TEST")
+
     const [currentPage, setCurrentPage] = useState(1)
     const [loading, setLoading] = useState(true)
     const [searchParams] = useSearchParams()
+
     useEffect(() => {
         const getProducts = async () => {
             setLoading(true)
+            setGamesLoading?.(true)
 
-            let page = 1
-            let allProducts = []
-            let totalPages = 1
+            try {
+                let page = 1
+                let allProducts = []
+                let totalPages = 1
 
-            while (page <= totalPages) {
-                const response = await ProductsGet(page)
-                allProducts = [...allProducts, ...response.data]
-                totalPages = response.totalPages
-                page++
+                while (page <= totalPages) {
+                    const response = await ProductsGet(page)
+
+                    allProducts = [
+                        ...allProducts,
+                        ...response.data
+                    ]
+
+                    totalPages = response.totalPages
+                    page++
+                }
+
+                setRes({
+                    data: allProducts,
+                    totalPages: Math.ceil(allProducts.length / 10),
+                    page: 1
+                })
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setLoading(false)
+                setGamesLoading?.(false)
             }
-
-            setRes({
-                data: allProducts,
-                totalPages: Math.ceil(allProducts.length / 10),
-                page: 1
-            })
-
-            setLoading(false)
         }
 
         getProducts()
@@ -93,27 +111,35 @@ function GamesBrowse({ sort = 1, genreId }) {
         switch (sort) {
             case 2:
                 list.sort(
-                    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                    (a, b) =>
+                        new Date(b.createdAt) - new Date(a.createdAt)
                 )
                 break
+
             case 3:
                 list.sort(
-                    (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+                    (a, b) =>
+                        new Date(b.updatedAt) - new Date(a.updatedAt)
                 )
                 break
+
             case 4:
                 list.sort((a, b) =>
                     a.name.localeCompare(b.name)
                 )
                 break
+
             case 5:
                 list.sort(
-                    (a, b) => getPrice(b) - getPrice(a)
+                    (a, b) =>
+                        getPrice(b) - getPrice(a)
                 )
                 break
+
             case 6:
                 list.sort(
-                    (a, b) => getPrice(a) - getPrice(b)
+                    (a, b) =>
+                        getPrice(a) - getPrice(b)
                 )
                 break
         }
@@ -126,7 +152,8 @@ function GamesBrowse({ sort = 1, genreId }) {
     const fallbackGames = useMemo(() => {
         return [...res.data]
             .sort(
-                (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                (a, b) =>
+                    new Date(b.createdAt) - new Date(a.createdAt)
             )
             .slice(0, 4)
     }, [res.data])
@@ -176,10 +203,13 @@ function GamesBrowse({ sort = 1, genreId }) {
 
     if (loading) {
         return (
-            <div className='bg-[#121216] min-h-screen'>
-                <div className='flex items-center justify-center gap-3 py-8 border-b border-[#29292d]'>
-                    <div className='w-5 h-5 rounded-full border-2 border-[#26BBFF] border-t-transparent animate-spin'></div>
-                    <span className='text-white text-[14px]'>Loading...</span>
+            <div className="bg-[#121216] w-[80vw] min-h-screen">
+                <div className="flex items-center justify-center gap-3 py-8 border-b border-[#29292d]">
+                    <div className="w-5 h-5 rounded-full border-2 border-[#26BBFF] border-t-transparent animate-spin"></div>
+
+                    <span className="text-white text-[14px]">
+                        Loading...
+                    </span>
                 </div>
             </div>
         )
@@ -188,24 +218,23 @@ function GamesBrowse({ sort = 1, genreId }) {
     const noResults = currentGames.length === 0
 
     return (
-        
-        <div className='bg-[#121216] min-h-screen'>
+        <div className="bg-[#121216] min-h-screen">
             {noResults && (
-                <div className='text-center pt-10 pb-5'>
-                    <h2 className='text-white text-[40px] max-[760px]:text-[30px]'>
+                <div className="text-center pt-10 pb-5">
+                    <h2 className="text-white text-[40px] max-[760px]:text-[30px]">
                         No results found
                     </h2>
 
-                    <p className='text-[#A7A7A9] text-[20px] max-[760px]:text-[16px] mt-2'>
+                    <p className="text-[#A7A7A9] text-[20px] max-[760px]:text-[16px] mt-2">
                         Unfortunately I could not find any results matching your search.
                     </p>
                 </div>
             )}
 
             {noResults && fallbackGames.length > 0 && (
-                <div className='pt-5 px-5'>
-                    <div className='w-full max-w-[1400px] mx-auto'>
-                        <h2 className='text-white text-[24px] font-bold pb-5'>
+                <div className="pt-5 px-5">
+                    <div className="w-full max-w-[1400px] mx-auto">
+                        <h2 className="text-white text-[24px] font-bold pb-5">
                             New To The Epic Games Store
                         </h2>
 
@@ -258,14 +287,15 @@ function GamesBrowse({ sort = 1, genreId }) {
 
                                         {item?.events?.[0]?.name && (
                                             <div
-                                                className={`${item.events[0].name === "First Run"
-                                                    ? "w-fit mb-1.5 rounded-[4px] px-1 py-0.5 bg-[#343437] text-[14px] text-white"
-                                                    : ""
-                                                    }`}
+                                                className={`${
+                                                    item.events[0].name === "First Run"
+                                                        ? "w-fit mb-1.5 rounded-[4px] px-1 py-0.5 bg-[#343437] text-[14px] text-white"
+                                                        : ""
+                                                }`}
                                             >
                                                 {item.events[0].name === "First Run" && (
-                                                    <div className='flex items-center gap-1'>
-                                                        <FaCrown className='text-[#FFD15C]' />
+                                                    <div className="flex items-center gap-1">
+                                                        <FaCrown className="text-[#FFD15C]" />
                                                         <span>First Run</span>
                                                     </div>
                                                 )}
@@ -273,26 +303,37 @@ function GamesBrowse({ sort = 1, genreId }) {
                                         )}
 
                                         <h5
-                                            className={`${item?.discount > 0 ? "flex min-[1000px]:max-[1450px]:grid min-[1000px]:max-[1450px]:grid-cols-2" : "hidden"}  items-center gap-2`}
+                                            className={`${
+                                                item?.discount > 0
+                                                    ? "flex min-[1000px]:max-[1450px]:grid min-[760px]:max-[864px]:grid min-[760px]:max-[864px]:grid-cols-2 min-[1000px]:max-[1450px]:grid-cols-2"
+                                                    : "hidden"
+                                            } items-center gap-2  min-[1000px]:max-[1020px]:w-[60%] min-[760px]:max-[864px]:w-[85%] min-[1000px]:max-[1250px]:w-[85%] min-[1250px]:max-[1450px]:w-[60%]`}
                                         >
-                                            <div className='bg-[#26BAFE] px-1 py-0.5 text-black text-[14px] w-fit rounded-2xl'>
+                                            <div className="bg-[#26BAFE] px-1 py-0.5 text-black text-[14px] w-fit rounded-2xl">
                                                 {item?.discount > 0 &&
-                                                    `-${Math.round(100 - ((item.discount / item.price) * 100))}%`}
+                                                    `-${Math.round(
+                                                        100 -
+                                                        ((item.discount / item.price) * 100)
+                                                    )}%`}
                                             </div>
 
-                                            <div className='text-[15px] line-through text-[#ACA294]'>
+                                            <div className="text-[15px] line-through text-[#ACA294]">
                                                 ${item.price}
                                             </div>
 
-                                            <div className='text-white block text-[15px]'>
+                                            <div className="text-white block text-[15px]">
                                                 ${item.discount}
                                             </div>
                                         </h5>
 
                                         <h5
-                                            className={`text-white text-[15px] ${item?.discount ? "hidden" : ""}`}
+                                            className={`text-white text-[15px] ${
+                                                item?.discount ? "hidden" : ""
+                                            }`}
                                         >
-                                            {item.price === 0 ? "Free" : "$" + item.price}
+                                            {item.price === 0
+                                                ? "Free"
+                                                : "$" + item.price}
                                         </h5>
                                     </Link>
                                 </div>
@@ -304,7 +345,7 @@ function GamesBrowse({ sort = 1, genreId }) {
 
             {!noResults && (
                 <>
-                    <div className='pt-10 flex items-start justify-center px-5'>
+                    <div className="pt-10 flex items-start justify-center px-5">
                         <div className="max-[760px]:grid-cols-2 gap-4 min-[760px]:grid-cols-4 grid w-full max-w-[1400px]">
                             {currentGames.map((item, index) => (
                                 <div key={item.id || index}>
@@ -349,19 +390,20 @@ function GamesBrowse({ sort = 1, genreId }) {
                                         </p>
 
                                         <h3 className="text-white pb-1 text-[17px] font-bold">
-                                            {item.name}
+                                            {item.name.length > 29 ? item.name.slice(0, 30) + "..." : item.name}
                                         </h3>
 
                                         {item?.events?.[0]?.name && (
                                             <div
-                                                className={`${item.events[0].name === "First Run"
-                                                    ? "w-fit mb-1.5 rounded-[4px] px-1 py-0.5 bg-[#343437] text-[14px] text-white"
-                                                    : ""
-                                                    }`}
+                                                className={`${
+                                                    item.events[0].name === "First Run"
+                                                        ? "w-fit mb-1.5 rounded-[4px] px-1 py-0.5 bg-[#343437] text-[14px] text-white"
+                                                        : ""
+                                                }`}
                                             >
                                                 {item.events[0].name === "First Run" && (
-                                                    <div className='flex items-center gap-1'>
-                                                        <FaCrown className='text-[#FFD15C]' />
+                                                    <div className="flex items-center gap-1">
+                                                        <FaCrown className="text-[#FFD15C]" />
                                                         <span>First Run</span>
                                                     </div>
                                                 )}
@@ -369,26 +411,37 @@ function GamesBrowse({ sort = 1, genreId }) {
                                         )}
 
                                         <h5
-                                            className={`${item?.discount > 0 ? "flex  min-[1000px]:max-[1450px]:grid min-[1000px]:max-[1450px]:grid-cols-2" : "hidden"}  items-center gap-2`}
+                                            className={`${
+                                                item?.discount > 0
+                                                    ? "flex min-[1000px]:max-[1450px]:grid min-[200px]:max-[463px]:grid min-[200px]:max-[463px]:grid-cols-2 min-[760px]:max-[864px]:grid min-[760px]:max-[864px]:grid-cols-2 min-[1000px]:max-[1450px]:grid-cols-2"
+                                                    : "hidden"
+                                            } items-center gap-2  min-[1000px]:max-[1020px]:w-[60%] min-[420px]:max-[463px]:w-[70%] min-[200px]:max-[420px]:w-[83%] min-[1000px]:max-[1250px]:w-[85%] min-[760px]:max-[864px]:w-[70%] min-[1250px]:max-[1450px]:w-[75%]`}
                                         >
-                                            <div className='bg-[#26BAFE] w-fit px-1 py-0.5 text-black text-[14px] rounded-2xl'>
+                                            <div className="bg-[#26BAFE] w-fit px-1 py-0.5 text-black text-[14px] rounded-2xl">
                                                 {item?.discount > 0 &&
-                                                    `-${Math.round(100 - ((item.discount / item.price) * 100))}%`}
+                                                    `-${Math.round(
+                                                        100 -
+                                                        ((item.discount / item.price) * 100)
+                                                    )}%`}
                                             </div>
 
-                                            <div className='text-[15px] line-through text-[#ACA294]'>
+                                            <div className="text-[15px] line-through text-[#ACA294]">
                                                 ${item.price}
                                             </div>
 
-                                            <div className='text-white text-[15px]'>
+                                            <div className="text-white text-[15px]">
                                                 ${item.discount}
                                             </div>
                                         </h5>
 
                                         <h5
-                                            className={`text-white text-[15px] ${item?.discount ? "hidden" : ""}`}
+                                            className={`text-white text-[15px] ${
+                                                item?.discount ? "hidden" : ""
+                                            }`}
                                         >
-                                            {item.price === 0 ? "Free" : "$" + item.price}
+                                            {item.price === 0
+                                                ? "Free"
+                                                : "$" + item.price}
                                         </h5>
                                     </Link>
                                 </div>
@@ -413,9 +466,10 @@ function GamesBrowse({ sort = 1, genreId }) {
                                             onClick={() => goToPage(page)}
                                             className={`
                                                 transition
-                                                ${currentPage === page
-                                                    ? "text-white"
-                                                    : "text-[#9e9e9e] hover:text-white"
+                                                ${
+                                                    currentPage === page
+                                                        ? "text-white"
+                                                        : "text-[#9e9e9e] hover:text-white"
                                                 }
                                             `}
                                         >

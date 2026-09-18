@@ -52,7 +52,7 @@ function ComingSoon() {
                 <div className="flex items-center justify-between mb-7">
                     <Link
                         to="/"
-                        className="flex items-center gap-2 text-white text-[25px] font-bold group"
+                        className="flex items-center gap-2 text-white text-[21px] font-bold group"
                     >
                         Coming Soon
                         <IoIosArrowForward className="duration-200 group-hover:translate-x-1" />
@@ -70,11 +70,11 @@ function ComingSoon() {
                             <img
                                 src={item.coverImage?.url}
                                 alt={item.name}
-                                className="w-[76px] h-[100px] rounded-[5px] object-cover shrink-0"
+                                className="w-[60px] h-[90px] rounded-[5px] object-cover shrink-0"
                             />
 
                             <div className="min-w-0">
-                                <p className="text-white text-[18px] font-bold truncate">
+                                <p className="text-white font-bold truncate">
                                     {item.name}
                                 </p>
 
@@ -82,7 +82,7 @@ function ComingSoon() {
                                     Added {formatDate(item.createdAt)}
                                 </p>
 
-                                <p className="text-white text-[16px] mt-2">
+                                <p className="text-white text-[14px] mt-2">
                                     {item.price === 0 ? "Free" : `$${item.price}`}
                                 </p>
                             </div>

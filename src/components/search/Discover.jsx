@@ -75,8 +75,8 @@ function Discover({ opened }) {
                     className="
                         absolute
                         top-full
-                        right-10
-                        w-full
+                        max-[690px]:min-w-[300px]
+                        min-w-[600px]
                         z-50
                         px-[30px]
                         pb-[14px]

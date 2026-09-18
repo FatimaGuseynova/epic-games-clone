@@ -21,7 +21,10 @@ const UserDropdown = ({ user, setUser }) => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("email");
+
         setUser(null);
+
+        window.dispatchEvent(new Event("logout"));
     };
 
     const items = [

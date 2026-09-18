@@ -16,25 +16,25 @@ function Header() {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
+        const accessToken = localStorage.getItem("accessToken");
 
-    if (!accessToken) {
-        setUser(null);
-        return;
-    }
-
-    const loadUser = async () => {
-        try {
-            const currentUser = await getCurrentUser();
-            setUser(currentUser);
-        } catch (error) {
-            console.log(error);
+        if (!accessToken) {
             setUser(null);
+            return;
         }
-    };
 
-    loadUser();
-}, []);
+        const loadUser = async () => {
+            try {
+                const currentUser = await getCurrentUser();
+                setUser(currentUser);
+            } catch (error) {
+                console.log(error);
+                setUser(null);
+            }
+        };
+
+        loadUser();
+    }, []);
 
     return (
         <header className="header bg-[#121216] flex text-[#FEFEFE]">
@@ -85,7 +85,12 @@ function Header() {
                         Download
                     </button>
                     <div className={`min-[720px]:hidden p-4 lg:hidden ${epicOpen ? "hidden" : "flex"}`}>
-                        <Hamburgermenu menulOpen={menuOpen} setMenulOpen={setMenuOpen} user={user} />
+                        <Hamburgermenu
+                            menulOpen={menuOpen}
+                            setMenulOpen={setMenuOpen}
+                            user={user}
+                            setUser={setUser}
+                        />
                     </div>
                 </div>
             </div>

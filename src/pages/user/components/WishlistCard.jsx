@@ -40,7 +40,7 @@ function WishlistCard({ product, onRemove, onAddToCart }) {
           <img
             src={product.coverImage?.url}
             alt={product.name}
-            className="w-[163px] h-[218px] object-cover rounded-[5px] max-[767px]:w-[36px] max-[767px]:h-[58px]"
+            className="w-[163px] h-[218px] object-cover rounded-[5px] max-[767px]:w-[56px] max-[767px]:h-[88px]"
           />
 
         </div>
@@ -73,8 +73,8 @@ function WishlistCard({ product, onRemove, onAddToCart }) {
             </p>
 
             <p className="text-[#b7b7bd] text-[12px] leading-5 mt-2 max-[767px]:text-[11px] max-[767px]:leading-5 max-[767px]:mt-1">
-              {(product.description || '').slice(0, 2500)}
-              {product.description?.length > 2500 && '...'}
+              {(product.description || '').slice(0, 2000)}
+              {product.description?.length > 2000 && '...'}
             </p>
 
           </div>
@@ -82,15 +82,15 @@ function WishlistCard({ product, onRemove, onAddToCart }) {
           {hasDiscount && (
             <div className="flex items-center gap-2 mt-3 max-[767px]:mt-2">
 
-              <span className="bg-[#26bbff] text-black font-bold text-[11px] px-1.5 py-0.5 rounded-[3px] max-[767px]:text-[9px]">
+              <span className="bg-[#26BAFE] px-1 py-0.5 text-black text-[14px] w-fit rounded-2xl">
                 -{discountPercent}%
               </span>
 
-              <span className="text-[#a7a7a9] text-[12px] line-through max-[767px]:text-[10px]">
+              <span className="text-[14px] line-through text-[#ACA294]">
                 ${Number(product.price).toFixed(2)}
               </span>
 
-              <span className="text-white font-bold text-[13px] max-[767px]:text-[11px]">
+              <span className="text-white block text-[14px]">
                 ${Number(product.discount).toFixed(2)}
               </span>
 

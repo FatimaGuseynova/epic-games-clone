@@ -52,7 +52,7 @@ function Payment() {
                 Payment settings
             </h1>
 
-            <p className="text-[#b9bac4] text-[14px] leading-[30px]">
+            <p className="text-[#b9bac4] leading-[30px]">
                 Manage your account balance, transactions, and payment methods.{' '}
                 <span className="text-[#20b5f5] pl-1 underline cursor-pointer">
                     View Privacy Policy.
@@ -65,7 +65,7 @@ function Payment() {
                     Account balance
                 </h2>
 
-                <p className="text-[#b9bac4] text-[14px] leading-[32px] max-w-[900px]">
+                <p className="text-[#b9bac4] leading-[32px] max-w-[900px]">
                     Use your account balance to buy games, V-Bucks, and in-game items. Your balance is non-refundable.{' '}
                     <span className="text-[#20b5f5] pl-1 underline cursor-pointer">
                         View Terms
@@ -136,20 +136,20 @@ function Payment() {
 
             <section className="mt-[48px]">
 
-                <h2 className="text-[26px] leading-[38px] font-bold">
+                <h2 className="text-[24px] leading-[38px] font-bold">
                     Balance
                 </h2>
-                <p className="text-[70px] leading-[90px] font-light mt-[18px]">
+                <p className="text-[60px] leading-[90px] font-light mt-[12px]">
                     ${balance.toFixed(2)}
                 </p>
-                <div className="flex items-center gap-[30px] mt-[48px]">
+                <div className="flex items-center gap-[30px] mt-[40px]">
 
                     <button
                         type="button"
                         onClick={() => setAddFundsOpen(true)}
                         className="
-                            h-[46px]
-                            px-[17px]
+                            h-[43px]
+                            px-[15px]
                             bg-[#26bbff]
                             hover:bg-[#65ccfb]
                             transition-colors
@@ -169,8 +169,8 @@ function Payment() {
                     <button
                         type="button"
                         className="
-                            h-[46px]
-                            px-[17px]
+                            h-[43px]
+                            px-[15px]
                             bg-[#353539]
                             hover:bg-[#414145]
                             transition-colors

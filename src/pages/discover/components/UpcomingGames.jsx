@@ -63,18 +63,18 @@ function UpcomingGames() {
 
         return (
             <Link
-                to="/detail"
-                state={{ product: item }}
-                className="flex items-center gap-4 min-w-0"
-            >
+    to="/detail"
+    state={{ product: item }}
+    className="flex items-center gap-4 min-w-0 p-3 rounded-[8px] hover:bg-[#202024] duration-200"
+>
                 <img
                     src={item.coverImage?.url}
                     alt={item.name}
-                    className="w-[76px] h-[100px] rounded-[5px] object-cover shrink-0"
+                    className="w-[60px] h-[90px] rounded-[5px] object-cover shrink-0"
                 />
 
                 <div className="min-w-0">
-                    <p className="text-white text-[18px] font-bold truncate">
+                    <p className="text-white font-bold truncate">
                         {item.name}
                     </p>
 
@@ -84,20 +84,20 @@ function UpcomingGames() {
                         </p>
                     ) : discount && item.discount > 0 ? (
                         <div className="flex items-center gap-2 mt-2 flex-wrap">
-                            <span className="bg-[#26b9ed] text-black text-[14px] px-3 py-1 rounded-full">
+                            <span className="bg-[#26b9ed] text-black text-[12px] px-1 py-0.5 rounded-full">
                                 -{Math.round(100 - (item.discount / item.price) * 100)}%
                             </span>
 
-                            <span className="text-[#888] line-through text-[15px]">
+                            <span className="text-[#888] line-through text-[14px]">
                                 ${oldPrice.toFixed(2)}
                             </span>
 
-                            <span className="text-white text-[16px]">
+                            <span className="text-white text-[14px]">
                                 ${newPrice.toFixed(2)}
                             </span>
                         </div>
                     ) : (
-                        <p className="text-white text-[16px] mt-2">
+                        <p className="text-white text-[14px] mt-2">
                             {item.price === 0 ? "Free" : `$${item.price}`}
                         </p>
                     )}
@@ -116,7 +116,7 @@ function UpcomingGames() {
                     <UpcomingWishlisted />
 
                     <div className="px-5">
-                        <Link className="flex items-center gap-2 text-white text-[25px] font-bold mb-7 group">
+                        <Link className="flex items-center gap-2 text-white text-[21px] font-bold mb-7 group">
                             Top New Releases
                             <IoIosArrowForward className="duration-200 group-hover:translate-x-1" />
                         </Link>

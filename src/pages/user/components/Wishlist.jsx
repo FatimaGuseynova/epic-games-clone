@@ -153,7 +153,7 @@ function Wishlist() {
                   className="text-[#26bbff] shrink-0 min-[798px]:w-[27px] min-[798px]:h-[27px]"
                 />
 
-                <div className="text-[10px] min-[798px]:text-[17px] leading-[14px] min-[798px]:leading-normal">
+                <div className="text-[13px] min-[798px]:text-[17px] leading-[14px] min-[798px]:leading-normal">
 
                   <span>
                     You are subscribed to wishlist email notifications.

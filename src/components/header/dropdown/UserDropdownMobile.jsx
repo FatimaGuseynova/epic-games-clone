@@ -8,12 +8,15 @@ import {
     IoGiftOutline,
     IoPersonOutline,
     IoCardOutline,
-    IoBookmarkOutline
+    IoBookmarkOutline,
+    IoLogOutOutline
 } from "react-icons/io5";
 
 import { MdConfirmationNumber } from "react-icons/md";
 
-function UserDropdownMobile({ user, setProfileOpen }) {
+import { Link } from 'react-router';
+
+function UserDropdownMobile({ user, setUser, setProfileOpen }) {
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -22,6 +25,24 @@ function UserDropdownMobile({ user, setProfileOpen }) {
             document.body.style.overflow = "";
         };
     }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("email");
+
+        if (typeof setUser === "function") {
+            setUser(null);
+        } else {
+            console.error("setUser prop is missing or not a function in UserDropdownMobile");
+        }
+
+        if (typeof setProfileOpen === "function") {
+            setProfileOpen(false);
+        }
+
+        window.dispatchEvent(new Event("logout"));
+    };
 
     return (
         <div
@@ -37,6 +58,7 @@ function UserDropdownMobile({ user, setProfileOpen }) {
                 overflow-y-auto
             "
         >
+
             <div className="px-4 pt-4 pb-6">
 
                 <button
@@ -112,13 +134,13 @@ function UserDropdownMobile({ user, setProfileOpen }) {
                         <span>Epic Rewards</span>
                     </button>
 
-                    <button
-                        type="button"
+                    <Link
+                        to="/balance"
                         className="flex items-center gap-3 min-h-[52px] text-left text-[18px]"
                     >
                         <IoWalletOutline className="text-[24px]" />
                         <span>Account Balance</span>
-                    </button>
+                    </Link>
 
                     <button
                         type="button"
@@ -136,13 +158,13 @@ function UserDropdownMobile({ user, setProfileOpen }) {
                         <span>Coupons</span>
                     </button>
 
-                    <button
-                        type="button"
+                    <Link
+                        to="/account"
                         className="flex items-center gap-3 min-h-[52px] text-left text-[18px]"
                     >
                         <IoPersonOutline className="text-[24px]" />
                         <span>Account</span>
-                    </button>
+                    </Link>
 
                     <button
                         type="button"
@@ -160,17 +182,42 @@ function UserDropdownMobile({ user, setProfileOpen }) {
                         <span>Redeem Fortnite Gift Card</span>
                     </button>
 
-                    <button
-                        type="button"
+                    <Link
+                        to="/wishlist"
                         className="flex items-center gap-3 min-h-[52px] text-left text-[18px]"
                     >
                         <IoBookmarkOutline className="text-[24px]" />
                         <span>Wishlist</span>
-                    </button>
+                    </Link>
+
+                    <div className="mt-4 border-t border-[#ffffff12] pt-4">
+
+                        <button
+                            type="button"
+                            onClick={handleLogout}
+                            className="
+                                flex
+                                items-center
+                                gap-3
+                                min-h-[52px]
+                                text-left
+                                text-[18px]
+                                w-full
+                            "
+                        >
+                            <IoLogOutOutline className="text-[24px]" />
+
+                            <span>
+                                Sign Out
+                            </span>
+                        </button>
+
+                    </div>
 
                 </div>
 
             </div>
+
         </div>
     );
 }

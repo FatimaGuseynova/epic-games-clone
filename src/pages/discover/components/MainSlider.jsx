@@ -76,7 +76,7 @@ function MainSlider() {
                 </div>
                 <div className=' '>
 
-                  <div className='flex flex-col p-5 min-[950px]:pb-20 h-full justify-end absolute z-10  w-[50%]'>
+                  <div className='flex flex-col p-5 min-[1110px]:pb-20 h-full justify-end absolute z-10  w-[50%]'>
 
                     <h4 className='pl-19 text-[#F5FBFE]
                         font-black
@@ -125,7 +125,7 @@ function MainSlider() {
                 >
                   <div className="absolute z-0 !text-white rounded-[12px] inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent">
                   </div>
-                  <div className='flex w-[85%] flex-col p-5 min-[950px]:pb-20 h-full justify-end absolute z-10  w-[50%]'>
+                  <div className='flex w-[85%] flex-col p-5 min-[1120px]:pb-20 h-full justify-end absolute z-10  w-[50%]'>
                     <h2 className=' font-semibold text-[17px]'>{item.name}</h2>
                     <h6 className='text-[14px] py-3 max-[900px]:py-1 w-full'>{item.description.split(' ').slice(0, 23).join(' ')}...</h6>
                     <p className='pb-2 pt-7 max-[910px]:pt-1'>{item.price === 0 ? "Free" : item.discount ? "$" + item.discount : "$" + item.price}</p>
@@ -150,7 +150,7 @@ function MainSlider() {
                 <ul>
                   <li
                     onClick={() => setClick(-1)}
-                    className='relative overflow-hidden cursor-pointer hover:bg-[#4c4c4c87] duration-150 p-4 pl-2 py-2 rounded-[10px] flex items-center gap-3'
+                    className={`${click === -1 && "bg-[#2b2b2f]"} relative overflow-hidden cursor-pointer flex items-center gap-3 p-2 rounded-[10px]`}
                   >
                     <img className='w-7 h-9.5 min-[960px]:w-10 relative z-11 h-full rounded-[5px]' src={savecard} alt="savecard" />
                     <p className="text-white text-[15px] h-full relative z-11 leading-[22px]">Epic Savings</p>
