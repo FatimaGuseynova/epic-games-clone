@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 
 import { Link, useLocation, NavLink, useNavigate } from 'react-router'
 import { WishlistToggle } from '../../../api/WishlistToggle'
-import { SlBasketLoaded } from "react-icons/sl";
 import { GrGift } from "react-icons/gr";
 import { CiBookmark } from "react-icons/ci";
 import { CiCircleQuestion } from "react-icons/ci";
@@ -16,9 +15,11 @@ import { FaRegFlag } from "react-icons/fa";
 import { FaCrown } from "react-icons/fa";
 import DetailSlider from './DetailSlider';
 import { FaFacebookF, FaXTwitter, FaInstagram, FaTwitch, FaDiscord, FaYoutube, FaRedditAlien } from "react-icons/fa6";
+import { SlBasket, SlBasketLoaded } from "react-icons/sl"
 import { IoGlobeOutline } from "react-icons/io5";
 import red from '../../../images2/red.png'
 import CheckoutModal from './CheckoutModal'
+import { AddToCart } from '../../../api/AddToCart'
 
 function DetailPage() {
   const location = useLocation()
@@ -28,6 +29,9 @@ function DetailPage() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
   const [isWishlisted, setIsWishlisted] = useState(false)
   const [wishlistLoading, setWishlistLoading] = useState(false)
+
+  const [isInCart, setIsInCart] = useState(false)
+  const [cartLoading, setCartLoading] = useState(false)
 
   const handleWishlist = async () => {
     const token = localStorage.getItem("accessToken")
@@ -53,6 +57,30 @@ function DetailPage() {
       setWishlistLoading(false)
     }
   }
+
+  const handleAddToCart = async () => {
+    const token = localStorage.getItem("accessToken")
+
+    if (!token) {
+      navigate("/signin")
+      return
+    }
+
+    if (cartLoading || isInCart) {
+      return
+    }
+
+    try {
+      setCartLoading(true)
+      await AddToCart(product.id)
+      setIsInCart(true)
+    } catch (error) {
+      console.error("Add to cart error:", error)
+    } finally {
+      setCartLoading(false)
+    }
+  }
+
   const handleAuthAction = () => {
     const token = localStorage.getItem("accessToken")
 
@@ -195,10 +223,14 @@ function DetailPage() {
                 </button>
 
                 <button
-                  onClick={handleAuthAction}
-                  className='bg-[#343437] rounded-[8px] p-3 duration-150 hover:bg-[#646469]'
+                  onClick={handleAddToCart}
+                  disabled={cartLoading || isInCart}
+                  className={`rounded-[8px] p-3 duration-150 ${isInCart
+                      ? "bg-[#66666a]"
+                      : "bg-[#343437] hover:bg-[#646469]"
+                    } ${cartLoading ? "opacity-70 cursor-not-allowed" : ""}`}
                 >
-                  <SlBasketLoaded />
+                  {isInCart ? <SlBasketLoaded /> : <SlBasket />}
                 </button>
 
               </div>
@@ -214,8 +246,8 @@ function DetailPage() {
                 onClick={handleWishlist}
                 disabled={wishlistLoading}
                 className={`w-full flex items-center justify-center rounded-[8px] my-3 block text-center gap-2 py-3 text-white duration-150 ${isWishlisted
-                    ? "bg-[#66666a]"
-                    : "bg-[#343437] hover:bg-[#646469]"
+                  ? "bg-[#66666a]"
+                  : "bg-[#343437] hover:bg-[#646469]"
                   } ${wishlistLoading ? "opacity-70 cursor-not-allowed" : ""}`}
               >
                 <CiBookmark size={20} />

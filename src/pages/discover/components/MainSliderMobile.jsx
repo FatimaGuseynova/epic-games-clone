@@ -110,14 +110,14 @@ function MainSliderMobile() {
 
     return (
         loading ? (
-            <div className='min-[768px]:hidden bg-[#121216]'>
+            <div className='min-[795px]:hidden bg-[#121216]'>
                 <div className='flex items-center justify-center gap-3 py-8 border-b border-[#29292d]'>
                     <div className='w-5 h-5 rounded-full border-2 border-[#26BBFF] border-t-transparent animate-spin'></div>
                     <span className='text-white text-[14px]'>Loading...</span>
                 </div>
             </div>
         ) : (
-            <div className="min-[768px]:hidden">
+            <div className="min-[795px]:hidden">
                 <div className="bg-[#121216]">
                     <section className="w-full px-[5%] py-8">
                         <div

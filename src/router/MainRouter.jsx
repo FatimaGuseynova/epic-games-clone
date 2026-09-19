@@ -13,6 +13,7 @@ import CasualPage from '../pages/browse/components/CasualPage'
 import CityPage from '../pages/browse/components/CityPage'
 import Achivments from '../pages/browse/components/Achivments'
 import WishlistMain from '../pages/user/WishlistMain'
+import Cart from '../pages/user/Cart'
 
 const MainRouter = () => {
     return (
@@ -30,6 +31,8 @@ const MainRouter = () => {
             <Route path="/browse/city" element={<CityPage />} />
             <Route path="/browse/achievements" element={<Achivments />} />
             <Route path="/wishlist" element={<WishlistMain />} />
+            <Route path="/cart" element={<Cart />} />
+            
             
 
         </Routes>

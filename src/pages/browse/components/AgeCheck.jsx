@@ -100,8 +100,16 @@ function AgeCheck() {
                             <div className="absolute top-full left-0 mt-1 w-full bg-[#18181C] border border-[#2E2E32] rounded-[4px] z-20 max-h-60 overflow-y-auto">
                                 <ul className="flex flex-col">
                                     {years.map(year => (
-                                        <li key={year} onClick={() => { setSelectedY(year); setSelectedD(""); setOpenY(false) }} className="px-3 py-2 cursor-pointer hover:bg-[#2E2E32]">{year}</li>
-                                    ))}
+                                        <li
+                                            key={year}
+                                            onClick={() => {
+                                                setSelectedY(year)
+                                                setOpenY(false)
+                                            }}
+                                            className="px-3 py-2 cursor-pointer hover:bg-[#2E2E32]"
+                                        >
+                                            {year}
+                                        </li>))}
                                 </ul>
                             </div>
                         )}

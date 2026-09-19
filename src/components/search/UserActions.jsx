@@ -19,7 +19,7 @@ function UserActions({ opened }) {
             <button className="text-[#a7a7aa] hover:text-white transition-colors">
                 <GrGift size={20} />
             </button>
-            <Link to="/" className="relative text-[#a7a7aa] hover:text-white transition-colors">
+            <Link to="/cart" className="relative text-[#a7a7aa] hover:text-white transition-colors">
                 <SlBasketLoaded size={21} />
             </Link>
         </div>

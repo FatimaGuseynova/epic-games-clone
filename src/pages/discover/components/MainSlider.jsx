@@ -66,7 +66,7 @@ function MainSlider() {
 
       <div className='bg-[#121216]'>
         <div className='min-[1100px]:w-[77%] w-[93%] mx-auto'>
-          <div className=' pt-10 max-[768px]:hidden'>
+          <div className=' pt-10 max-[795px]:hidden'>
             <div className='flex items-center justify-center gap-5'>
               <div
                 className={`${click === -1 ? "block" : "hidden"}  relative z-10 w-[64vw] aspect-[16/9] max-w-[1500px] min-w-[300px] bg-cover bg-center bg-no-repeat rounded-[12px] overflow-hidden`}
