@@ -117,7 +117,7 @@ function MainSliderMobile() {
                 </div>
             </div>
         ) : (
-            <div className="min-[795px]:hidden">
+            <div className="min-[850px]:hidden">
                 <div className="bg-[#121216]">
                     <section className="w-full px-[5%] py-8">
                         <div

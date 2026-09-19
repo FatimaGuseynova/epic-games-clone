@@ -209,13 +209,6 @@ function AccountInf() {
 
                                 <FiInfo className="text-[19px] text-white shrink-0" />
                             </div>
-
-                            <button
-                                onClick={() => handleEdit('email')}
-                                className="w-[45px] h-[45px] flex items-center justify-center rounded-[9px] bg-[#20b5f5] hover:bg-[#18a9e8] transition"
-                            >
-                                <FiEdit2 className="text-[19px] text-[#111216]" />
-                            </button>
                         </div>
                     </div>
 
